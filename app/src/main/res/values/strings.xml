@@ -1,3 +1,5 @@
 <resources>
     <string name="app_name">Noted</string>
+    <string name="receive_tab">Received notes</string>
+    <string name="sent_tab">sent notes</string>
 </resources>
