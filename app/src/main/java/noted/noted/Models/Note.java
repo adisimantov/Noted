@@ -17,6 +17,16 @@ public class Note {
         Location location;
         boolean isAppear;
 
+    public Note(int id, int from, int to, String details, boolean isAppear) {
+        this.details = details;
+        this.from = from;
+        this.id = id;
+        this.isAppear = isAppear;
+        this.location = location;
+        this.time = time;
+        this.to = to;
+    }
+
     public int getId() {
         return id;
     }
