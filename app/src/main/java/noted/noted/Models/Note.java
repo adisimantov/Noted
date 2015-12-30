@@ -15,7 +15,7 @@ public class Note {
         String details;
         Calendar time;
         Location location;
-        boolean isAppear;
+        boolean isShown;
 
     public int getId() {
         return id;
@@ -61,12 +61,12 @@ public class Note {
         this.location = location;
     }
 
-    public boolean isAppear() {
-        return isAppear;
+    public boolean isShown() {
+        return isShown;
     }
 
-    public void setIsAppear(boolean isAppear) {
-        this.isAppear = isAppear;
+    public void setIsShown(boolean isShown) {
+        this.isShown = isShown;
     }
 }
 
