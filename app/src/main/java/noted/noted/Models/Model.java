@@ -24,7 +24,6 @@ public class Model {
         local.init(context);
     }
 
-    public void addNote() {
-        
+    public void addNote(Note note) {
     }
 }

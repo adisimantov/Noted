@@ -7,33 +7,48 @@ import java.util.Calendar;
 /**
  * Created by adi on 26-Dec-15.
  */
-// test
 public class Note {
-        int id;
-        int from;
-        int to;
-        String details;
-        Calendar time;
-        Location location;
-        boolean isShown;
+    private int id;
+    private String from;
+    private String to;
+    private String details;
+    private Calendar sentTime;
+    private Calendar receivedTime;
+    private Calendar showedTime;
+    private Calendar timeToShow;
+    private Location locationToShow;
+    private boolean isShown;
+
+    public Note(int id, String from, String to, String details, Calendar sentTime, Calendar receivedTime, Calendar showedTime, Calendar timeToShow, Location locationToShow, boolean isShown) {
+        this.id = id;
+        this.from = from;
+        this.to = to;
+        this.details = details;
+        this.sentTime = sentTime;
+        this.receivedTime = receivedTime;
+        this.showedTime = showedTime;
+        this.timeToShow = timeToShow;
+        this.locationToShow = locationToShow;
+        this.isShown = isShown;
+    }
 
     public int getId() {
         return id;
     }
 
-    public int getFrom() {
+    public String getFrom() {
         return from;
     }
 
-    public void setFrom(int from) {
+    public void setFrom(String from) {
         this.from = from;
     }
 
-    public int getTo() {
+    public String getTo() {
         return to;
     }
 
-    public void setTo(int to) {
+    public void setTo(String to) {
         this.to = to;
     }
 
@@ -45,20 +60,44 @@ public class Note {
         this.details = details;
     }
 
-    public Calendar getTime() {
-        return time;
+    public Calendar getSentTime() {
+        return sentTime;
     }
 
-    public void setTime(Calendar time) {
-        this.time = time;
+    public void setSentTime(Calendar sentTime) {
+        this.sentTime = sentTime;
     }
 
-    public Location getLocation() {
-        return location;
+    public Calendar getReceivedTime() {
+        return receivedTime;
     }
 
-    public void setLocation(Location location) {
-        this.location = location;
+    public void setReceivedTime(Calendar receivedTime) {
+        this.receivedTime = receivedTime;
+    }
+
+    public Calendar getShowedTime() {
+        return showedTime;
+    }
+
+    public void setShowedTime(Calendar showedTime) {
+        this.showedTime = showedTime;
+    }
+
+    public Calendar getTimeToShow() {
+        return timeToShow;
+    }
+
+    public void setTimeToShow(Calendar timeToShow) {
+        this.timeToShow = timeToShow;
+    }
+
+    public Location getLocationToShow() {
+        return locationToShow;
+    }
+
+    public void setLocationToShow(Location locationToShow) {
+        this.locationToShow = locationToShow;
     }
 
     public boolean isShown() {
