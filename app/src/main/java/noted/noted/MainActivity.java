@@ -1,66 +1,44 @@
 package noted.noted;
 
+import android.app.ActionBar;
+import android.app.Activity;
+import android.app.Fragment;
 import android.os.Bundle;
-import android.support.design.widget.TabLayout;
-import android.support.v4.view.ViewPager;
-import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.Toolbar;
-import android.view.Menu;
-import android.view.MenuItem;
 
-import noted.noted.R;
+public class MainActivity extends Activity {
 
-
-public class MainActivity extends AppCompatActivity {
+    // Declaring our tabs and the corresponding fragments.
+    ActionBar.Tab receivedTab, sentTab;
+    Fragment tabReceivedNotes = new TabReceivedNotes();
+    Fragment tabSentNotes = new TabSentNotes();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
-        setSupportActionBar(toolbar);
 
-        TabLayout tabLayout = (TabLayout) findViewById(R.id.tab_layout);
-        tabLayout.addTab(tabLayout.newTab().setText(R.string.receive_tab));
-        tabLayout.addTab(tabLayout.newTab().setText(R.string.sent_tab));
-        tabLayout.setTabGravity(TabLayout.GRAVITY_FILL);
+        // Asking for the default ActionBar element that our platform supports.
+        ActionBar actionBar = getActionBar();
 
-        final ViewPager viewPager = (ViewPager) findViewById(R.id.pager);
-        final PagerAdapter adapter = new PagerAdapter
-                (getSupportFragmentManager(), tabLayout.getTabCount());
-        viewPager.setAdapter(adapter);
-        viewPager.addOnPageChangeListener(new TabLayout.TabLayoutOnPageChangeListener(tabLayout));
-        tabLayout.setOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
-            @Override
-            public void onTabSelected(TabLayout.Tab tab) {
-                viewPager.setCurrentItem(tab.getPosition());
-            }
+        // Screen handling while hiding ActionBar icon.
+        actionBar.setDisplayShowHomeEnabled(false);
 
-            @Override
-            public void onTabUnselected(TabLayout.Tab tab) {
+        // Screen handling while hiding Actionbar title.
+        actionBar.setDisplayShowTitleEnabled(false);
 
-            }
+        // Creating ActionBar tabs.
+        actionBar.setNavigationMode(ActionBar.NAVIGATION_MODE_TABS);
 
-            @Override
-            public void onTabReselected(TabLayout.Tab tab) {
+        // Setting custom tab icons.
+        receivedTab = actionBar.newTab().setText("Receibed Notes");
+        sentTab = actionBar.newTab().setText("Sent Notes");
 
-            }
-        });
+        // Setting tab listeners.
+        receivedTab.setTabListener(new TabListener(tabReceivedNotes));
+        sentTab.setTabListener(new TabListener(tabSentNotes));
+
+        // Adding tabs to the ActionBar.
+        actionBar.addTab(receivedTab);
+        actionBar.addTab(sentTab);
     }
-
-    /*@Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        getMenuInflater().inflate(R.menu.menu_main, menu);
-        return true;
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        int id = item.getItemId();
-        if (id == R.id.action_settings) {
-            return true;
-        }
-
-        return super.onOptionsItemSelected(item);
-    }*/
 }
