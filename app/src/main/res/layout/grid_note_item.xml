@@ -1,31 +1,20 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="match_parent"
+    android:layout_width="wrap_content"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    >
+    android:weightSum="1">
     <TextView
-        android:id="@+id/noteId"
+        android:id="@+id/noteContact"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="ID"/>
-
-    <TextView
-        android:id="@+id/noteFrom"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="From"/>
-
-    <TextView
-        android:id="@+id/noteTo"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="To"/>
+        android:text="Contact"/>
 
     <TextView
         android:id="@+id/noteDetails"
-        android:layout_width="match_parent"
+        android:layout_width="170dp"
         android:layout_height="wrap_content"
-        android:text="details"/>
+        android:text="details"
+        android:layout_weight="0.23" />
 
 </LinearLayout>
