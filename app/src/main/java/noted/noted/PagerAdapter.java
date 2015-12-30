@@ -1,3 +1,4 @@
+/*
 package noted.noted;
 
 import android.support.v4.app.Fragment;
@@ -31,4 +32,4 @@ public class PagerAdapter extends FragmentStatePagerAdapter {
     public int getCount() {
         return mNumOfTabs;
     }
-}
+}*/
