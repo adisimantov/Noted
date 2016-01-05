@@ -62,7 +62,19 @@ public class Model {
         remote.getNote(id,listener);
     }
 
-    public void addRemoteNote(Note note){
-        remote.addNote(note);
+    public interface AddNoteListener {
+        public void onResult(boolean result);
+    }
+
+    public void addRemoteNote(Note note, AddNoteListener listener){
+        remote.addNote(note, listener);
+    }
+
+    public interface UpdateNoteListener {
+        public void onResult(boolean result);
+    }
+
+    public void updateRemoteNote(Note note, UpdateNoteListener listener){
+        remote.updateNote(note, listener);
     }
 }

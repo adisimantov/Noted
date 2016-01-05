@@ -9,6 +9,7 @@ import com.parse.GetCallback;
 import com.parse.ParseException;
 import com.parse.ParseObject;
 import com.parse.ParseQuery;
+import com.parse.SaveCallback;
 
 import java.util.LinkedList;
 import java.util.List;
@@ -31,7 +32,7 @@ public class NoteParse {
     private final static String NOTE_LOCATION_TO_SHOW = "LOCATION_TO_SHOW";
     private final static String NOTE_IS_SHOWN         = "IS_SHOWN";
 
-    public static boolean addNote(Note note) {
+    public static void addNote(Note note, final Model.AddNoteListener listener) {
         ParseObject parseNote = new ParseObject(NOTE_TABLE);
         parseNote.put(NOTE_ID, note.getId());
         parseNote.put(NOTE_FROM, note.getFrom());
@@ -44,13 +45,50 @@ public class NoteParse {
         parseNote.put(NOTE_LOCATION_TO_SHOW, note.getLocationToShow());
         parseNote.put(NOTE_IS_SHOWN, note.isShown());
 
-        try {
-            parseNote.save();
-            return true;
-        } catch (ParseException e) {
-            Log.e(TAG, "Error inserting " + note.toString(), e);
-            return false;
-        }
+        parseNote.saveInBackground(new SaveCallback() {
+            @Override
+            public void done(ParseException e) {
+                if (e == null) {
+                    listener.onResult(true);
+                } else {
+                    listener.onResult(false);
+                    Log.d(getClass().getSimpleName(), "Note add error: " + e);
+                }
+            }
+        });
+    }
+
+    public static void updateNote(final Note note, final Model.UpdateNoteListener listener) {
+        ParseQuery<ParseObject> query = ParseQuery.getQuery(NOTE_TABLE);
+
+        // Retrieve the object by id
+        query.getInBackground(String.valueOf(note.getId()), new GetCallback<ParseObject>() {
+            public void done(ParseObject parseNote, ParseException e) {
+                if (e == null) {
+                    // Now let's update it with some new data.
+                    parseNote.put(NOTE_FROM, note.getFrom());
+                    parseNote.put(NOTE_TO, note.getTo());
+                    parseNote.put(NOTE_DETAILS, note.getDetails());
+                    parseNote.put(NOTE_SENT_TIME, note.getSentTime());
+                    parseNote.put(NOTE_RECEIVED_TIME, note.getReceivedTime());
+                    parseNote.put(NOTE_SHOWED_TIME, note.getShowedTime());
+                    parseNote.put(NOTE_TIME_TO_SHOW, note.getTimeToShow());
+                    parseNote.put(NOTE_LOCATION_TO_SHOW, note.getLocationToShow());
+                    parseNote.put(NOTE_IS_SHOWN, note.isShown());
+
+                    parseNote.saveInBackground(new SaveCallback() {
+                        public void done(ParseException e) {
+                            if (e == null) {
+                                listener.onResult(true);
+                            } else {
+                                listener.onResult(false);
+                                Log.d(getClass().getSimpleName(), "Note update error: " + e);
+                            }
+                        }
+                    });
+                }
+            }
+        });
     }
 
     public static void getNote(long id, final Model.GetNoteListener listener) {

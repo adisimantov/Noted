@@ -23,11 +23,11 @@ public class ModelParse {
         NoteParse.getNote(id, listener);
     }
 
-    public void addNote(Note note){
-        NoteParse.addNote(note);
+    public void addNote(Note note, Model.AddNoteListener listener){
+        NoteParse.addNote(note, listener);
     }
 
-    public void updateNote(Note note){
-
+    public void updateNote(Note note, Model.UpdateNoteListener listener){
+        NoteParse.updateNote(note, listener);
     }
 }
