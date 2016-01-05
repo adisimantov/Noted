@@ -1,25 +1,29 @@
 package noted.noted.Models;
 
-import android.location.Location;
-
-import java.util.Calendar;
-
 /**
  * Created by adi on 26-Dec-15.
  */
 public class Note {
-    private int id;
+    private long id;
     private String from;
     private String to;
     private String details;
-    private Calendar sentTime;
-    private Calendar receivedTime;
-    private Calendar showedTime;
-    private Calendar timeToShow;
-    private Location locationToShow;
+    private String sentTime;
+    private String receivedTime;
+    private String showedTime;
+    private String timeToShow;
+    private String locationToShow;
     private boolean isShown;
 
-    public Note(int id, String from, String to, String details, Calendar sentTime, Calendar receivedTime, Calendar showedTime, Calendar timeToShow, Location locationToShow, boolean isShown) {
+    public Note(String from, String to, String details, String sentTime) {
+        this.id = id;
+        this.from = from;
+        this.to = to;
+        this.details = details;
+        this.sentTime = sentTime;
+    }
+
+    public Note(long id, String from, String to, String details, String sentTime, String receivedTime, String showedTime, String timeToShow, String locationToShow, boolean isShown) {
         this.id = id;
         this.from = from;
         this.to = to;
@@ -32,7 +36,7 @@ public class Note {
         this.isShown = isShown;
     }
 
-    public int getId() {
+    public long getId() {
         return id;
     }
 
@@ -60,43 +64,43 @@ public class Note {
         this.details = details;
     }
 
-    public Calendar getSentTime() {
+    public String getSentTime() {
         return sentTime;
     }
 
-    public void setSentTime(Calendar sentTime) {
+    public void setSentTime(String sentTime) {
         this.sentTime = sentTime;
     }
 
-    public Calendar getReceivedTime() {
+    public String getReceivedTime() {
         return receivedTime;
     }
 
-    public void setReceivedTime(Calendar receivedTime) {
+    public void setReceivedTime(String receivedTime) {
         this.receivedTime = receivedTime;
     }
 
-    public Calendar getShowedTime() {
+    public String getShowedTime() {
         return showedTime;
     }
 
-    public void setShowedTime(Calendar showedTime) {
+    public void setShowedTime(String showedTime) {
         this.showedTime = showedTime;
     }
 
-    public Calendar getTimeToShow() {
+    public String getTimeToShow() {
         return timeToShow;
     }
 
-    public void setTimeToShow(Calendar timeToShow) {
+    public void setTimeToShow(String timeToShow) {
         this.timeToShow = timeToShow;
     }
 
-    public Location getLocationToShow() {
+    public String getLocationToShow() {
         return locationToShow;
     }
 
-    public void setLocationToShow(Location locationToShow) {
+    public void setLocationToShow(String locationToShow) {
         this.locationToShow = locationToShow;
     }
 

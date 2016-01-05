@@ -4,7 +4,12 @@ import android.app.ActionBar;
 import android.app.Activity;
 import android.app.Fragment;
 import android.os.Bundle;
+import android.util.Log;
+
+import java.util.Calendar;
+
 import noted.noted.Models.Model;
+import noted.noted.Models.Note;
 
 public class MainActivity extends Activity {
 
@@ -40,6 +45,10 @@ public class MainActivity extends Activity {
         // Setting tab listeners.
         receivedTab.setTabListener(new TabListener(tabReceivedNotes));
         sentTab.setTabListener(new TabListener(tabSentNotes));
+
+        //Note test = new Note("anna","anna","bla", "05/01/16");
+        //Model.getInstance().addLocalNote(test);
+        //Log.d("a", Model.getInstance().getAllLocalNotes().get(0).getDetails());
 
         // Adding tabs to the ActionBar.
         actionBar.addTab(receivedTab);
