@@ -25,7 +25,7 @@ public class MainActivity extends Activity {
 
         // Init databse model with context
         Model.getInstance().init(this);
-        
+
         // Asking for the default ActionBar element that our platform supports.
         ActionBar actionBar = getActionBar();
 
@@ -46,9 +46,15 @@ public class MainActivity extends Activity {
         receivedTab.setTabListener(new TabListener(tabReceivedNotes));
         sentTab.setTabListener(new TabListener(tabSentNotes));
 
-        //Note test = new Note("anna","anna","bla", "05/01/16");
+        Note test = new Note("anna","anna","bla", "05/01/16");
         //Model.getInstance().addLocalNote(test);
         //Log.d("a", Model.getInstance().getAllLocalNotes().get(0).getDetails());
+     /*   Model.getInstance().addRemoteNote(test, new Model.AddNoteListener() {
+            @Override
+            public void onResult(boolean result) {
+                Log.d("a","DONE");
+            }
+        });*/
 
         // Adding tabs to the ActionBar.
         actionBar.addTab(receivedTab);

@@ -11,6 +11,8 @@ import com.parse.ParseObject;
 import com.parse.ParseQuery;
 import com.parse.SaveCallback;
 
+import org.json.JSONObject;
+
 import java.util.LinkedList;
 import java.util.List;
 
@@ -38,11 +40,11 @@ public class NoteParse {
         parseNote.put(NOTE_FROM, note.getFrom());
         parseNote.put(NOTE_TO, note.getTo());
         parseNote.put(NOTE_DETAILS, note.getDetails());
-        parseNote.put(NOTE_SENT_TIME, note.getSentTime());
-        parseNote.put(NOTE_RECEIVED_TIME, note.getReceivedTime());
-        parseNote.put(NOTE_SHOWED_TIME, note.getShowedTime());
-        parseNote.put(NOTE_TIME_TO_SHOW, note.getTimeToShow());
-        parseNote.put(NOTE_LOCATION_TO_SHOW, note.getLocationToShow());
+        parseNote.put(NOTE_SENT_TIME, (note.getSentTime() == null) ? JSONObject.NULL : note.getSentTime());
+        parseNote.put(NOTE_RECEIVED_TIME, (note.getReceivedTime() == null) ? JSONObject.NULL : note.getReceivedTime());
+        parseNote.put(NOTE_SHOWED_TIME, (note.getShowedTime() == null) ? JSONObject.NULL : note.getShowedTime());
+        parseNote.put(NOTE_TIME_TO_SHOW, (note.getTimeToShow() == null) ? JSONObject.NULL : note.getTimeToShow());
+        parseNote.put(NOTE_LOCATION_TO_SHOW, (note.getLocationToShow() == null) ? JSONObject.NULL : note.getLocationToShow());
         parseNote.put(NOTE_IS_SHOWN, note.isShown());
 
         parseNote.saveInBackground(new SaveCallback() {
