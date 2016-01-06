@@ -4,6 +4,12 @@ import android.app.ActionBar;
 import android.app.Activity;
 import android.app.Fragment;
 import android.os.Bundle;
+import android.util.Log;
+
+import java.util.Calendar;
+
+import noted.noted.Models.Model;
+import noted.noted.Models.Note;
 
 public class MainActivity extends Activity {
 
@@ -16,6 +22,9 @@ public class MainActivity extends Activity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        // Init databse model with context
+        Model.getInstance().init(this);
 
         // Asking for the default ActionBar element that our platform supports.
         ActionBar actionBar = getActionBar();
@@ -36,6 +45,16 @@ public class MainActivity extends Activity {
         // Setting tab listeners.
         receivedTab.setTabListener(new TabListener(tabReceivedNotes));
         sentTab.setTabListener(new TabListener(tabSentNotes));
+
+        Note test = new Note("anna","anna","bla", "05/01/16");
+        //Model.getInstance().addLocalNote(test);
+        //Log.d("a", Model.getInstance().getAllLocalNotes().get(0).getDetails());
+     /*   Model.getInstance().addRemoteNote(test, new Model.AddNoteListener() {
+            @Override
+            public void onResult(boolean result) {
+                Log.d("a","DONE");
+            }
+        });*/
 
         // Adding tabs to the ActionBar.
         actionBar.addTab(receivedTab);
