@@ -6,6 +6,7 @@ import android.util.Log;
 
 import com.parse.FindCallback;
 import com.parse.GetCallback;
+import com.parse.Parse;
 import com.parse.ParseException;
 import com.parse.ParseObject;
 import com.parse.ParseQuery;
@@ -23,7 +24,6 @@ public class NoteParse {
     private static final String TAG = "NoteParse";
 
     private final static String NOTE_TABLE            = "NOTES";
-    private final static String NOTE_ID               = "LOCAL_ID";
     private final static String NOTE_FROM             = "SENDER";
     private final static String NOTE_TO               = "RECEIVER";
     private final static String NOTE_DETAILS          = "DETAILS";
@@ -36,7 +36,6 @@ public class NoteParse {
 
     public static void addNote(Note note, final Model.AddNoteListener listener) {
         ParseObject parseNote = new ParseObject(NOTE_TABLE);
-        parseNote.put(NOTE_ID, note.getId());
         parseNote.put(NOTE_FROM, note.getFrom());
         parseNote.put(NOTE_TO, note.getTo());
         parseNote.put(NOTE_DETAILS, note.getDetails());
@@ -64,7 +63,7 @@ public class NoteParse {
         ParseQuery<ParseObject> query = ParseQuery.getQuery(NOTE_TABLE);
 
         // Retrieve the object by id
-        query.getInBackground(String.valueOf(note.getId()), new GetCallback<ParseObject>() {
+        query.getInBackground(note.getId(), new GetCallback<ParseObject>() {
             public void done(ParseObject parseNote, ParseException e) {
                 if (e == null) {
                     // Now let's update it with some new data.
@@ -93,16 +92,14 @@ public class NoteParse {
         });
     }
 
-    public static void getNote(long id, final Model.GetNoteListener listener) {
+    public static void getNote(String id, final Model.GetNoteListener listener) {
         ParseQuery<ParseObject> query = new ParseQuery<ParseObject>(NOTE_TABLE);
-        query.whereEqualTo(NOTE_ID, id);
-        query.findInBackground(new FindCallback<ParseObject>() {
+        query.getInBackground(id, new GetCallback<ParseObject>() {
             @Override
-            public void done(List<ParseObject> parseObjects, ParseException e) {
+            public void done(ParseObject po, ParseException e) {
                 Note note = null;
-                if (e == null && parseObjects.size() > 0) {
-                    ParseObject po = parseObjects.get(0);
-                    long id = po.getInt(NOTE_ID);
+                if (e == null) {
+                    String id = po.getObjectId();
                     String from = po.getString(NOTE_FROM);
                     String to = po.getString(NOTE_TO);
                     String details = po.getString(NOTE_DETAILS);
@@ -128,7 +125,7 @@ public class NoteParse {
                 List<Note> notes = new LinkedList<Note>();
                 if (e == null) {
                     for (ParseObject po : parseObjects) {
-                        long id = po.getInt(NOTE_ID);
+                        String id = po.getObjectId();
                         String from = po.getString(NOTE_FROM);
                         String to = po.getString(NOTE_TO);
                         String details = po.getString(NOTE_DETAILS);

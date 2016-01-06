@@ -26,6 +26,7 @@ public class NoteSql {
     public static long addNote(ModelSql.Helper dbHelper, Note note) {
         SQLiteDatabase db = dbHelper.getWritableDatabase();
         ContentValues values = new ContentValues();
+        values.put(NOTE_ID, note.getId());
         values.put(NOTE_FROM, note.getFrom());
         values.put(NOTE_TO, note.getTo());
         values.put(NOTE_DETAILS, note.getDetails());
@@ -57,9 +58,9 @@ public class NoteSql {
         return rows_updated;
     }
 
-    public static Note getNote(ModelSql.Helper dbHelper, long note_id) {
+    public static Note getNote(ModelSql.Helper dbHelper, String note_id) {
         SQLiteDatabase db = dbHelper.getReadableDatabase();
-        Cursor cursor = db.query(NOTE_TABLE, null, NOTE_ID + "=?", new String[]{String.valueOf(note_id)}, null, null, null);
+        Cursor cursor = db.query(NOTE_TABLE, null, NOTE_ID + "=?", new String[]{note_id}, null, null, null);
         Note note = null;
 
         if (cursor.moveToFirst()) {
@@ -74,7 +75,7 @@ public class NoteSql {
             int location_to_show_index = cursor.getColumnIndex(NOTE_LOCATION_TO_SHOW);
             int is_shown_index = cursor.getColumnIndex(NOTE_IS_SHOWN);
 
-            long id = cursor.getInt(id_index);
+            String id = cursor.getString(id_index);
             String from = cursor.getString(from_index);
             String to = cursor.getString(to_index);
             String details = cursor.getString(details_index);
@@ -110,7 +111,7 @@ public class NoteSql {
             int is_shown_index = cursor.getColumnIndex(NOTE_IS_SHOWN);
 
             do {
-                long id = cursor.getInt(id_index);
+                String id = cursor.getString(id_index);
                 String from = cursor.getString(from_index);
                 String to = cursor.getString(to_index);
                 String details = cursor.getString(details_index);
@@ -131,7 +132,7 @@ public class NoteSql {
 
     public static void create(SQLiteDatabase db) {
         db.execSQL("CREATE TABLE " + NOTE_TABLE + " (" +
-                    NOTE_ID                 + " INTEGER PRIMARY KEY," +
+                    NOTE_ID                 + " TEXT PRIMARY KEY," +
                     NOTE_FROM               + " TEXT NOT NULL," +
                     NOTE_TO                 + " TEXT NOT NULL," +
                     NOTE_DETAILS            + " TEXT NOT NULL," +

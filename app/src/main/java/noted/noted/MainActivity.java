@@ -7,6 +7,7 @@ import android.os.Bundle;
 import android.util.Log;
 
 import java.util.Calendar;
+import java.util.List;
 
 import noted.noted.Models.Model;
 import noted.noted.Models.Note;
@@ -47,14 +48,27 @@ public class MainActivity extends Activity {
         sentTab.setTabListener(new TabListener(tabSentNotes));
 
         Note test = new Note("anna","anna","bla", "05/01/16");
-        //Model.getInstance().addLocalNote(test);
-        //Log.d("a", Model.getInstance().getAllLocalNotes().get(0).getDetails());
-     /*   Model.getInstance().addRemoteNote(test, new Model.AddNoteListener() {
+/*        Model.getInstance().addRemoteNote(test, new Model.AddNoteListener() {
             @Override
             public void onResult(boolean result) {
                 Log.d("a","DONE");
+                Model.getInstance().getAllRemoteNotes(new Model.GetNotesListener() {
+                    @Override
+                    public void onResult(List<Note> notes) {
+                        Log.d("a", notes.get(0).getId());
+                        Model.getInstance().addLocalNote(notes.get(0));
+                        Log.d("a", Model.getInstance().getAllLocalNotes().get(0).getId());
+                    }
+                });
             }
         });*/
+
+        Model.getInstance().getAllRemoteNotes(new Model.GetNotesListener() {
+            @Override
+            public void onResult(List<Note> notes) {
+                Log.d("a", notes.get(0).getId());
+            }
+        });
 
         // Adding tabs to the ActionBar.
         actionBar.addTab(receivedTab);

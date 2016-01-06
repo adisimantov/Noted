@@ -19,7 +19,7 @@ public class ModelParse {
         NoteParse.getAllNotes(listener);
     }
 
-    public void getNote(long id, Model.GetNoteListener listener){
+    public void getNote(String id, Model.GetNoteListener listener){
         NoteParse.getNote(id, listener);
     }
 

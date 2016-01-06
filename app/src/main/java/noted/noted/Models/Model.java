@@ -27,7 +27,7 @@ public class Model {
     }
 
     // Local database
-    public Note getLocalNote(long id){
+    public Note getLocalNote(String id){
         return local.getNote(id);
     }
 
@@ -58,7 +58,7 @@ public class Model {
         public void onResult(Note note);
     }
 
-    public void getNote(long id,GetNoteListener listener){
+    public void getNote(String id,GetNoteListener listener){
         remote.getNote(id,listener);
     }
 

@@ -10,7 +10,7 @@ import java.util.List;
  * Created by Anna on 30-Dec-15.
  */
 public class ModelSql {
-    final static int VERSION = 1;
+    final static int VERSION = 2;
     private Helper dbHelper;
 
     public void init(Context context) {
@@ -23,7 +23,7 @@ public class ModelSql {
         return NoteSql.getAllNotes(dbHelper);
     }
 
-    public Note getNote(long id){
+    public Note getNote(String id){
         return NoteSql.getNote(dbHelper, id);
     }
 

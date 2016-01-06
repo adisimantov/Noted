@@ -4,7 +4,7 @@ package noted.noted.Models;
  * Created by adi on 26-Dec-15.
  */
 public class Note {
-    private long id;
+    private String id;
     private String from;
     private String to;
     private String details;
@@ -16,14 +16,13 @@ public class Note {
     private boolean isShown;
 
     public Note(String from, String to, String details, String sentTime) {
-        this.id = id;
         this.from = from;
         this.to = to;
         this.details = details;
         this.sentTime = sentTime;
     }
 
-    public Note(long id, String from, String to, String details, String sentTime, String receivedTime, String showedTime, String timeToShow, String locationToShow, boolean isShown) {
+    public Note(String id, String from, String to, String details, String sentTime, String receivedTime, String showedTime, String timeToShow, String locationToShow, boolean isShown) {
         this.id = id;
         this.from = from;
         this.to = to;
@@ -36,9 +35,11 @@ public class Note {
         this.isShown = isShown;
     }
 
-    public long getId() {
+    public String getId() {
         return id;
     }
+
+    public void setId(String id) {this.id = id; }
 
     public String getFrom() {
         return from;
