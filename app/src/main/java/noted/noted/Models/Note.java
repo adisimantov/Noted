@@ -21,7 +21,7 @@ public class Note {
         this.details = details;
         this.from = from;
         this.id = id;
-        this.isAppear = isAppear;
+        this.isShown = isShown;
         this.location = location;
         this.time = time;
         this.to = to;
