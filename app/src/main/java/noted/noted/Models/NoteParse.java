@@ -34,8 +34,8 @@ public class NoteParse {
     private final static String NOTE_LOCATION_TO_SHOW = "LOCATION_TO_SHOW";
     private final static String NOTE_IS_SHOWN         = "IS_SHOWN";
 
-    public static void addNote(Note note, final Model.AddNoteListener listener) {
-        ParseObject parseNote = new ParseObject(NOTE_TABLE);
+    public static void addNote(final Note note, final Model.AddNoteListener listener) {
+        final ParseObject parseNote = new ParseObject(NOTE_TABLE);
         parseNote.put(NOTE_FROM, note.getFrom());
         parseNote.put(NOTE_TO, note.getTo());
         parseNote.put(NOTE_DETAILS, note.getDetails());
@@ -50,9 +50,10 @@ public class NoteParse {
             @Override
             public void done(ParseException e) {
                 if (e == null) {
-                    listener.onResult(true);
+                    note.setId(parseNote.getObjectId());
+                    listener.onResult(true,note);
                 } else {
-                    listener.onResult(false);
+                    listener.onResult(false,note);
                     Log.d(getClass().getSimpleName(), "Note add error: " + e);
                 }
             }

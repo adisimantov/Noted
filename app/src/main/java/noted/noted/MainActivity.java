@@ -62,7 +62,12 @@ public class MainActivity extends Activity {
                 });
             }
         });*/
-
+        Model.getInstance().addLocalAndRemoteNote(test, new Model.AddNoteListener() {
+            @Override
+            public void onResult(boolean result, Note id) {
+                Log.d("a", "" + result + " " + id.getId());
+            }
+        });
         Model.getInstance().getAllRemoteNotes(new Model.GetNotesListener() {
             @Override
             public void onResult(List<Note> notes) {

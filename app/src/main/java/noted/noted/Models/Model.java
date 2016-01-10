@@ -63,7 +63,7 @@ public class Model {
     }
 
     public interface AddNoteListener {
-        public void onResult(boolean result);
+        public void onResult(boolean result, Note id);
     }
 
     public void addRemoteNote(Note note, AddNoteListener listener){
@@ -76,5 +76,22 @@ public class Model {
 
     public void updateRemoteNote(Note note, UpdateNoteListener listener){
         remote.updateNote(note, listener);
+    }
+
+    public void addLocalAndRemoteNote(final Note note, final AddNoteListener listener) {
+        addRemoteNote(note, new AddNoteListener() {
+            @Override
+            public void onResult(boolean result, Note note) {
+                if (result) {
+                    if (addLocalNote(note) > -1) {
+                        listener.onResult(true,note);
+                    } else {
+                        listener.onResult(false,note);
+                    }
+                } else {
+                    listener.onResult(false,note);
+                }
+            }
+        });
     }
 }
