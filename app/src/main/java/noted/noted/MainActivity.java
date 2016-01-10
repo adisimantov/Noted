@@ -7,7 +7,9 @@ import android.os.Bundle;
 import android.util.Log;
 
 import java.util.Calendar;
+import java.util.List;
 
+import noted.noted.Models.Contact;
 import noted.noted.Models.Model;
 import noted.noted.Models.Note;
 
@@ -55,6 +57,9 @@ public class MainActivity extends Activity {
                 Log.d("a","DONE");
             }
         });*/
+
+        List<Contact> contactList = Model.getInstance().getAllContacts();
+        Contact contact = Model.getInstance().getContact("000-1255");
 
         // Adding tabs to the ActionBar.
         actionBar.addTab(receivedTab);

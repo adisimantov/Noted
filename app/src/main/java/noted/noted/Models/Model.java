@@ -13,6 +13,7 @@ public class Model {
 
     ModelSql local = new ModelSql();
     ModelParse remote = new ModelParse();
+    ModelContact contacts = new ModelContact();
 
     private Model(){}
 
@@ -76,5 +77,14 @@ public class Model {
 
     public void updateRemoteNote(Note note, UpdateNoteListener listener){
         remote.updateNote(note, listener);
+    }
+
+    // Contacts
+    public List<Contact> getAllContacts(){
+        return contacts.getAllContacts(context);
+    }
+
+    public Contact getContact(String phoneNumber){
+        return contacts.getContact(phoneNumber);
     }
 }
