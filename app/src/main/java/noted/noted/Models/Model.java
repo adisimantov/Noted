@@ -13,6 +13,7 @@ public class Model {
 
     ModelSql local = new ModelSql();
     ModelParse remote = new ModelParse();
+    ModelContact contacts = new ModelContact();
 
     private Model(){}
 
@@ -45,7 +46,6 @@ public class Model {
 
 
     // Remote database
-
     public interface LogInListener {
         public void onResult(boolean result);
     }
@@ -59,7 +59,7 @@ public class Model {
     }
 
     public void signIn(User user, SignUpListener listener) {
-        remote.userSignUp(user,listener);
+        remote.userSignUp(user, listener);
     }
 
     public interface ResetPasswordListener {
@@ -69,7 +69,7 @@ public class Model {
     public void resetPassword(String email, ResetPasswordListener listener) {
         remote.userResetPassword(email,listener);
     }
-
+    
     public interface GetNotesListener{
         public void onResult(List<Note> notes);
     }
@@ -82,15 +82,15 @@ public class Model {
         public void onResult(Note note);
     }
 
-    public void getNote(String id,GetNoteListener listener){
-        remote.getNote(id,listener);
+    public void getNote(String id, GetNoteListener listener) {
+        remote.getNote(id, listener);
     }
 
     public interface AddNoteListener {
         public void onResult(boolean result, Note id);
     }
 
-    public void addRemoteNote(Note note, AddNoteListener listener){
+    public void addRemoteNote(Note note, AddNoteListener listener) {
         remote.addNote(note, listener);
     }
 
@@ -98,7 +98,7 @@ public class Model {
         public void onResult(boolean result);
     }
 
-    public void updateRemoteNote(Note note, UpdateNoteListener listener){
+    public void updateRemoteNote(Note note, UpdateNoteListener listener) {
         remote.updateNote(note, listener);
     }
 
@@ -108,14 +108,23 @@ public class Model {
             public void onResult(boolean result, Note note) {
                 if (result) {
                     if (addLocalNote(note) > -1) {
-                        listener.onResult(true,note);
+                        listener.onResult(true, note);
                     } else {
-                        listener.onResult(false,note);
+                        listener.onResult(false, note);
                     }
                 } else {
-                    listener.onResult(false,note);
+                    listener.onResult(false, note);
                 }
             }
         });
+    }
+
+    // Contacts
+    public List<Contact> getAllContacts(){
+        return contacts.getAllContacts(context);
+    }
+
+    public Contact getContact(String phoneNumber){
+        return contacts.getContact(phoneNumber);
     }
 }
