@@ -46,6 +46,30 @@ public class Model {
 
     // Remote database
 
+    public interface LogInListener {
+        public void onResult(boolean result);
+    }
+
+    public void logIn(User user, LogInListener listener) {
+        remote.userLogIn(user,listener);
+    }
+
+    public interface SignUpListener {
+        public void onResult(boolean result);
+    }
+
+    public void signIn(User user, SignUpListener listener) {
+        remote.userSignUp(user,listener);
+    }
+
+    public interface ResetPasswordListener {
+        public void onResult(boolean result);
+    }
+
+    public void resetPassword(String email, ResetPasswordListener listener) {
+        remote.userResetPassword(email,listener);
+    }
+
     public interface GetNotesListener{
         public void onResult(List<Note> notes);
     }
