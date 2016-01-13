@@ -41,6 +41,13 @@ public class NoteSql {
         return note_id;
     }
 
+    public static int deleteNote(ModelSql.Helper dbHelper, String noteId) {
+        SQLiteDatabase db = dbHelper.getWritableDatabase();
+
+        int rows_deleted = db.delete(NOTE_TABLE, NOTE_ID + "= ? ", new String[] {noteId});
+        return rows_deleted;
+    }
+
     public static int updateNote(ModelSql.Helper dbHelper, Note note) {
         SQLiteDatabase db = dbHelper.getWritableDatabase();
         ContentValues values = new ContentValues();
@@ -54,7 +61,7 @@ public class NoteSql {
         values.put(NOTE_LOCATION_TO_SHOW, note.getLocationToShow());
         values.put(NOTE_IS_SHOWN, note.isShown());
 
-        int rows_updated = db.update(NOTE_TABLE, values, NOTE_ID + "=" + note.getId(), null);
+        int rows_updated = db.update(NOTE_TABLE, values, NOTE_ID + "= ?", new String[]{note.getId()} );
         return rows_updated;
     }
 

@@ -40,6 +40,10 @@ public class Model {
         return local.updateNote(note);
     }
 
+    public int deleteLocalNote(String noteId){
+        return local.deleteNote(noteId);
+    }
+
     public List<Note> getAllLocalNotes(){
         return local.getAllNotes();
     }

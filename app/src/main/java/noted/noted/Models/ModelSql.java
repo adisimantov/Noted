@@ -32,7 +32,11 @@ public class ModelSql {
     }
 
     public int updateNote(Note note){
-        return NoteSql.updateNote(dbHelper,note);
+        return NoteSql.updateNote(dbHelper, note);
+    }
+
+    public int deleteNote(String noteId){
+        return NoteSql.deleteNote(dbHelper, noteId);
     }
 
     class Helper extends SQLiteOpenHelper {
