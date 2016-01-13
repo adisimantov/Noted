@@ -6,12 +6,12 @@ import android.app.Fragment;
 import android.os.Bundle;
 import android.util.Log;
 
-import java.util.Calendar;
 import java.util.List;
 
 import noted.noted.Models.Contact;
 import noted.noted.Models.Model;
 import noted.noted.Models.Note;
+import noted.noted.Receivers.AlarmReceiver;
 
 public class MainActivity extends Activity {
 
@@ -82,5 +82,11 @@ public class MainActivity extends Activity {
         // Adding tabs to the ActionBar.
         actionBar.addTab(receivedTab);
         actionBar.addTab(sentTab);
+    }
+
+    @Override
+    protected void onStart() {
+        super.onStart();
+        new AlarmReceiver().SetAlarm(this);
     }
 }
