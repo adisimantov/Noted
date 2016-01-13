@@ -48,6 +48,13 @@ public class Model {
         return local.getAllNotes();
     }
 
+    public List<Note> getReceivedLocalNotes(String sentPhone){
+        return local.getReceivedNotes(sentPhone);
+    }
+
+    public List<Note> getSentLocalNotes(String receivedPhone){
+        return local.getSentNotes(receivedPhone);
+    }
 
     // Remote database
     public interface LogInListener {

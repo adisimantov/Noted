@@ -23,6 +23,41 @@ public class NoteSql {
     private final static String NOTE_LOCATION_TO_SHOW = "LOCATION_TO_SHOW";
     private final static String NOTE_IS_SHOWN         = "IS_SHOWN";
 
+    private static List<Note> getNoteListByCursor(Cursor cursor) {
+        List<Note> data = new LinkedList<Note>();
+
+        if (cursor.moveToFirst()) {
+            int id_index = cursor.getColumnIndex(NOTE_ID);
+            int from_index = cursor.getColumnIndex(NOTE_FROM);
+            int to_index = cursor.getColumnIndex(NOTE_TO);
+            int details_index = cursor.getColumnIndex(NOTE_DETAILS);
+            int sent_time_index = cursor.getColumnIndex(NOTE_SENT_TIME);
+            int received_time_index = cursor.getColumnIndex(NOTE_RECEIVED_TIME);
+            int showed_time_index = cursor.getColumnIndex(NOTE_SHOWED_TIME);
+            int time_to_show_index = cursor.getColumnIndex(NOTE_TIME_TO_SHOW);
+            int location_to_show_index = cursor.getColumnIndex(NOTE_LOCATION_TO_SHOW);
+            int is_shown_index = cursor.getColumnIndex(NOTE_IS_SHOWN);
+
+            do {
+                String id = cursor.getString(id_index);
+                String from = cursor.getString(from_index);
+                String to = cursor.getString(to_index);
+                String details = cursor.getString(details_index);
+                String sentTime = cursor.getString(sent_time_index);
+                String receivedTime = cursor.getString(received_time_index);
+                String showedTime = cursor.getString(showed_time_index);
+                String timeToShow = cursor.getString(time_to_show_index);
+                String locationToShow = cursor.getString(location_to_show_index);
+                boolean isShown = (cursor.getInt(is_shown_index) == 1);
+
+                Note st = new Note(id,from,to,details,sentTime,receivedTime,showedTime,timeToShow,locationToShow,isShown);
+                data.add(st);
+            } while (cursor.moveToNext());
+        }
+
+        return data;
+    }
+
     public static long addNote(ModelSql.Helper dbHelper, Note note) {
         SQLiteDatabase db = dbHelper.getWritableDatabase();
         ContentValues values = new ContentValues();
@@ -61,8 +96,20 @@ public class NoteSql {
         values.put(NOTE_LOCATION_TO_SHOW, note.getLocationToShow());
         values.put(NOTE_IS_SHOWN, note.isShown());
 
-        int rows_updated = db.update(NOTE_TABLE, values, NOTE_ID + "= ?", new String[]{note.getId()} );
+        int rows_updated = db.update(NOTE_TABLE, values, NOTE_ID + "= ?", new String[]{note.getId()});
         return rows_updated;
+    }
+
+    public static List<Note> getReceivedNotes(ModelSql.Helper dbHelper, String receivedPhone) {
+        SQLiteDatabase db = dbHelper.getReadableDatabase();
+        Cursor cursor = db.query(NOTE_TABLE, null, NOTE_TO + "=?", new String[]{receivedPhone}, null, null, null);
+        return getNoteListByCursor(cursor);
+    }
+
+    public static List<Note> getSentNotes(ModelSql.Helper dbHelper, String sentPhone) {
+        SQLiteDatabase db = dbHelper.getReadableDatabase();
+        Cursor cursor = db.query(NOTE_TABLE, null, NOTE_FROM + "=?", new String[]{sentPhone}, null, null, null);
+        return getNoteListByCursor(cursor);
     }
 
     public static Note getNote(ModelSql.Helper dbHelper, String note_id) {
@@ -100,41 +147,9 @@ public class NoteSql {
     }
 
     public static List<Note> getAllNotes(ModelSql.Helper dbHelper) {
-        List<Note> data = new LinkedList<Note>();
         SQLiteDatabase db = dbHelper.getReadableDatabase();
-
         Cursor cursor = db.query(NOTE_TABLE, null, null, null, null, null, null);
-
-        if (cursor.moveToFirst()) {
-            int id_index = cursor.getColumnIndex(NOTE_ID);
-            int from_index = cursor.getColumnIndex(NOTE_FROM);
-            int to_index = cursor.getColumnIndex(NOTE_TO);
-            int details_index = cursor.getColumnIndex(NOTE_DETAILS);
-            int sent_time_index = cursor.getColumnIndex(NOTE_SENT_TIME);
-            int received_time_index = cursor.getColumnIndex(NOTE_RECEIVED_TIME);
-            int showed_time_index = cursor.getColumnIndex(NOTE_SHOWED_TIME);
-            int time_to_show_index = cursor.getColumnIndex(NOTE_TIME_TO_SHOW);
-            int location_to_show_index = cursor.getColumnIndex(NOTE_LOCATION_TO_SHOW);
-            int is_shown_index = cursor.getColumnIndex(NOTE_IS_SHOWN);
-
-            do {
-                String id = cursor.getString(id_index);
-                String from = cursor.getString(from_index);
-                String to = cursor.getString(to_index);
-                String details = cursor.getString(details_index);
-                String sentTime = cursor.getString(sent_time_index);
-                String receivedTime = cursor.getString(received_time_index);
-                String showedTime = cursor.getString(showed_time_index);
-                String timeToShow = cursor.getString(time_to_show_index);
-                String locationToShow = cursor.getString(location_to_show_index);
-                boolean isShown = (cursor.getInt(is_shown_index) == 1);
-
-                Note st = new Note(id,from,to,details,sentTime,receivedTime,showedTime,timeToShow,locationToShow,isShown);
-                data.add(st);
-            } while (cursor.moveToNext());
-        }
-
-        return data;
+        return getNoteListByCursor(cursor);
     }
 
     public static void create(SQLiteDatabase db) {

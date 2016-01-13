@@ -22,7 +22,12 @@ public class ModelSql {
     public List<Note> getAllNotes(){
         return NoteSql.getAllNotes(dbHelper);
     }
-
+    public List<Note> getSentNotes(String sentPhone){
+        return NoteSql.getSentNotes(dbHelper, sentPhone);
+    }
+    public List<Note> getReceivedNotes(String receivedPhone){
+        return NoteSql.getReceivedNotes(dbHelper,receivedPhone);
+    }
     public Note getNote(String id){
         return NoteSql.getNote(dbHelper, id);
     }
