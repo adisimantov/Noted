@@ -130,6 +130,20 @@ public class Model {
         });
     }
 
+    public interface SyncNotesListener {
+        public void onResult(List<Note> data);
+    }
+
+    public void syncNotesFromServer(final SyncNotesListener listener) {
+        getAllRemoteNotes(new GetNotesListener() {
+            @Override
+            public void onResult(List<Note> notes) {
+                listener.onResult(notes);
+            }
+        });
+
+    }
+    
     // Contacts
     public List<Contact> getAllContacts(){
         return contacts.getAllContacts(context);
