@@ -15,10 +15,9 @@ public class ModelParse {
     public void init(Context context) {
         Parse.initialize(context);
     }
-    public void getAllNotes(Model.GetNotesListener listener) {
-        NoteParse.getAllNotes(listener);
+    public void getAllNotes(Model.GetNotesListener listener, String timestamp, String to) {
+        NoteParse.getAllNotes(listener, timestamp, to);
     }
-
     public void getNote(String id, Model.GetNoteListener listener){
         NoteParse.getNote(id, listener);
     }

@@ -62,7 +62,7 @@ public class Model {
     }
 
     public void logIn(User user, LogInListener listener) {
-        remote.userLogIn(user,listener);
+        remote.userLogIn(user, listener);
     }
 
     public interface SignUpListener {
@@ -78,15 +78,11 @@ public class Model {
     }
 
     public void resetPassword(String email, ResetPasswordListener listener) {
-        remote.userResetPassword(email,listener);
+        remote.userResetPassword(email, listener);
     }
     
     public interface GetNotesListener{
         public void onResult(List<Note> notes);
-    }
-
-    public void getAllRemoteNotes(GetNotesListener listener){
-        remote.getAllNotes(listener);
     }
 
     public interface GetNoteListener {
@@ -134,16 +130,19 @@ public class Model {
         public void onResult(List<Note> data);
     }
 
-    public void syncNotesFromServer(final SyncNotesListener listener) {
-        getAllRemoteNotes(new GetNotesListener() {
+    public void syncNotesFromServer(final SyncNotesListener listener, String timestamp, String to) {
+        remote.getAllNotes(new GetNotesListener() {
             @Override
             public void onResult(List<Note> notes) {
+                for (Note note : notes) {
+                    local.addNote(note);
+                }
                 listener.onResult(notes);
             }
-        });
-
+        }, timestamp, to);
     }
-    
+
+
     // Contacts
     public List<Contact> getAllContacts(){
         return contacts.getAllContacts(context);
