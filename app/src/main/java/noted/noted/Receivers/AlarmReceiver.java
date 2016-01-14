@@ -16,7 +16,7 @@ public class AlarmReceiver extends BroadcastReceiver {
 
     @Override
     public void onReceive(Context context, Intent intent) {
-
+        
         Model.getInstance().syncNotesFromServer(new Model.SyncNotesListener() {
             @Override
             public void onResult(List<Note> data) {
