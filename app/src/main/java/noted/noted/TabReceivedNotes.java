@@ -26,12 +26,14 @@ import noted.noted.Models.Note;
 public class TabReceivedNotes extends Fragment {
 
     GridView receivedGrid;
+    GridAdapter adapter;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.received_notes_tab, container, false);
         receivedGrid = (GridView) view.findViewById(R.id.receivedNotesGrid);
-        receivedGrid.setAdapter(new GridAdapter(view.getContext(), true));
+        adapter =  new GridAdapter(view.getContext(),true);
+        receivedGrid.setAdapter(adapter);
 
         receivedGrid.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
             @Override
@@ -42,6 +44,9 @@ public class TabReceivedNotes extends Fragment {
                 builder.setPositiveButton(R.string.yes_button, new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
+                        //receivedGrid.removeViewInLayout(view);
+                        adapter.lNotes.remove(position);
+                        adapter.notifyDataSetChanged();
                     }
                 });
                 builder.setNegativeButton(R.string.no_button, new DialogInterface.OnClickListener() {
@@ -50,6 +55,7 @@ public class TabReceivedNotes extends Fragment {
 
                     }
                 });
+
 
                 AlertDialog alert = builder.create();
                 alert.show();

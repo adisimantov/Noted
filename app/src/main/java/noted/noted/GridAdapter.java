@@ -2,6 +2,7 @@ package noted.noted;
 
 import android.app.Activity;
 import android.content.Context;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -11,6 +12,7 @@ import android.widget.TextView;
 import java.util.ArrayList;
 import java.util.List;
 
+import noted.noted.Models.Model;
 import noted.noted.Models.Note;
 
 public class GridAdapter extends BaseAdapter {
@@ -22,10 +24,23 @@ public class GridAdapter extends BaseAdapter {
     public GridAdapter(Context context, boolean isReceived) {
         this.context = context;
         this.isReceived = isReceived;
-        lNotes.add(new Note(1, 1111, 2222, "blabla", false));
-        lNotes.add(new Note(2, 1111, 2222, "blabla", false));
-        lNotes.add(new Note(3, 1111, 2222, "blabla", false));
-        lNotes.add(new Note(4, 1111, 2222, "blabla", false));
+
+        List<Note> noteList = Model.getInstance().getAllLocalNotes();
+
+        for(Note note : noteList)
+        {
+            lNotes.add(note);
+        }
+        /**Note note = new Note("from1","to1","details1","1111");
+        lNotes.add(note);
+        lNotes.add(note);
+        lNotes.add(note);
+        lNotes.add(note);*/
+        Log.d("noy", "enter");
+        //lNotes.add(new Note(1, 1111, 2222, "blabla", false));
+        //lNotes.add(new Note(2, 1111, 2222, "blabla", false));
+        //lNotes.add(new Note(3, 1111, 2222, "blabla", false));
+        //lNotes.add(new Note(4, 1111, 2222, "blabla", false));
     }
 
     @Override

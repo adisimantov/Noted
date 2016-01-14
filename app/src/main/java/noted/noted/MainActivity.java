@@ -48,18 +48,20 @@ public class MainActivity extends Activity {
         receivedTab.setTabListener(new TabListener(tabReceivedNotes));
         sentTab.setTabListener(new TabListener(tabSentNotes));
 
-        Note test = new Note("anna","anna","bla", "05/01/16");
+        //Note test = new Note("anna","anna","bla", "05/01/16");
         //Model.getInstance().addLocalNote(test);
-        //Log.d("a", Model.getInstance().getAllLocalNotes().get(0).getDetails());
-     /*   Model.getInstance().addRemoteNote(test, new Model.AddNoteListener() {
+        Log.d("a", Model.getInstance().getAllLocalNotes().get(0).getDetails());
+        /**Model.getInstance().addRemoteNote(test, new Model.AddNoteListener() {
             @Override
             public void onResult(boolean result) {
                 Log.d("a","DONE");
             }
         });*/
 
-        List<Contact> contactList = Model.getInstance().getAllContacts();
-        Contact contact = Model.getInstance().getContact("000-1255");
+
+
+        //List<Contact> contactList = Model.getInstance().getAllContacts();
+        //Contact contact = Model.getInstance().getContact("000-1255");
 
         // Adding tabs to the ActionBar.
         actionBar.addTab(receivedTab);
