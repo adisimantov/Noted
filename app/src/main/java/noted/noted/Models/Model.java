@@ -28,7 +28,7 @@ public class Model {
     }
 
     // Local database
-    public Note getLocalNote(long id){
+    public Note getLocalNote(String id){
         return local.getNote(id);
     }
 
@@ -40,13 +40,47 @@ public class Model {
         return local.updateNote(note);
     }
 
+    public int deleteLocalNote(String noteId){
+        return local.deleteNote(noteId);
+    }
+
     public List<Note> getAllLocalNotes(){
         return local.getAllNotes();
     }
 
+    public List<Note> getReceivedLocalNotes(String sentPhone){
+        return local.getReceivedNotes(sentPhone);
+    }
+
+    public List<Note> getSentLocalNotes(String receivedPhone){
+        return local.getSentNotes(receivedPhone);
+    }
 
     // Remote database
+    public interface LogInListener {
+        public void onResult(boolean result);
+    }
 
+    public void logIn(User user, LogInListener listener) {
+        remote.userLogIn(user,listener);
+    }
+
+    public interface SignUpListener {
+        public void onResult(boolean result);
+    }
+
+    public void signIn(User user, SignUpListener listener) {
+        remote.userSignUp(user, listener);
+    }
+
+    public interface ResetPasswordListener {
+        public void onResult(boolean result);
+    }
+
+    public void resetPassword(String email, ResetPasswordListener listener) {
+        remote.userResetPassword(email,listener);
+    }
+    
     public interface GetNotesListener{
         public void onResult(List<Note> notes);
     }
@@ -59,15 +93,15 @@ public class Model {
         public void onResult(Note note);
     }
 
-    public void getNote(long id,GetNoteListener listener){
-        remote.getNote(id,listener);
+    public void getNote(String id, GetNoteListener listener) {
+        remote.getNote(id, listener);
     }
 
     public interface AddNoteListener {
-        public void onResult(boolean result);
+        public void onResult(boolean result, Note id);
     }
 
-    public void addRemoteNote(Note note, AddNoteListener listener){
+    public void addRemoteNote(Note note, AddNoteListener listener) {
         remote.addNote(note, listener);
     }
 
@@ -75,10 +109,41 @@ public class Model {
         public void onResult(boolean result);
     }
 
-    public void updateRemoteNote(Note note, UpdateNoteListener listener){
+    public void updateRemoteNote(Note note, UpdateNoteListener listener) {
         remote.updateNote(note, listener);
     }
 
+    public void addLocalAndRemoteNote(final Note note, final AddNoteListener listener) {
+        addRemoteNote(note, new AddNoteListener() {
+            @Override
+            public void onResult(boolean result, Note note) {
+                if (result) {
+                    if (addLocalNote(note) > -1) {
+                        listener.onResult(true, note);
+                    } else {
+                        listener.onResult(false, note);
+                    }
+                } else {
+                    listener.onResult(false, note);
+                }
+            }
+        });
+    }
+
+    public interface SyncNotesListener {
+        public void onResult(List<Note> data);
+    }
+
+    public void syncNotesFromServer(final SyncNotesListener listener) {
+        getAllRemoteNotes(new GetNotesListener() {
+            @Override
+            public void onResult(List<Note> notes) {
+                listener.onResult(notes);
+            }
+        });
+
+    }
+    
     // Contacts
     public List<Contact> getAllContacts(){
         return contacts.getAllContacts(context);

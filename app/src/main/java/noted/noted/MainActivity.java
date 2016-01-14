@@ -48,15 +48,27 @@ public class MainActivity extends Activity {
         receivedTab.setTabListener(new TabListener(tabReceivedNotes));
         sentTab.setTabListener(new TabListener(tabSentNotes));
 
-        //Note test = new Note("anna","anna","bla", "05/01/16");
+        Note test = new Note("anna","anna","bla", "05/01/16");
         //Model.getInstance().addLocalNote(test);
-        Log.d("a", Model.getInstance().getAllLocalNotes().get(0).getDetails());
-        /**Model.getInstance().addRemoteNote(test, new Model.AddNoteListener() {
+        //Log.d("a", Model.getInstance().getAllLocalNotes().get(0).getDetails());
+     /*   Model.getInstance().addRemoteNote(test, new Model.AddNoteListener() {
             @Override
             public void onResult(boolean result) {
                 Log.d("a","DONE");
             }
         });*/
+        Model.getInstance().addLocalAndRemoteNote(test, new Model.AddNoteListener() {
+            @Override
+            public void onResult(boolean result, Note id) {
+                Log.d("a", "" + result + " " + id.getId());
+            }
+        });
+        Model.getInstance().getAllRemoteNotes(new Model.GetNotesListener() {
+            @Override
+            public void onResult(List<Note> notes) {
+                Log.d("a", notes.get(0).getId());
+            }
+        });
 
 
 

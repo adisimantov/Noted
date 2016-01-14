@@ -19,7 +19,7 @@ public class ModelParse {
         NoteParse.getAllNotes(listener);
     }
 
-    public void getNote(long id, Model.GetNoteListener listener){
+    public void getNote(String id, Model.GetNoteListener listener){
         NoteParse.getNote(id, listener);
     }
 
@@ -29,5 +29,21 @@ public class ModelParse {
 
     public void updateNote(Note note, Model.UpdateNoteListener listener){
         NoteParse.updateNote(note, listener);
+    }
+
+    public void userLogIn(User user, Model.LogInListener listener) {
+        UserParse.userLogIn(user, listener);
+    }
+
+    public void userSignUp(User user, Model.SignUpListener listener) {
+        UserParse.userSignUp(user, listener);
+    }
+
+    public User getCurrUser() {
+        return UserParse.getCurrUser();
+    }
+
+    public void userResetPassword(String email, Model.ResetPasswordListener listener) {
+        UserParse.userResetPassword(email,listener);
     }
 }

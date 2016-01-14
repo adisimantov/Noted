@@ -10,7 +10,7 @@ import java.util.List;
  * Created by Anna on 30-Dec-15.
  */
 public class ModelSql {
-    final static int VERSION = 1;
+    final static int VERSION = 3;
     private Helper dbHelper;
 
     public void init(Context context) {
@@ -22,8 +22,13 @@ public class ModelSql {
     public List<Note> getAllNotes(){
         return NoteSql.getAllNotes(dbHelper);
     }
-
-    public Note getNote(long id){
+    public List<Note> getSentNotes(String sentPhone){
+        return NoteSql.getSentNotes(dbHelper, sentPhone);
+    }
+    public List<Note> getReceivedNotes(String receivedPhone){
+        return NoteSql.getReceivedNotes(dbHelper,receivedPhone);
+    }
+    public Note getNote(String id){
         return NoteSql.getNote(dbHelper, id);
     }
 
@@ -32,7 +37,11 @@ public class ModelSql {
     }
 
     public int updateNote(Note note){
-        return NoteSql.updateNote(dbHelper,note);
+        return NoteSql.updateNote(dbHelper, note);
+    }
+
+    public int deleteNote(String noteId){
+        return NoteSql.deleteNote(dbHelper, noteId);
     }
 
     class Helper extends SQLiteOpenHelper {
