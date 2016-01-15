@@ -41,8 +41,4 @@ public class ModelParse {
     public User getCurrUser() {
         return UserParse.getCurrUser();
     }
-
-    public void userResetPassword(String email, Model.ResetPasswordListener listener) {
-        UserParse.userResetPassword(email,listener);
-    }
 }

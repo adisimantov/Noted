@@ -20,6 +20,9 @@
         <meta-data
             android:name="com.parse.CLIENT_KEY"
             android:value="ygeNWRWBw4sBNWRclG82NWQobeas1Fa8CLmTyl5g" />
+        <meta-data
+            android:name="io.fabric.ApiKey"
+            android:value="f5893c5ac29273ad7c9a1e71e7d380ac3cf1f75c" />
     </application>
 
     <uses-permission android:name="android.permission.INTERNET" />

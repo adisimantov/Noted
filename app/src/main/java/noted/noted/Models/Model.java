@@ -73,14 +73,6 @@ public class Model {
         remote.userSignUp(user, listener);
     }
 
-    public interface ResetPasswordListener {
-        public void onResult(boolean result);
-    }
-
-    public void resetPassword(String email, ResetPasswordListener listener) {
-        remote.userResetPassword(email, listener);
-    }
-    
     public interface GetNotesListener{
         public void onResult(List<Note> notes);
     }
@@ -142,7 +134,9 @@ public class Model {
         }, timestamp, to);
     }
 
-
+    public User getCurrUser() {
+        return remote.getCurrUser();
+    }
     // Contacts
     public List<Contact> getAllContacts(){
         return contacts.getAllContacts(context);

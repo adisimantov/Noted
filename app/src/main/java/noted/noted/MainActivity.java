@@ -3,17 +3,41 @@ package noted.noted;
 import android.app.ActionBar;
 import android.app.Activity;
 import android.app.Fragment;
+import android.graphics.AvoidXfermode;
 import android.os.Bundle;
 import android.util.Log;
+import android.widget.Toast;
 
+import com.digits.sdk.android.AuthCallback;
+import com.digits.sdk.android.Digits;
+import com.digits.sdk.android.DigitsAuthButton;
+import com.digits.sdk.android.DigitsAuthConfig;
+import com.digits.sdk.android.DigitsException;
+import com.digits.sdk.android.DigitsOAuthSigning;
+import com.digits.sdk.android.DigitsSession;
+import com.digits.sdk.android.DigitsUser;
+import com.parse.LogInCallback;
+import com.parse.Parse;
+import com.parse.ParseException;
+import com.parse.ParseUser;
+import com.twitter.sdk.android.core.TwitterAuthConfig;
+import com.twitter.sdk.android.core.TwitterAuthToken;
+import com.twitter.sdk.android.core.TwitterCore;
+import io.fabric.sdk.android.Fabric;
 import java.util.Calendar;
 import java.util.List;
 
 import noted.noted.Models.Contact;
 import noted.noted.Models.Model;
 import noted.noted.Models.Note;
+import noted.noted.Models.User;
 
 public class MainActivity extends Activity {
+
+    // Note: Your consumer key and secret should be obfuscated in your source code before shipping.
+    private static final String TWITTER_KEY = "Fdmw3315pp4jkT5XzrJaGrZCf";
+    private static final String TWITTER_SECRET = "4GqParZLqrr7cggWANygsAP732WEiVi1cEE3ZxV8NG4OiVjG74";
+
 
     // Declaring our tabs and the corresponding fragments.
     ActionBar.Tab receivedTab, sentTab;
@@ -23,64 +47,122 @@ public class MainActivity extends Activity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
+        TwitterAuthConfig authConfig = new TwitterAuthConfig(TWITTER_KEY, TWITTER_SECRET);
+        Fabric.with(this, new TwitterCore(authConfig), new Digits());
 
         // Init databse model with context
         Model.getInstance().init(this);
 
-        // Asking for the default ActionBar element that our platform supports.
-        ActionBar actionBar = getActionBar();
+        Log.d("HELLO", "" + Digits.getInstance().getSessionManager().getActiveSession().getAuthToken());
+        //Digits.getInstance().getSessionManager().clearActiveSession();
 
-        // Screen handling while hiding ActionBar icon.
-        actionBar.setDisplayShowHomeEnabled(false);
+        if (Digits.getInstance().getSessionManager().getActiveSession() == null) {
+            setContentView(R.layout.activity_sign_in);
 
-        // Screen handling while hiding Actionbar title.
-        actionBar.setDisplayShowTitleEnabled(false);
+            final DigitsAuthButton digitsButton = (DigitsAuthButton) findViewById(R.id.auth_button);
+            digitsButton.setCallback(new AuthCallback() {
+                @Override
+                public void success(DigitsSession session, String phoneNumber) {
+                    //session.getId();
+                    User newUser = new User(phoneNumber, session.getAuthToken().toString(),"",true);
+                    Model.getInstance().signIn(newUser, new Model.SignUpListener() {
+                        @Override
+                        public void onResult(boolean result) {
+                            // TODO: associate the session userID with your user model
+                            Toast.makeText(getApplicationContext(), "Authentication was " + result , Toast.LENGTH_LONG).show();
+                            Log.d("SIGN UP", " " + result);
+                        }
+                    });
 
-        // Creating ActionBar tabs.
-        actionBar.setNavigationMode(ActionBar.NAVIGATION_MODE_TABS);
+                }
 
-        // Setting custom tab icons.
-        receivedTab = actionBar.newTab().setText("Receibed Notes");
-        sentTab = actionBar.newTab().setText("Sent Notes");
+                @Override
+                public void failure(DigitsException exception) {
+                    Log.d("Digits", "Sign in with Digits failure", exception);
+                }
+            });
+        } else {
+            setContentView(R.layout.activity_main);
 
-        // Setting tab listeners.
-        receivedTab.setTabListener(new TabListener(tabReceivedNotes));
-        sentTab.setTabListener(new TabListener(tabSentNotes));
+            // Asking for the default ActionBar element that our platform supports.
+            ActionBar actionBar = getActionBar();
 
+            // Screen handling while hiding ActionBar icon.
+            actionBar.setDisplayShowHomeEnabled(false);
+
+            // Screen handling while hiding Actionbar title.
+            actionBar.setDisplayShowTitleEnabled(false);
+
+            // Creating ActionBar tabs.
+            actionBar.setNavigationMode(ActionBar.NAVIGATION_MODE_TABS);
+
+            // Setting custom tab icons.
+            receivedTab = actionBar.newTab().setText("Receibed Notes");
+            sentTab = actionBar.newTab().setText("Sent Notes");
+
+            // Setting tab listeners.
+            receivedTab.setTabListener(new TabListener(tabReceivedNotes));
+            sentTab.setTabListener(new TabListener(tabSentNotes));
+
+            // Adding tabs to the ActionBar.
+            actionBar.addTab(receivedTab);
+            actionBar.addTab(sentTab);
+            String phone = Digits.getInstance().getSessionManager().getActiveSession().getPhoneNumber();
+            String auth = Digits.getInstance().getSessionManager().getActiveSession().getAuthToken().toString();
+            User currUser = new User(phone, auth,"",true);
+            Model.getInstance().logIn(currUser, new Model.LogInListener() {
+                @Override
+                public void onResult(boolean result) {
+                    Log.d("LOG IN", " " + result);
+                }
+            });
+        }
+
+/*
         Note test = new Note("anna","anna","bla", "05/01/16");
-/*        Model.getInstance().addRemoteNote(test, new Model.AddNoteListener() {
-            @Override
-            public void onResult(boolean result) {
-                Log.d("a","DONE");
-                Model.getInstance().getAllRemoteNotes(new Model.GetNotesListener() {
-                    @Override
-                    public void onResult(List<Note> notes) {
-                        Log.d("a", notes.get(0).getId());
-                        Model.getInstance().addLocalNote(notes.get(0));
-                        Log.d("a", Model.getInstance().getAllLocalNotes().get(0).getId());
-                    }
-                });
-            }
-        });*/
+        final String[] delete_id = new String[1];
+
         Model.getInstance().addLocalAndRemoteNote(test, new Model.AddNoteListener() {
             @Override
             public void onResult(boolean result, Note id) {
+                delete_id[0] = id.getId();
                 Log.d("a", "" + result + " " + id.getId());
             }
         });
         Model.getInstance().getAllRemoteNotes(new Model.GetNotesListener() {
             @Override
             public void onResult(List<Note> notes) {
-                Log.d("a", notes.get(0).getId());
+                delete_id[0] = notes.get(0).getId();
+                for (Note note : notes) {
+                    Log.d("a", note.getId());
+                }
             }
-        });
+        });*/
 
-        List<Contact> contactList = Model.getInstance().getAllContacts();
-        Contact contact = Model.getInstance().getContact("000-1255");
+/*        List<Note> before = Model.getInstance().getAllLocalNotes();
+        Log.d("before", "" + before.size());
+        for (Note note : before) {
+            Log.d("a", note.getId());
+        }
+        delete_id[0] = before.get(0).getId();
+        Log.d("get", "" + (Model.getInstance().getLocalNote(delete_id[0]) == null));
+        Log.d("delete", "" + Model.getInstance().deleteLocalNote(delete_id[0]));
+        List<Note> after = Model.getInstance().getAllLocalNotes();
+        Log.d("after", "" + after.size());
+        for (Note note : after) {
+            Log.d("a", note.getId());
+        }*/
+/*        PreferenceManager a = new PreferenceManager();
+        Log.d("sync time" , a.getLastSyncTime());
+        List<Note> recived = Model.getInstance().getReceivedLocalNotes("anna");
+        Log.d("recived", "" + recived.size());
+        List<Note> sent = Model.getInstance().getSentLocalNotes("anna");
+        Log.d("sent", "" + sent.size());*/
+        //List<Contact> contactList = Model.getInstance().getAllContacts();
+        //Contact contact = Model.getInstance().getContact("000-1255");
+        //DigitsAuthConfig a = new DigitsAuthConfig();
 
-        // Adding tabs to the ActionBar.
-        actionBar.addTab(receivedTab);
-        actionBar.addTab(sentTab);
+        //Digits.authenticate();
+
     }
 }
