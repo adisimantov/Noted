@@ -38,6 +38,10 @@ public class ModelParse {
         UserParse.userSignUp(user, listener);
     }
 
+    public void userLogOut(Model.LogOutListener listener) {
+        UserParse.userLogOut(listener);
+    }
+
     public User getCurrUser() {
         return UserParse.getCurrUser();
     }

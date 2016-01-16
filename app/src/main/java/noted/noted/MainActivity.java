@@ -3,6 +3,7 @@ package noted.noted;
 import android.app.ActionBar;
 import android.app.Activity;
 import android.app.Fragment;
+import android.content.Intent;
 import android.graphics.AvoidXfermode;
 import android.os.Bundle;
 import android.util.Log;
@@ -52,10 +53,16 @@ public class MainActivity extends Activity {
 
         // Init databse model with context
         Model.getInstance().init(this);
-
-        Log.d("HELLO", "" + Digits.getInstance().getSessionManager().getActiveSession().getAuthToken());
         //Digits.getInstance().getSessionManager().clearActiveSession();
 
+/*
+        Model.getInstance().logOut(new Model.LogOutListener() {
+            @Override
+            public void onResult(boolean result) {
+                Log.d("Log out","" + result);
+            }
+        });*/
+        // User is not signup to digits
         if (Digits.getInstance().getSessionManager().getActiveSession() == null) {
             setContentView(R.layout.activity_sign_in);
 
@@ -63,17 +70,18 @@ public class MainActivity extends Activity {
             digitsButton.setCallback(new AuthCallback() {
                 @Override
                 public void success(DigitsSession session, String phoneNumber) {
-                    //session.getId();
+                    Log.d("SES ID", "" + session.getId());
                     User newUser = new User(phoneNumber, session.getAuthToken().toString(),"",true);
+
+                    // Sign in to parse db as well
                     Model.getInstance().signIn(newUser, new Model.SignUpListener() {
                         @Override
                         public void onResult(boolean result) {
-                            // TODO: associate the session userID with your user model
-                            Toast.makeText(getApplicationContext(), "Authentication was " + result , Toast.LENGTH_LONG).show();
                             Log.d("SIGN UP", " " + result);
+                            finish();
+                            startActivity(getIntent());
                         }
                     });
-
                 }
 
                 @Override
@@ -82,6 +90,19 @@ public class MainActivity extends Activity {
                 }
             });
         } else {
+            // Log in with current digit user
+            if (Model.getInstance().getCurrUser() == null) {
+                String phone = Digits.getInstance().getSessionManager().getActiveSession().getPhoneNumber();
+                String auth = Digits.getInstance().getSessionManager().getActiveSession().getAuthToken().toString();
+                User currUser = new User(phone, auth, "", true);
+                Model.getInstance().logIn(currUser, new Model.LogInListener() {
+                    @Override
+                    public void onResult(boolean result) {
+                        Log.d("LOG IN", " " + result);
+                    }
+                });
+            }
+
             setContentView(R.layout.activity_main);
 
             // Asking for the default ActionBar element that our platform supports.
@@ -97,7 +118,7 @@ public class MainActivity extends Activity {
             actionBar.setNavigationMode(ActionBar.NAVIGATION_MODE_TABS);
 
             // Setting custom tab icons.
-            receivedTab = actionBar.newTab().setText("Receibed Notes");
+            receivedTab = actionBar.newTab().setText("Received Notes");
             sentTab = actionBar.newTab().setText("Sent Notes");
 
             // Setting tab listeners.
@@ -107,17 +128,16 @@ public class MainActivity extends Activity {
             // Adding tabs to the ActionBar.
             actionBar.addTab(receivedTab);
             actionBar.addTab(sentTab);
-            String phone = Digits.getInstance().getSessionManager().getActiveSession().getPhoneNumber();
-            String auth = Digits.getInstance().getSessionManager().getActiveSession().getAuthToken().toString();
-            User currUser = new User(phone, auth,"",true);
-            Model.getInstance().logIn(currUser, new Model.LogInListener() {
-                @Override
-                public void onResult(boolean result) {
-                    Log.d("LOG IN", " " + result);
-                }
-            });
         }
-
+        Model.getInstance().syncNotesFromServer(new Model.SyncNotesListener() {
+            @Override
+            public void onResult(List<Note> data) {
+                Log.d(" number ", "" + data.size());
+                for (Note note : data) {
+                    Log.d(" note ", note.getId());
+                }
+            }
+        });
 /*
         Note test = new Note("anna","anna","bla", "05/01/16");
         final String[] delete_id = new String[1];
@@ -152,17 +172,7 @@ public class MainActivity extends Activity {
         for (Note note : after) {
             Log.d("a", note.getId());
         }*/
-/*        PreferenceManager a = new PreferenceManager();
-        Log.d("sync time" , a.getLastSyncTime());
-        List<Note> recived = Model.getInstance().getReceivedLocalNotes("anna");
-        Log.d("recived", "" + recived.size());
-        List<Note> sent = Model.getInstance().getSentLocalNotes("anna");
-        Log.d("sent", "" + sent.size());*/
         //List<Contact> contactList = Model.getInstance().getAllContacts();
         //Contact contact = Model.getInstance().getContact("000-1255");
-        //DigitsAuthConfig a = new DigitsAuthConfig();
-
-        //Digits.authenticate();
-
     }
 }

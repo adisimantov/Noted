@@ -1,6 +1,7 @@
 package noted.noted.Models;
 
 import com.parse.LogInCallback;
+import com.parse.LogOutCallback;
 import com.parse.Parse;
 import com.parse.ParseException;
 import com.parse.ParseUser;
@@ -35,6 +36,19 @@ public class UserParse {
         newUser.put(USER_JOIN_DATE,user.getJoinDate());
         newUser.put(USER_IS_ACTIVE,user.getIsActive());
         newUser.signUpInBackground(new SignUpCallback() {
+            @Override
+            public void done(ParseException e) {
+                if (e == null) {
+                    listener.onResult(true);
+                } else {
+                    listener.onResult(false);
+                }
+            }
+        });
+    }
+
+    public static void userLogOut(final Model.LogOutListener listener) {
+        ParseUser.logOutInBackground(new LogOutCallback() {
             @Override
             public void done(ParseException e) {
                 if (e == null) {

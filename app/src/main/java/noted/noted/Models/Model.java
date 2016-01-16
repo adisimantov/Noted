@@ -1,15 +1,26 @@
 package noted.noted.Models;
 
 import android.content.Context;
+import android.content.SharedPreferences;
+import android.util.Log;
 
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
 import java.util.List;
+import java.util.TimeZone;
+
+import noted.noted.PreferenceManager;
 
 /**
  * Created by Anna on 30-Dec-15.
  */
 public class Model {
     private final static Model instance = new Model();
-    Context context;
+    private Context context = null;
+    private SharedPreferences sharedPrefs;
+    private final static String PREF_FILE = "PREF_FILE";
+    private final static String LAST_SYNC_TIME = "LAST_SYNC_TIME";
 
     ModelSql local = new ModelSql();
     ModelParse remote = new ModelParse();
@@ -22,9 +33,22 @@ public class Model {
     }
 
     public void init(Context context){
-        this.context = context;
-        remote.init(context);
-        local.init(context);
+        if (this.context == null) {
+            this.context = context;
+            sharedPrefs = context.getSharedPreferences(PREF_FILE, Context.MODE_PRIVATE);
+            remote.init(context);
+            local.init(context);
+        }
+    }
+
+    public String getLastSyncTime() {
+        return sharedPrefs.getString(LAST_SYNC_TIME, null);
+    }
+
+    public void setLastSyncTime(String timestamp) {
+        SharedPreferences.Editor editor = sharedPrefs.edit();
+        editor.putString(LAST_SYNC_TIME, timestamp);
+        editor.commit();
     }
 
     // Local database
@@ -72,6 +96,15 @@ public class Model {
     public void signIn(User user, SignUpListener listener) {
         remote.userSignUp(user, listener);
     }
+
+    public interface LogOutListener {
+        public void onResult(boolean result);
+    }
+
+    public void logOut(LogOutListener listener) {
+        remote.userLogOut(listener);
+    }
+
 
     public interface GetNotesListener{
         public void onResult(List<Note> notes);
@@ -122,7 +155,11 @@ public class Model {
         public void onResult(List<Note> data);
     }
 
-    public void syncNotesFromServer(final SyncNotesListener listener, String timestamp, String to) {
+    public void syncNotesFromServer(final SyncNotesListener listener){
+        String timestamp = getLastSyncTime();
+        Log.d("TIMESTAMP", "" + timestamp);
+        String to = "anna" ;//getCurrUser().getPhoneNumber();
+        //Log.d("TO", "" + to);
         remote.getAllNotes(new GetNotesListener() {
             @Override
             public void onResult(List<Note> notes) {
@@ -130,6 +167,11 @@ public class Model {
                     local.addNote(note);
                 }
                 listener.onResult(notes);
+
+                Calendar cal = Calendar.getInstance();
+                DateFormat formatter = new SimpleDateFormat("yyyy'-'MM'-'dd'T'HH':'mm':'ss.SSS'Z'");
+                formatter.setTimeZone(TimeZone.getTimeZone("GMT"));
+                setLastSyncTime(formatter.format((cal.getTime())));
             }
         }, timestamp, to);
     }
