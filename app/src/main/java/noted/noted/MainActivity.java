@@ -133,9 +133,6 @@ public class MainActivity extends Activity {
             @Override
             public void onResult(List<Note> data) {
                 Log.d(" number ", "" + data.size());
-                for (Note note : data) {
-                    Log.d(" note ", note.getId());
-                }
             }
         });
 /*
