@@ -10,8 +10,6 @@ import java.util.Calendar;
 import java.util.List;
 import java.util.TimeZone;
 
-import noted.noted.PreferenceManager;
-
 /**
  * Created by Anna on 30-Dec-15.
  */
@@ -41,6 +39,14 @@ public class Model {
         }
     }
 
+    public String getCurrentGMTDate() {
+        Calendar cal = Calendar.getInstance();
+        DateFormat formatter = new SimpleDateFormat(remote.DEFAULT_DATE_FORMAT);
+        formatter.setTimeZone(TimeZone.getTimeZone(remote.DEFAULT_TIME_ZONE));
+        return formatter.format((cal.getTime()));
+    }
+
+    // Shared Preferences
     public String getLastSyncTime() {
         return sharedPrefs.getString(LAST_SYNC_TIME, null);
     }
@@ -81,31 +87,47 @@ public class Model {
     }
 
     // Remote database
-    public interface LogInListener {
+
+    public interface SimpleSuccessListener {
         public void onResult(boolean result);
     }
 
-    public void logIn(User user, LogInListener listener) {
+    // Users
+    public void logIn(User user, SimpleSuccessListener listener) {
         remote.userLogIn(user, listener);
     }
 
-    public interface SignUpListener {
-        public void onResult(boolean result);
-    }
-
-    public void signIn(User user, SignUpListener listener) {
+    public void signIn(User user, SimpleSuccessListener listener) {
         remote.userSignUp(user, listener);
     }
 
-    public interface LogOutListener {
-        public void onResult(boolean result);
+    public void signOrLogin(final User user , final SimpleSuccessListener listener) {
+        remote.userLogIn(user, new SimpleSuccessListener() {
+            @Override
+            public void onResult(boolean result) {
+                if (result) {
+                    listener.onResult(true);
+                } else {
+                    remote.userSignUp(user, new SimpleSuccessListener() {
+                        @Override
+                        public void onResult(boolean result) {
+                            listener.onResult(result);
+                        }
+                    });
+                }
+            }
+        });
     }
 
-    public void logOut(LogOutListener listener) {
+    public void logOut(SimpleSuccessListener listener) {
         remote.userLogOut(listener);
     }
 
+    public User getCurrUser() {
+        return remote.getCurrUser();
+    }
 
+    // Notes
     public interface GetNotesListener{
         public void onResult(List<Note> notes);
     }
@@ -157,9 +179,7 @@ public class Model {
 
     public void syncNotesFromServer(final SyncNotesListener listener){
         String timestamp = getLastSyncTime();
-        Log.d("TIMESTAMP", "" + timestamp);
-        String to = "anna" ;//getCurrUser().getPhoneNumber();
-        //Log.d("TO", "" + to);
+        String to = getCurrUser().getPhoneNumber();
         remote.getAllNotes(new GetNotesListener() {
             @Override
             public void onResult(List<Note> notes) {
@@ -167,18 +187,11 @@ public class Model {
                     local.addNote(note);
                 }
                 listener.onResult(notes);
-
-                Calendar cal = Calendar.getInstance();
-                DateFormat formatter = new SimpleDateFormat("yyyy'-'MM'-'dd'T'HH':'mm':'ss.SSS'Z'");
-                formatter.setTimeZone(TimeZone.getTimeZone("GMT"));
-                setLastSyncTime(formatter.format((cal.getTime())));
+                setLastSyncTime(getCurrentGMTDate());
             }
         }, timestamp, to);
     }
 
-    public User getCurrUser() {
-        return remote.getCurrUser();
-    }
     // Contacts
     public List<Contact> getAllContacts(){
         return contacts.getAllContacts(context);
