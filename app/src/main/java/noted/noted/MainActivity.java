@@ -70,16 +70,21 @@ public class MainActivity extends Activity {
             digitsButton.setCallback(new AuthCallback() {
                 @Override
                 public void success(DigitsSession session, String phoneNumber) {
-                    Log.d("SES ID", "" + session.getId());
-                    User newUser = new User(phoneNumber, session.getAuthToken().toString(),"",true);
 
-                    // Sign in to parse db as well
-                    Model.getInstance().signIn(newUser, new Model.SignUpListener() {
+                    User newUser = new User(phoneNumber, session.getAuthToken().toString(),
+                            Model.getInstance().getCurrentGMTDate(),true);
+
+                    Model.getInstance().signOrLogin(newUser, new Model.SimpleSuccessListener() {
                         @Override
                         public void onResult(boolean result) {
-                            Log.d("SIGN UP", " " + result);
-                            finish();
-                            startActivity(getIntent());
+                            Log.d("signOrLogin", " " + result);
+
+                            if (result) {
+                                finish();
+                                startActivity(getIntent());
+                            } else {
+                                // TODO : show failure message
+                            }
                         }
                     });
                 }
@@ -91,14 +96,22 @@ public class MainActivity extends Activity {
             });
         } else {
             // Log in with current digit user
+            Log.d("DIGITS",Digits.getInstance().getSessionManager().getActiveSession().getAuthToken().toString());
+            // Log in with current digit user
             if (Model.getInstance().getCurrUser() == null) {
                 String phone = Digits.getInstance().getSessionManager().getActiveSession().getPhoneNumber();
                 String auth = Digits.getInstance().getSessionManager().getActiveSession().getAuthToken().toString();
                 User currUser = new User(phone, auth, "", true);
-                Model.getInstance().logIn(currUser, new Model.LogInListener() {
+                Model.getInstance().logIn(currUser, new Model.SimpleSuccessListener() {
                     @Override
                     public void onResult(boolean result) {
                         Log.d("LOG IN", " " + result);
+                        Model.getInstance().syncNotesFromServer(new Model.SyncNotesListener() {
+                            @Override
+                            public void onResult(List<Note> data) {
+                                Log.d(" number ", "" + data.size());
+                            }
+                        });
                     }
                 });
             }
@@ -129,12 +142,6 @@ public class MainActivity extends Activity {
             actionBar.addTab(receivedTab);
             actionBar.addTab(sentTab);
         }
-        Model.getInstance().syncNotesFromServer(new Model.SyncNotesListener() {
-            @Override
-            public void onResult(List<Note> data) {
-                Log.d(" number ", "" + data.size());
-            }
-        });
 /*
         Note test = new Note("anna","anna","bla", "05/01/16");
         final String[] delete_id = new String[1];

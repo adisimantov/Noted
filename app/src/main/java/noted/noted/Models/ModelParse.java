@@ -12,9 +12,14 @@ import java.util.List;
  * Created by Anna on 30-Dec-15.
  */
 public class ModelParse {
+    public final static String DEFAULT_DATE_FORMAT = "yyyy'-'MM'-'dd'T'HH':'mm':'ss.SSS'Z'";
+    public final static String DEFAULT_TIME_ZONE = "GMT";
+
     public void init(Context context) {
         Parse.initialize(context);
     }
+
+    // Notes
     public void getAllNotes(Model.GetNotesListener listener, String timestamp, String to) {
         NoteParse.getAllNotes(listener, timestamp, to);
     }
@@ -30,15 +35,17 @@ public class ModelParse {
         NoteParse.updateNote(note, listener);
     }
 
-    public void userLogIn(User user, Model.LogInListener listener) {
+    // User
+    public void userLogIn(User user, Model.SimpleSuccessListener listener) {
         UserParse.userLogIn(user, listener);
     }
 
-    public void userSignUp(User user, Model.SignUpListener listener) {
+    public void userSignUp(User user, Model.SimpleSuccessListener listener) {
         UserParse.userSignUp(user, listener);
     }
 
-    public void userLogOut(Model.LogOutListener listener) {
+    public void userLogOut(Model.SimpleSuccessListener listener) {
+
         UserParse.userLogOut(listener);
     }
 
