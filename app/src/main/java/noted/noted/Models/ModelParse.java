@@ -15,10 +15,9 @@ public class ModelParse {
     public void init(Context context) {
         Parse.initialize(context);
     }
-    public void getAllNotes(Model.GetNotesListener listener) {
-        NoteParse.getAllNotes(listener);
+    public void getAllNotes(Model.GetNotesListener listener, String timestamp, String to) {
+        NoteParse.getAllNotes(listener, timestamp, to);
     }
-
     public void getNote(String id, Model.GetNoteListener listener){
         NoteParse.getNote(id, listener);
     }
@@ -39,11 +38,11 @@ public class ModelParse {
         UserParse.userSignUp(user, listener);
     }
 
-    public User getCurrUser() {
-        return UserParse.getCurrUser();
+    public void userLogOut(Model.LogOutListener listener) {
+        UserParse.userLogOut(listener);
     }
 
-    public void userResetPassword(String email, Model.ResetPasswordListener listener) {
-        UserParse.userResetPassword(email,listener);
+    public User getCurrUser() {
+        return UserParse.getCurrUser();
     }
 }
