@@ -48,8 +48,8 @@ public class MainActivity extends Activity {
         receivedTab.setTabListener(new TabListener(tabReceivedNotes));
         sentTab.setTabListener(new TabListener(tabSentNotes));
 
-        Note test = new Note("anna","anna","bla", "05/01/16");
-/*        Model.getInstance().addRemoteNote(test, new Model.AddNoteListener() {
+        /*Note test = new Note("anna","anna","bla", "05/01/16");
+*//*        Model.getInstance().addRemoteNote(test, new Model.AddNoteListener() {
             @Override
             public void onResult(boolean result) {
                 Log.d("a","DONE");
@@ -62,7 +62,7 @@ public class MainActivity extends Activity {
                     }
                 });
             }
-        });*/
+        });*//*
         Model.getInstance().addLocalAndRemoteNote(test, new Model.AddNoteListener() {
             @Override
             public void onResult(boolean result, Note id) {
@@ -75,18 +75,27 @@ public class MainActivity extends Activity {
                 Log.d("a", notes.get(0).getId());
             }
         });
-
+*/
         List<Contact> contactList = Model.getInstance().getAllContacts();
         Contact contact = Model.getInstance().getContact("000-1255");
 
         // Adding tabs to the ActionBar.
         actionBar.addTab(receivedTab);
         actionBar.addTab(sentTab);
+
+        GeofenceController.getInstance().init(this);
     }
 
     @Override
     protected void onStart() {
         super.onStart();
         new AlarmReceiver().SetAlarm(this);
+        GeofenceController.getInstance().connectToApiClient();
+    }
+
+    @Override
+    protected void onStop() {
+        GeofenceController.getInstance().disconnectApiClient();
+        super.onStop();
     }
 }
