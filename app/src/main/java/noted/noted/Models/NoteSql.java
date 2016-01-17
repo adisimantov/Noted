@@ -3,6 +3,7 @@ package noted.noted.Models;
 import android.content.ContentValues;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
+import android.location.*;
 
 import java.util.LinkedList;
 import java.util.List;
@@ -11,17 +12,15 @@ import java.util.List;
  * Created by Anna on 30-Dec-15.
  */
 public class NoteSql {
-    private final static String NOTE_TABLE            = "NOTES";
-    private final static String NOTE_ID               = "ID";
-    private final static String NOTE_FROM             = "SENDER";
-    private final static String NOTE_TO               = "RECEIVER";
-    private final static String NOTE_DETAILS          = "DETAILS";
-    private final static String NOTE_SENT_TIME        = "SENT_TIME";
-    private final static String NOTE_RECEIVED_TIME    = "RECEIVED_TIME";
-    private final static String NOTE_SHOWED_TIME      = "SHOWED_TIME";
-    private final static String NOTE_TIME_TO_SHOW     = "TIME_TO_SHOW";
-    private final static String NOTE_LOCATION_TO_SHOW = "LOCATION_TO_SHOW";
-    private final static String NOTE_IS_SHOWN         = "IS_SHOWN";
+    private final static String NOTE_TABLE          = "NOTES";
+    private final static String NOTE_ID             = "ID";
+    private final static String NOTE_FROM           = "SENDER";
+    private final static String NOTE_TO             = "RECEIVER";
+    private final static String NOTE_DETAILS        = "DETAILS";
+    private final static String NOTE_SENT_TIME      = "SENT_TIME";
+    private final static String NOTE_TIME_TO_SHOW   = "TIME_TO_SHOW";
+    private final static String NOTE_LNG_TO_SHOW         = "LNG_TO_SHOW";
+    private final static String NOTE_LAT_TO_SHOW         = "LAT_TO_SHOW";
 
     private static List<Note> getNoteListByCursor(Cursor cursor) {
         List<Note> data = new LinkedList<Note>();
@@ -32,11 +31,9 @@ public class NoteSql {
             int to_index = cursor.getColumnIndex(NOTE_TO);
             int details_index = cursor.getColumnIndex(NOTE_DETAILS);
             int sent_time_index = cursor.getColumnIndex(NOTE_SENT_TIME);
-            int received_time_index = cursor.getColumnIndex(NOTE_RECEIVED_TIME);
-            int showed_time_index = cursor.getColumnIndex(NOTE_SHOWED_TIME);
             int time_to_show_index = cursor.getColumnIndex(NOTE_TIME_TO_SHOW);
-            int location_to_show_index = cursor.getColumnIndex(NOTE_LOCATION_TO_SHOW);
-            int is_shown_index = cursor.getColumnIndex(NOTE_IS_SHOWN);
+            int lng_to_show_index = cursor.getColumnIndex(NOTE_LNG_TO_SHOW);
+            int lat_to_show_index = cursor.getColumnIndex(NOTE_LAT_TO_SHOW);
 
             do {
                 String id = cursor.getString(id_index);
@@ -44,13 +41,11 @@ public class NoteSql {
                 String to = cursor.getString(to_index);
                 String details = cursor.getString(details_index);
                 String sentTime = cursor.getString(sent_time_index);
-                String receivedTime = cursor.getString(received_time_index);
-                String showedTime = cursor.getString(showed_time_index);
                 String timeToShow = cursor.getString(time_to_show_index);
-                String locationToShow = cursor.getString(location_to_show_index);
-                boolean isShown = (cursor.getInt(is_shown_index) == 1);
+                double lngToShow = cursor.getDouble(lng_to_show_index);
+                double latToShow = cursor.getDouble(lat_to_show_index);
 
-                Note st = new Note(id,from,to,details,sentTime,receivedTime,showedTime,timeToShow,locationToShow,isShown);
+                Note st = new Note(id,from,to,details,sentTime,timeToShow,new Location(lngToShow,latToShow));
                 data.add(st);
             } while (cursor.moveToNext());
         }
@@ -66,11 +61,9 @@ public class NoteSql {
         values.put(NOTE_TO, note.getTo());
         values.put(NOTE_DETAILS, note.getDetails());
         values.put(NOTE_SENT_TIME, note.getSentTime());
-        values.put(NOTE_RECEIVED_TIME, note.getReceivedTime());
-        values.put(NOTE_SHOWED_TIME, note.getShowedTime());
         values.put(NOTE_TIME_TO_SHOW, note.getTimeToShow());
-        values.put(NOTE_LOCATION_TO_SHOW, note.getLocationToShow());
-        values.put(NOTE_IS_SHOWN, note.isShown());
+        values.put(NOTE_LNG_TO_SHOW, note.getLocationToShow().getLongitudeToShow());
+        values.put(NOTE_LAT_TO_SHOW, note.getLocationToShow().getLatitudeToShow());
 
         long note_id = db.insert(NOTE_TABLE, NOTE_ID, values);
         return note_id;
@@ -87,21 +80,15 @@ public class NoteSql {
         SQLiteDatabase db = dbHelper.getWritableDatabase();
         ContentValues values = new ContentValues();
 
-        if (note.getId() != null) {
-            values.put(NOTE_ID, note.getId());
-        }
         values.put(NOTE_FROM, note.getFrom());
         values.put(NOTE_TO, note.getTo());
         values.put(NOTE_DETAILS, note.getDetails());
         values.put(NOTE_SENT_TIME, note.getSentTime());
-        values.put(NOTE_RECEIVED_TIME, note.getReceivedTime());
-        values.put(NOTE_SHOWED_TIME, note.getShowedTime());
         values.put(NOTE_TIME_TO_SHOW, note.getTimeToShow());
-        values.put(NOTE_LOCATION_TO_SHOW, note.getLocationToShow());
-        values.put(NOTE_IS_SHOWN, note.isShown());
+        values.put(NOTE_LNG_TO_SHOW, note.getLocationToShow().getLongitudeToShow());
+        values.put(NOTE_LAT_TO_SHOW, note.getLocationToShow().getLatitudeToShow());
 
         int rows_updated = db.update(NOTE_TABLE, values, NOTE_ID + "= ?", new String[]{note.getId()});
-        //long rows_updated =  db.replace(NOTE_TABLE, null, values);
         return rows_updated;
     }
 
@@ -128,24 +115,20 @@ public class NoteSql {
             int to_index = cursor.getColumnIndex(NOTE_TO);
             int details_index = cursor.getColumnIndex(NOTE_DETAILS);
             int sent_time_index = cursor.getColumnIndex(NOTE_SENT_TIME);
-            int received_time_index = cursor.getColumnIndex(NOTE_RECEIVED_TIME);
-            int showed_time_index = cursor.getColumnIndex(NOTE_SHOWED_TIME);
             int time_to_show_index = cursor.getColumnIndex(NOTE_TIME_TO_SHOW);
-            int location_to_show_index = cursor.getColumnIndex(NOTE_LOCATION_TO_SHOW);
-            int is_shown_index = cursor.getColumnIndex(NOTE_IS_SHOWN);
+            int lng_to_show_index = cursor.getColumnIndex(NOTE_LNG_TO_SHOW);
+            int lat_to_show_index = cursor.getColumnIndex(NOTE_LAT_TO_SHOW);
 
             String id = cursor.getString(id_index);
             String from = cursor.getString(from_index);
             String to = cursor.getString(to_index);
             String details = cursor.getString(details_index);
             String sentTime = cursor.getString(sent_time_index);
-            String receivedTime = cursor.getString(received_time_index);
-            String showedTime = cursor.getString(showed_time_index);
             String timeToShow = cursor.getString(time_to_show_index);
-            String locationToShow = cursor.getString(location_to_show_index);
-            boolean isShown = (cursor.getInt(is_shown_index) == 1);
+            double lngToShow = cursor.getDouble(lng_to_show_index);
+            double latToShow = cursor.getDouble(lat_to_show_index);
 
-            note = new Note(id,from,to,details,sentTime,receivedTime,showedTime,timeToShow,locationToShow,isShown);
+            note = new Note(id,from,to,details,sentTime,timeToShow,new Location(lngToShow,latToShow));
         }
 
         return note;
@@ -163,12 +146,10 @@ public class NoteSql {
                     NOTE_FROM               + " TEXT NOT NULL," +
                     NOTE_TO                 + " TEXT NOT NULL," +
                     NOTE_DETAILS            + " TEXT NOT NULL," +
-                    NOTE_SENT_TIME          + " DATETIME," +
-                    NOTE_RECEIVED_TIME      + " DATETIME," +
-                    NOTE_SHOWED_TIME        + " DATETIME," +
+                    NOTE_SENT_TIME          + " DATETIME NOT NULL," +
                     NOTE_TIME_TO_SHOW       + " DATETIME," +
-                    NOTE_LOCATION_TO_SHOW   + " TEXT," +
-                    NOTE_IS_SHOWN           + " BOOLEAN" + ");");
+                    NOTE_LNG_TO_SHOW        + " REAL," +
+                    NOTE_LAT_TO_SHOW        + " REAL" + ");");
     }
 
     public static void drop(SQLiteDatabase db) {

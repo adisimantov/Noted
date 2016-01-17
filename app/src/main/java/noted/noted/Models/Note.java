@@ -9,11 +9,8 @@ public class Note {
     private String to;
     private String details;
     private String sentTime;
-    private String receivedTime;
-    private String showedTime;
     private String timeToShow;
-    private String locationToShow;
-    private boolean isShown;
+    private Location locationToShow;
 
     public Note(String from, String to, String details, String sentTime) {
         this.from = from;
@@ -22,17 +19,19 @@ public class Note {
         this.sentTime = sentTime;
     }
 
-    public Note(String id, String from, String to, String details, String sentTime, String receivedTime, String showedTime, String timeToShow, String locationToShow, boolean isShown) {
+    public Note(String id, String from, String to, String details, String sentTime, String timeToShow, Location locationToShow) {
         this.id = id;
         this.from = from;
         this.to = to;
         this.details = details;
         this.sentTime = sentTime;
-        this.receivedTime = receivedTime;
-        this.showedTime = showedTime;
         this.timeToShow = timeToShow;
         this.locationToShow = locationToShow;
-        this.isShown = isShown;
+    }
+
+    // To use in gridview
+    public Long getNumericId() {
+        return new Long(id);
     }
 
     public String getId() {
@@ -73,22 +72,6 @@ public class Note {
         this.sentTime = sentTime;
     }
 
-    public String getReceivedTime() {
-        return receivedTime;
-    }
-
-    public void setReceivedTime(String receivedTime) {
-        this.receivedTime = receivedTime;
-    }
-
-    public String getShowedTime() {
-        return showedTime;
-    }
-
-    public void setShowedTime(String showedTime) {
-        this.showedTime = showedTime;
-    }
-
     public String getTimeToShow() {
         return timeToShow;
     }
@@ -97,20 +80,12 @@ public class Note {
         this.timeToShow = timeToShow;
     }
 
-    public String getLocationToShow() {
+    public Location getLocationToShow() {
         return locationToShow;
     }
 
-    public void setLocationToShow(String locationToShow) {
+    public void setLocationToShow(Location locationToShow) {
         this.locationToShow = locationToShow;
-    }
-
-    public boolean isShown() {
-        return isShown;
-    }
-
-    public void setIsShown(boolean isShown) {
-        this.isShown = isShown;
     }
 }
 
