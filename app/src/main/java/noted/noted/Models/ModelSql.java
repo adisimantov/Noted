@@ -4,13 +4,15 @@ import android.content.Context;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 
+import java.sql.Timestamp;
+import java.util.Calendar;
 import java.util.List;
 
 /**
  * Created by Anna on 30-Dec-15.
  */
 public class ModelSql {
-    final static int VERSION = 3;
+    final static int VERSION = 5;
     private Helper dbHelper;
 
     public void init(Context context) {
@@ -22,12 +24,15 @@ public class ModelSql {
     public List<Note> getAllNotes(){
         return NoteSql.getAllNotes(dbHelper);
     }
+
     public List<Note> getSentNotes(String sentPhone){
         return NoteSql.getSentNotes(dbHelper, sentPhone);
     }
+
     public List<Note> getReceivedNotes(String receivedPhone){
         return NoteSql.getReceivedNotes(dbHelper,receivedPhone);
     }
+
     public Note getNote(String id){
         return NoteSql.getNote(dbHelper, id);
     }
