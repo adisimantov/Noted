@@ -3,7 +3,9 @@ package noted.noted;
 import android.app.ActionBar;
 import android.app.Activity;
 import android.app.Fragment;
+import android.content.Context;
 import android.os.Bundle;
+import android.telephony.TelephonyManager;
 import android.util.Log;
 
 import java.util.Calendar;
@@ -48,6 +50,11 @@ public class MainActivity extends Activity {
         receivedTab.setTabListener(new TabListener(tabReceivedNotes));
         sentTab.setTabListener(new TabListener(tabSentNotes));
 
+        TelephonyManager mManager =(TelephonyManager)getApplicationContext().getSystemService(Context.TELEPHONY_SERVICE);
+        String mPhoneNumber =  mManager.getLine1Number();
+        mPhoneNumber = ((TelephonyManager)getSystemService(Context.TELEPHONY_SERVICE)).getLine1Number();
+        Log.d("number", mPhoneNumber);
+
         Note test = new Note("anna","anna","bla", "05/01/16");
         //Model.getInstance().addLocalNote(test);
         //Log.d("a", Model.getInstance().getAllLocalNotes().get(0).getDetails());
@@ -57,12 +64,12 @@ public class MainActivity extends Activity {
                 Log.d("a","DONE");
             }
         });*/
-        Model.getInstance().addLocalAndRemoteNote(test, new Model.AddNoteListener() {
+        /*Model.getInstance().addLocalAndRemoteNote(test, new Model.AddNoteListener() {
             @Override
             public void onResult(boolean result, Note id) {
                 Log.d("a", "" + result + " " + id.getId());
             }
-        });
+        });*/
         Model.getInstance().getAllRemoteNotes(new Model.GetNotesListener() {
             @Override
             public void onResult(List<Note> notes) {

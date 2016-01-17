@@ -25,7 +25,16 @@ public class GridAdapter extends BaseAdapter {
         this.context = context;
         this.isReceived = isReceived;
 
-        List<Note> noteList = Model.getInstance().getAllLocalNotes();
+        List<Note> noteList;
+
+        if (isReceived){
+            noteList = Model.getInstance().getReceivedLocalNotes("");
+        }
+        else{
+            noteList = Model.getInstance().getSentLocalNotes("");
+        }
+
+        noteList = Model.getInstance().getAllLocalNotes();
 
         for(Note note : noteList)
         {
@@ -55,8 +64,11 @@ public class GridAdapter extends BaseAdapter {
 
     @Override
     public long getItemId(int position) {
-        return lNotes.get(position).getId();
+        //return lNotes.get(position).getId();
+        return 1;
     }
+
+
 
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {

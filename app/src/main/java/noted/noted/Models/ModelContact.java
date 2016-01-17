@@ -17,7 +17,7 @@ import java.util.jar.Manifest;
 public class ModelContact {
     List<Contact> contactsList;
 
-    public List<Contact> getAllContacts(Context context){
+    public void init(Context context) {
         contactsList = new LinkedList<Contact>();
 
         Cursor cursor = null;
@@ -32,7 +32,7 @@ public class ModelContact {
                 String idContact = cursor.getString(contactIdIdx);
                 String name = cursor.getString(nameIdx);
                 String phoneNumber = cursor.getString(phoneNumberIdx);
-                Contact contact = new Contact(name,phoneNumber);
+                Contact contact = new Contact(idContact, name,phoneNumber);
                 contactsList.add(contact);
             } while (cursor.moveToNext());
         } catch (Exception e) {
@@ -42,6 +42,9 @@ public class ModelContact {
                 cursor.close();
             }
         }
+    }
+
+    public List<Contact> getAllContacts(Context context){
 
         return contactsList;
     }
@@ -49,6 +52,22 @@ public class ModelContact {
     public Contact getContact(String phoneNumber){
         for(Contact contact : contactsList){
             if(contact.getPhoneNumber().equals(phoneNumber))
+                return contact;
+        }
+        return null;
+    }
+
+    public Contact getContactById(String id){
+        for(Contact contact : contactsList) {
+                if (contact.getId().equals(id))
+                    return contact;
+        }
+        return null;
+    }
+
+    public Contact getContactByName(String name){
+        for(Contact contact : contactsList) {
+            if (contact.getName().equals(name))
                 return contact;
         }
         return null;

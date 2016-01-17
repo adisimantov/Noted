@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.os.Bundle;
 import android.app.Fragment;
 import android.view.LayoutInflater;
@@ -18,6 +19,7 @@ import android.widget.TextView;
 import java.util.ArrayList;
 import java.util.List;
 
+import noted.noted.Models.Model;
 import noted.noted.Models.Note;
 
 /**
@@ -27,12 +29,13 @@ public class TabReceivedNotes extends Fragment {
 
     GridView receivedGrid;
     GridAdapter adapter;
+    View viewTab;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.received_notes_tab, container, false);
-        receivedGrid = (GridView) view.findViewById(R.id.receivedNotesGrid);
-        adapter =  new GridAdapter(view.getContext(),true);
+        viewTab = inflater.inflate(R.layout.received_notes_tab, container, false);
+        receivedGrid = (GridView) viewTab.findViewById(R.id.receivedNotesGrid);
+        adapter =  new GridAdapter(viewTab.getContext(),true);
         receivedGrid.setAdapter(adapter);
 
         receivedGrid.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
@@ -45,8 +48,10 @@ public class TabReceivedNotes extends Fragment {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
                         //receivedGrid.removeViewInLayout(view);
+                        Note note = adapter.getItem(position);
                         adapter.lNotes.remove(position);
                         adapter.notifyDataSetChanged();
+                        Model.getInstance().deleteLocalNote(note.getId());
                     }
                 });
                 builder.setNegativeButton(R.string.no_button, new DialogInterface.OnClickListener() {
@@ -64,6 +69,16 @@ public class TabReceivedNotes extends Fragment {
             }
         });
 
-        return view;
+        receivedGrid.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                Intent intent = new Intent(view.getContext(),NoteActivity.class);
+                Note note = adapter.getItem(position);
+                intent.putExtra("note_id", note.getId());
+                startActivity(intent);
+            }
+        });
+
+        return viewTab;
     }
 }

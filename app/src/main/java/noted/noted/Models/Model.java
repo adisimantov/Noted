@@ -25,6 +25,7 @@ public class Model {
         this.context = context;
         remote.init(context);
         local.init(context);
+        contacts.init(context);
     }
 
     // Local database
@@ -152,4 +153,13 @@ public class Model {
     public Contact getContact(String phoneNumber){
         return contacts.getContact(phoneNumber);
     }
+
+    public Contact getContactById(String id){
+        return contacts.getContactById(id);
+    }
+
+    public Contact getContactByName(String name){
+        return contacts.getContactByName(name);
+    }
+
 }
