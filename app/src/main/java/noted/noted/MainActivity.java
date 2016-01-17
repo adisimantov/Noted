@@ -14,6 +14,7 @@ import com.digits.sdk.android.DigitsSession;
 import com.twitter.sdk.android.core.TwitterAuthConfig;
 import com.twitter.sdk.android.core.TwitterCore;
 
+import java.util.Calendar;
 import java.util.List;
 
 import io.fabric.sdk.android.Fabric;

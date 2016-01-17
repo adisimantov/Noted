@@ -113,7 +113,7 @@ public class GeofenceController implements
         builder.setInitialTrigger(GeofencingRequest.INITIAL_TRIGGER_ENTER);
 
         // Add the geofences to be monitored by geofencing service.
-        builder.addGeofences(createGeofenceList(note, 32.1363, 34.9882));
+        builder.addGeofences(createGeofenceList(note));
 
         // Return a GeofencingRequest.
         return builder.build();
@@ -194,7 +194,7 @@ public class GeofenceController implements
      * the user's location.
      */
     //TODO: remove latitude, longitude
-    public  List<Geofence> createGeofenceList(Note note, double latitude, double longitude) {
+    public  List<Geofence> createGeofenceList(Note note) {
 
             List<Geofence> geofenceList = new ArrayList<Geofence>();
             geofenceList.add(new Geofence.Builder()
@@ -204,8 +204,8 @@ public class GeofenceController implements
 
                             // Set the circular region of this geofence.
                     .setCircularRegion(
-                            latitude,
-                            longitude,
+                            note.getLocationToShow().getLatitudeToShow(),
+                            note.getLocationToShow().getLongitudeToShow(),
                             GEOFENCE_RADIUS_IN_METERS
                     )
 

@@ -41,8 +41,10 @@ public class NoteParse {
         String sentTime = po.getString(NOTE_SENT_TIME);
         String timeToShow = po.getString(NOTE_TIME_TO_SHOW);
         ParseGeoPoint locationToShow = po.getParseGeoPoint(NOTE_LOCATION_TO_SHOW);
-        Location location = new Location(locationToShow.getLongitude(),locationToShow.getLatitude());
-
+        Location location = null;
+        if (locationToShow != null) {
+            new Location(locationToShow.getLongitude(), locationToShow.getLatitude());
+        }
         return (new Note(id, from, to, details, sentTime, timeToShow, location));
     }
 

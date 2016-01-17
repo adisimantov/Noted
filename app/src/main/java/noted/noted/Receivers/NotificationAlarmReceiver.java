@@ -15,6 +15,7 @@ import java.util.Calendar;
 import java.util.logging.Handler;
 
 import noted.noted.MainActivity;
+import noted.noted.Models.Model;
 import noted.noted.Models.Note;
 import noted.noted.NotificationController;
 import noted.noted.R;
@@ -52,9 +53,9 @@ public class NotificationAlarmReceiver extends BroadcastReceiver {
                 broadcastCode++, alarmIntent, PendingIntent.FLAG_CANCEL_CURRENT);
 
         AlarmManager alarmManager = (AlarmManager)context.getSystemService(Context.ALARM_SERVICE);
-        //TODO: change time to long!
-        Calendar c = Calendar.getInstance();
-        c.add(Calendar.SECOND, 30);
-        alarmManager.set(AlarmManager.RTC_WAKEUP,  c.getTimeInMillis() /*new Long(note.getTimeToShow())*/, pendingIntent);
+        alarmManager.set(AlarmManager.RTC_WAKEUP,
+                    Model.getInstance().getMilisFromDateString(note.getTimeToShow(),
+                                                                Model.APP_DEFAULT_DATE_FORMAT),
+                    pendingIntent);
     }
 }
