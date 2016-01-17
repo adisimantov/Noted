@@ -24,35 +24,21 @@ public class AlarmReceiver extends BroadcastReceiver {
         Model.getInstance().syncNotesFromServer(new Model.SyncNotesListener() {
             @Override
             public void onResult(List<Note> data) {
-                //TODO: set notifications by time & location
                 Log.d("alarm", "syncing data......");
                 GeofenceController geofenceController = GeofenceController.getInstance();
-               /* for (Note note : data) {
+                for (Note note : data) {
                     if (note.getTimeToShow() != null) {
                         new NotificationAlarmReceiver().SetAlarm(context, note);
 
                     } else if (note.getLocationToShow() != null) {
 
-                        geofenceController.addGeofenceToList(note.getId(), 32.1363, 34.9882);
-
-
-*//*
-                        Geofence fence = new Geofence.Builder()
-                                .setRequestId(note.getId())
-                                .setTransitionTypes(Geofence.GEOFENCE_TRANSITION_ENTER)
-                                .setCircularRegion(
-                                        48.87146, 2.35500, 50)
-                                .setExpirationDuration(Geofence.NEVER_EXPIRE)
-                                .build();
-                        mGeofenceList.add(fence);*//*
+                        geofenceController.addGeofence(note);
                     }
+                }
 
-                    geofenceController.addGeofences();
-                }*/
-
-                geofenceController.addGeofenceToList(data.get(0).getId(), 32.1363, 34.9882);
-                geofenceController.addGeofences();
-
+               /* new NotificationAlarmReceiver().SetAlarm(context, data.get(0));
+                geofenceController.addGeofence(data.get(0));
+*/
             }
         });
     }

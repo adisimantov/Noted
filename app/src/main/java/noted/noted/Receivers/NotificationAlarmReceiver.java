@@ -13,6 +13,7 @@ import java.util.Calendar;
 
 import noted.noted.MainActivity;
 import noted.noted.Models.Note;
+import noted.noted.NotificationController;
 import noted.noted.R;
 
 /**
@@ -25,11 +26,15 @@ public class NotificationAlarmReceiver extends BroadcastReceiver {
 
     @Override
     public void onReceive(Context context, Intent intent) {
-        Log.d("ntf", "alarm notification!!!");
 
+        Log.d("notificationAlarm", "again");
+        String id = intent.getStringExtra("noteId");
         String from = intent.getStringExtra("noteFrom");
         String details = intent.getStringExtra("noteDetails");
 
+        NotificationController.getInstance().notify(from,details,id,context);
+
+/*
         Intent notificationIntent = new Intent(context, MainActivity.class);
         // use System.currentTimeMillis() to have a unique ID for the pending intent
         PendingIntent pIntent = PendingIntent.getActivity(context, (int) System.currentTimeMillis(), intent, 0);
@@ -37,15 +42,17 @@ public class NotificationAlarmReceiver extends BroadcastReceiver {
         // build notification
         // the addAction re-use the same intent to keep the example short
         Notification n  = new Notification.Builder(context)
-                .setContentTitle("New note from " + from)
+                .setContentTitle(from)
                 .setContentText(details)
                 .setSmallIcon(R.mipmap.notedicon)
-                .setAutoCancel(true).build();
+                .setAutoCancel(true).setContentIntent(pIntent)
+                .build();
 
         NotificationManager notificationManager =
                 (NotificationManager) context.getSystemService(context.NOTIFICATION_SERVICE);
 
         notificationManager.notify(notificationCode++, n);
+*/
 
     }
 
@@ -55,13 +62,16 @@ public class NotificationAlarmReceiver extends BroadcastReceiver {
         Intent alarmIntent = new Intent(context, NotificationAlarmReceiver.class);
         alarmIntent.putExtra("noteID", note.getId());
         alarmIntent.putExtra("noteFrom", note.getFrom());
-        alarmIntent.putExtra("noteDetails", note.getDetails());
+        //TODO remove!
+        alarmIntent.putExtra("noteDetails", note.getDetails() + "alarm");
 
         PendingIntent pendingIntent = PendingIntent.getBroadcast(context,
                 broadcastCode++, alarmIntent, PendingIntent.FLAG_CANCEL_CURRENT);
 
         AlarmManager alarmManager = (AlarmManager)context.getSystemService(Context.ALARM_SERVICE);
         //TODO: change time to long!
-        alarmManager.set(AlarmManager.RTC_WAKEUP,  new Long(note.getTimeToShow()), pendingIntent);
+        Calendar c = Calendar.getInstance();
+        c.add(Calendar.SECOND, 30);
+        alarmManager.set(AlarmManager.RTC_WAKEUP,  c.getTimeInMillis() /*new Long(note.getTimeToShow())*/, pendingIntent);
     }
 }

@@ -16,6 +16,7 @@ package noted.noted.Services;
  */
 
 import android.app.IntentService;
+import android.app.Notification;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.content.Context;
@@ -34,7 +35,9 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
 
+import noted.noted.GeofenceController;
 import noted.noted.MainActivity;
+import noted.noted.NotificationController;
 import noted.noted.R;
 
 /**
@@ -47,6 +50,7 @@ import noted.noted.R;
 public class GeofenceTransitionsIntentService extends IntentService {
 
     protected static final String TAG = "GeofenceTransitionsIS";
+    static  int notificationCode = 1000;
 
     /**
      * This constructor is required, and calls the super IntentService(String)
@@ -92,10 +96,16 @@ public class GeofenceTransitionsIntentService extends IntentService {
                     triggeringGeofences
             );
 
-            //TODO: remove triggered geofences
+            GeofenceController.getInstance().removeGeofencesButtonHandler(triggeringGeofences);
 
+            String id = intent.getStringExtra("noteID");
+            String from = intent.getStringExtra("noteFrom");
+            String details = intent.getStringExtra("noteDetails");
+
+            NotificationController.getInstance().notify(from,details,id,this);
+/*
             // Send notification and log the transition details.
-            sendNotification(geofenceTransitionDetails);
+            sendNotification(from, details);*/
             Log.i(TAG, geofenceTransitionDetails);
         } else {
             // Log the error.
@@ -132,7 +142,7 @@ public class GeofenceTransitionsIntentService extends IntentService {
      * Posts a notification in the notification bar when a transition is detected.
      * If the user clicks the notification, control goes to the MainActivity.
      */
-    private void sendNotification(String notificationDetails) {
+    private void sendNotification(String from, String details) {
         // Create an explicit content Intent that starts the main Activity.
         Intent notificationIntent = new Intent(getApplicationContext(), MainActivity.class);
 
@@ -152,26 +162,20 @@ public class GeofenceTransitionsIntentService extends IntentService {
         // Get a notification builder that's compatible with platform versions >= 4
         NotificationCompat.Builder builder = new NotificationCompat.Builder(this);
 
-        // Define the notification settings.
-        builder.setSmallIcon(R.mipmap.notedicon)
-                // In a real app, you may want to use a library like Volley
-                // to decode the Bitmap.
-                .setLargeIcon(BitmapFactory.decodeResource(getResources(),
-                        R.mipmap.notedicon))
-                .setColor(Color.RED)
-                .setContentTitle(notificationDetails)
-                .setContentText("note content text")
-                .setContentIntent(notificationPendingIntent);
-
-        // Dismiss notification once the user touches it.
-        builder.setAutoCancel(true);
+        Notification n  = new Notification.Builder(this)
+                .setContentTitle(from)
+                .setContentText(details)
+                .setSmallIcon(R.mipmap.notedicon)
+                .setAutoCancel(true)
+                .setContentIntent(notificationPendingIntent)
+                .build();
 
         // Get an instance of the Notification manager
         NotificationManager mNotificationManager =
                 (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
 
         // Issue the notification
-        mNotificationManager.notify(0, builder.build());
+        mNotificationManager.notify(notificationCode++, n);
     }
 
     /**

@@ -1,52 +1,28 @@
-/**
- * Copyright 2014 Google Inc. All Rights Reserved.
- *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- *
- * http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
- */
-
 package noted.noted;
 
-import android.app.Activity;
 import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.os.Bundle;
-import android.support.v7.app.ActionBarActivity;
 import android.util.Log;
-import android.view.View;
-import android.widget.Button;
-import android.widget.Toast;
 
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.common.api.GoogleApiClient.ConnectionCallbacks;
 import com.google.android.gms.common.api.GoogleApiClient.OnConnectionFailedListener;
-import com.google.android.gms.common.api.ResultCallback;
-import com.google.android.gms.common.api.Status;
 import com.google.android.gms.location.Geofence;
 import com.google.android.gms.location.GeofencingRequest;
 import com.google.android.gms.location.LocationServices;
-import com.google.android.gms.location.GeofencingApi;
-import com.google.android.gms.maps.model.LatLng;
 
 import java.util.ArrayList;
-import java.util.Map;
+import java.util.List;
 
+import noted.noted.Models.Note;
 import noted.noted.Services.GeofenceTransitionsIntentService;
 
 public class GeofenceController implements
         ConnectionCallbacks, OnConnectionFailedListener {
+    public static final float GEOFENCE_RADIUS_IN_METERS = 50;
 
     private final static GeofenceController instance = new GeofenceController();
 
@@ -59,7 +35,6 @@ public class GeofenceController implements
 
     public void init(Context context){
         this.context = context;
-        mGeofenceList = new ArrayList<Geofence>();
         buildGoogleApiClient();
 
     }
@@ -76,13 +51,6 @@ public class GeofenceController implements
     public void disconnectApiClient(){
         mGoogleApiClient.disconnect();
     }
-
-    /**
-     * The list of geofences used in this sample.
-     */
-    protected ArrayList<Geofence> mGeofenceList;
-
-    protected  PendingIntent mGeofencePendingIntent;
 
     private GeofenceController(){
     }
@@ -110,11 +78,32 @@ public class GeofenceController implements
         // onConnected() will be called again automatically when the service reconnects
     }
 
+    public void addGeofence(Note note){
+        try {
+            LocationServices.GeofencingApi.addGeofences(
+                    mGoogleApiClient,
+                    // The GeofenceRequest object.
+                    getGeofencingRequest(note),
+                    // A pending intent that that is reused when calling removeGeofences(). This
+                    // pending intent is used to generate an intent when a matched geofence
+                    // transition is observed.
+                    getGeofencePendingIntent(note)
+
+            );
+
+            Log.i("mGoogleApiClient", "addGeofences ");
+        } catch (SecurityException securityException) {
+            // Catch exception generated if the app does not use ACCESS_FINE_LOCATION permission.
+            logSecurityException(securityException);
+        }
+
+    }
+
     /**
      * Builds and returns a GeofencingRequest. Specifies the list of geofences to be monitored.
      * Also specifies how the geofence notifications are initially triggered.
      */
-    private GeofencingRequest getGeofencingRequest() {
+    private GeofencingRequest getGeofencingRequest(Note note) {
         GeofencingRequest.Builder builder = new GeofencingRequest.Builder();
 
         // The INITIAL_TRIGGER_ENTER flag indicates that geofencing service should trigger a
@@ -123,7 +112,7 @@ public class GeofenceController implements
         builder.setInitialTrigger(GeofencingRequest.INITIAL_TRIGGER_ENTER);
 
         // Add the geofences to be monitored by geofencing service.
-        builder.addGeofences(mGeofenceList);
+        builder.addGeofences(createGeofenceList(note, 32.1363, 34.9882));
 
         // Return a GeofencingRequest.
         return builder.build();
@@ -142,32 +131,20 @@ public class GeofenceController implements
     }
 
     /**
-     * Adds geofences, which sets alerts to be notified when the device enters or exits one of the
-     * specified geofences. Handles the success or failure results returned by addGeofences().
+     * Removes geofences, which stops further notifications when the device enters or exits
+     * previously registered geofences.
      */
-    public void addGeofences() {
-        /*if (!mGoogleApiClient.isConnected()) {
-            Log.i("mGoogleApiClient", "addGeofences not Connected to GoogleApiClient");
-            return;
-        }*/
-        if (!mGeofenceList.isEmpty()) {
-            try {
-                LocationServices.GeofencingApi.addGeofences(
-                        mGoogleApiClient,
-                        // The GeofenceRequest object.
-                        getGeofencingRequest(),
-                        // A pending intent that that is reused when calling removeGeofences(). This
-                        // pending intent is used to generate an intent when a matched geofence
-                        // transition is observed.
-                        getGeofencePendingIntent()
+    public void removeGeofencesButtonHandler(List<Geofence> listToRemove) {
 
-                );
-
-                Log.i("mGoogleApiClient", "addGeofences ");
-            } catch (SecurityException securityException) {
-                // Catch exception generated if the app does not use ACCESS_FINE_LOCATION permission.
-                logSecurityException(securityException);
-            }
+        List<String> geofencesToRemove = new ArrayList<>();
+        for (Geofence geofence : listToRemove) {
+            geofencesToRemove.add(geofence.getRequestId());
+        }
+        try {
+            LocationServices.GeofencingApi.removeGeofences(mGoogleApiClient, geofencesToRemove);
+        } catch (SecurityException securityException) {
+            // Catch exception generated if the app does not use ACCESS_FINE_LOCATION permission.
+            logSecurityException(securityException);
         }
     }
 
@@ -184,13 +161,30 @@ public class GeofenceController implements
      * @return A PendingIntent for the IntentService that handles geofence transitions.
      */
     private PendingIntent getGeofencePendingIntent() {
-        // Reuse the PendingIntent if we already have it.
-        if (mGeofencePendingIntent != null) {
-            return mGeofencePendingIntent;
-        }
+
         Intent intent = new Intent(context, GeofenceTransitionsIntentService.class);
         // We use FLAG_UPDATE_CURRENT so that we get the same pending intent back when calling
         // addGeofences() and removeGeofences().
+
+        return PendingIntent.getService(context, 0, intent, PendingIntent.FLAG_UPDATE_CURRENT);
+    }
+
+    /**
+     * Gets a PendingIntent to send with the request to add or remove Geofences. Location Services
+     * issues the Intent inside this PendingIntent whenever a geofence transition occurs for the
+     * current list of geofences.
+     *
+     * @return A PendingIntent for the IntentService that handles geofence transitions.
+     */
+    private PendingIntent getGeofencePendingIntent(Note note) {
+
+        Intent intent = new Intent(context, GeofenceTransitionsIntentService.class);
+        // We use FLAG_UPDATE_CURRENT so that we get the same pending intent back when calling
+        // addGeofences() and removeGeofences().
+        intent.putExtra("noteID", note.getId());
+        intent.putExtra("noteFrom", note.getFrom());
+        intent.putExtra("noteDetails", note.getDetails());
+
         return PendingIntent.getService(context, 0, intent, PendingIntent.FLAG_UPDATE_CURRENT);
     }
 
@@ -198,18 +192,20 @@ public class GeofenceController implements
      * This sample hard codes geofence data. A real app might dynamically create geofences based on
      * the user's location.
      */
-    public void addGeofenceToList(String id, double latitude, double longitude) {
+    //TODO: remove latitude, longitude
+    public  List<Geofence> createGeofenceList(Note note, double latitude, double longitude) {
 
-            mGeofenceList.add(new Geofence.Builder()
+            List<Geofence> geofenceList = new ArrayList<Geofence>();
+            geofenceList.add(new Geofence.Builder()
                     // Set the request ID of the geofence. This is a string to identify this
                     // geofence.
-                    .setRequestId(id)
+                    .setRequestId(note.getId())
 
                             // Set the circular region of this geofence.
                     .setCircularRegion(
                             latitude,
                             longitude,
-                            Constants.GEOFENCE_RADIUS_IN_METERS
+                            GEOFENCE_RADIUS_IN_METERS
                     )
 
                             // Set the expiration duration of the geofence. This geofence gets automatically
@@ -221,5 +217,6 @@ public class GeofenceController implements
                     .setTransitionTypes(Geofence.GEOFENCE_TRANSITION_ENTER)
                     .build());
 
+        return geofenceList;
     }
 }
