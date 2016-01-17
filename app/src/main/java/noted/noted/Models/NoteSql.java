@@ -65,8 +65,8 @@ public class NoteSql {
         values.put(NOTE_DETAILS, note.getDetails());
         values.put(NOTE_SENT_TIME, note.getSentTime());
         values.put(NOTE_TIME_TO_SHOW, note.getTimeToShow());
-        values.put(NOTE_LNG_TO_SHOW, note.getLocationToShow().getLongitudeToShow());
-        values.put(NOTE_LAT_TO_SHOW, note.getLocationToShow().getLatitudeToShow());
+        values.put(NOTE_LNG_TO_SHOW,(note.getLocationToShow() == null) ? null : note.getLocationToShow().getLongitudeToShow());
+        values.put(NOTE_LAT_TO_SHOW,(note.getLocationToShow() == null) ? null : note.getLocationToShow().getLatitudeToShow());
         values.put(NOTE_IS_SHOWN, note.isShown());
 
         long note_id = db.insert(NOTE_TABLE, NOTE_ID, values);
@@ -89,8 +89,8 @@ public class NoteSql {
         values.put(NOTE_DETAILS, note.getDetails());
         values.put(NOTE_SENT_TIME, note.getSentTime());
         values.put(NOTE_TIME_TO_SHOW, note.getTimeToShow());
-        values.put(NOTE_LNG_TO_SHOW, note.getLocationToShow().getLongitudeToShow());
-        values.put(NOTE_LAT_TO_SHOW, note.getLocationToShow().getLatitudeToShow());
+        values.put(NOTE_LNG_TO_SHOW,(note.getLocationToShow() == null) ? null : note.getLocationToShow().getLongitudeToShow());
+        values.put(NOTE_LAT_TO_SHOW, (note.getLocationToShow() == null) ? null : note.getLocationToShow().getLatitudeToShow());
         values.put(NOTE_IS_SHOWN, note.isShown());
 
         int rows_updated = db.update(NOTE_TABLE, values, NOTE_ID + "= ?", new String[]{note.getId()});
