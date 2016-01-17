@@ -86,6 +86,10 @@ public class NoteSql {
     public static int updateNote(ModelSql.Helper dbHelper, Note note) {
         SQLiteDatabase db = dbHelper.getWritableDatabase();
         ContentValues values = new ContentValues();
+
+        if (note.getId() != null) {
+            values.put(NOTE_ID, note.getId());
+        }
         values.put(NOTE_FROM, note.getFrom());
         values.put(NOTE_TO, note.getTo());
         values.put(NOTE_DETAILS, note.getDetails());
@@ -97,6 +101,7 @@ public class NoteSql {
         values.put(NOTE_IS_SHOWN, note.isShown());
 
         int rows_updated = db.update(NOTE_TABLE, values, NOTE_ID + "= ?", new String[]{note.getId()});
+        //long rows_updated =  db.replace(NOTE_TABLE, null, values);
         return rows_updated;
     }
 

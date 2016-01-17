@@ -1,15 +1,24 @@
 package noted.noted.Models;
 
 import android.content.Context;
+import android.content.SharedPreferences;
+import android.util.Log;
 
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
 import java.util.List;
+import java.util.TimeZone;
 
 /**
  * Created by Anna on 30-Dec-15.
  */
 public class Model {
     private final static Model instance = new Model();
-    Context context;
+    private Context context = null;
+    private SharedPreferences sharedPrefs;
+    private final static String PREF_FILE = "PREF_FILE";
+    private final static String LAST_SYNC_TIME = "LAST_SYNC_TIME";
 
     ModelSql local = new ModelSql();
     ModelParse remote = new ModelParse();
@@ -22,10 +31,31 @@ public class Model {
     }
 
     public void init(Context context){
-        this.context = context;
-        remote.init(context);
-        local.init(context);
-        contacts.init(context);
+        if (this.context == null) {
+            this.context = context;
+            sharedPrefs = context.getSharedPreferences(PREF_FILE, Context.MODE_PRIVATE);
+            remote.init(context);
+            local.init(context);
+            contacts.init(context);
+        }
+    }
+
+    public String getCurrentGMTDate() {
+        Calendar cal = Calendar.getInstance();
+        DateFormat formatter = new SimpleDateFormat(remote.DEFAULT_DATE_FORMAT);
+        formatter.setTimeZone(TimeZone.getTimeZone(remote.DEFAULT_TIME_ZONE));
+        return formatter.format((cal.getTime()));
+    }
+
+    // Shared Preferences
+    public String getLastSyncTime() {
+        return sharedPrefs.getString(LAST_SYNC_TIME, null);
+    }
+
+    public void setLastSyncTime(String timestamp) {
+        SharedPreferences.Editor editor = sharedPrefs.edit();
+        editor.putString(LAST_SYNC_TIME, timestamp);
+        editor.commit();
     }
 
     // Local database
@@ -58,36 +88,49 @@ public class Model {
     }
 
     // Remote database
-    public interface LogInListener {
+
+    public interface SimpleSuccessListener {
         public void onResult(boolean result);
     }
 
-    public void logIn(User user, LogInListener listener) {
-        remote.userLogIn(user,listener);
+    // Users
+    public void logIn(User user, SimpleSuccessListener listener) {
+        remote.userLogIn(user, listener);
     }
 
-    public interface SignUpListener {
-        public void onResult(boolean result);
-    }
-
-    public void signIn(User user, SignUpListener listener) {
+    public void signIn(User user, SimpleSuccessListener listener) {
         remote.userSignUp(user, listener);
     }
 
-    public interface ResetPasswordListener {
-        public void onResult(boolean result);
+    public void signOrLogin(final User user , final SimpleSuccessListener listener) {
+        remote.userLogIn(user, new SimpleSuccessListener() {
+            @Override
+            public void onResult(boolean result) {
+                if (result) {
+                    listener.onResult(true);
+                } else {
+                    remote.userSignUp(user, new SimpleSuccessListener() {
+                        @Override
+                        public void onResult(boolean result) {
+                            listener.onResult(result);
+                        }
+                    });
+                }
+            }
+        });
     }
 
-    public void resetPassword(String email, ResetPasswordListener listener) {
-        remote.userResetPassword(email,listener);
+    public void logOut(SimpleSuccessListener listener) {
+        remote.userLogOut(listener);
     }
-    
+
+    public User getCurrUser() {
+        return remote.getCurrUser();
+    }
+
+    // Notes
     public interface GetNotesListener{
         public void onResult(List<Note> notes);
-    }
-
-    public void getAllRemoteNotes(GetNotesListener listener){
-        remote.getAllNotes(listener);
     }
 
     public interface GetNoteListener {
@@ -135,16 +178,21 @@ public class Model {
         public void onResult(List<Note> data);
     }
 
-    public void syncNotesFromServer(final SyncNotesListener listener) {
-        getAllRemoteNotes(new GetNotesListener() {
+    public void syncNotesFromServer(final SyncNotesListener listener){
+        String timestamp = getLastSyncTime();
+        String to = getCurrUser().getPhoneNumber();
+        remote.getAllNotes(new GetNotesListener() {
             @Override
             public void onResult(List<Note> notes) {
+                for (Note note : notes) {
+                    local.addNote(note);
+                }
                 listener.onResult(notes);
+                setLastSyncTime(getCurrentGMTDate());
             }
-        });
-
+        }, timestamp, to);
     }
-    
+
     // Contacts
     public List<Contact> getAllContacts(){
         return contacts.getAllContacts(context);
