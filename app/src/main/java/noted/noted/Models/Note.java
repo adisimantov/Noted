@@ -13,6 +13,7 @@ public class Note {
     private String sentTime;
     private String timeToShow;
     private Location locationToShow;
+    private boolean isShown;
 
     public Note(String from, String to, String details, String sentTime) {
         this.from = from;
@@ -29,6 +30,17 @@ public class Note {
         this.sentTime = sentTime;
         this.timeToShow = timeToShow;
         this.locationToShow = locationToShow;
+    }
+
+    public Note(String id, String from, String to, String details, String sentTime, String timeToShow, Location locationToShow, boolean isShown) {
+        this.id = id;
+        this.from = from;
+        this.to = to;
+        this.details = details;
+        this.sentTime = sentTime;
+        this.timeToShow = timeToShow;
+        this.locationToShow = locationToShow;
+        this.isShown = isShown;
     }
 
     // To use in gridview
@@ -88,6 +100,14 @@ public class Note {
 
     public void setLocationToShow(Location locationToShow) {
         this.locationToShow = locationToShow;
+    }
+
+    public boolean isShown() {
+        return isShown;
+    }
+
+    public void setIsShown(boolean isShown) {
+        this.isShown = isShown;
     }
 }
 
