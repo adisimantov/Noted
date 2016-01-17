@@ -28,7 +28,7 @@ public class NotificationAlarmReceiver extends BroadcastReceiver {
     public void onReceive(Context context, Intent intent) {
 
         Log.d("notificationAlarm", "again");
-        String id = intent.getStringExtra("noteId");
+        String id = intent.getStringExtra("noteID");
         String from = intent.getStringExtra("noteFrom");
         String details = intent.getStringExtra("noteDetails");
 

@@ -3,35 +3,24 @@ package noted.noted;
 import android.app.ActionBar;
 import android.app.Activity;
 import android.app.Fragment;
-import android.content.Intent;
-import android.graphics.AvoidXfermode;
 import android.os.Bundle;
 import android.util.Log;
-import android.widget.Toast;
 
 import com.digits.sdk.android.AuthCallback;
 import com.digits.sdk.android.Digits;
 import com.digits.sdk.android.DigitsAuthButton;
-import com.digits.sdk.android.DigitsAuthConfig;
 import com.digits.sdk.android.DigitsException;
-import com.digits.sdk.android.DigitsOAuthSigning;
 import com.digits.sdk.android.DigitsSession;
-import com.digits.sdk.android.DigitsUser;
-import com.parse.LogInCallback;
-import com.parse.Parse;
-import com.parse.ParseException;
-import com.parse.ParseUser;
 import com.twitter.sdk.android.core.TwitterAuthConfig;
-import com.twitter.sdk.android.core.TwitterAuthToken;
 import com.twitter.sdk.android.core.TwitterCore;
-import io.fabric.sdk.android.Fabric;
-import java.util.Calendar;
+
 import java.util.List;
 
-import noted.noted.Models.Contact;
+import io.fabric.sdk.android.Fabric;
 import noted.noted.Models.Model;
 import noted.noted.Models.Note;
 import noted.noted.Models.User;
+import noted.noted.Receivers.AlarmReceiver;
 
 public class MainActivity extends Activity {
 
@@ -178,5 +167,18 @@ public class MainActivity extends Activity {
         }*/
         //List<Contact> contactList = Model.getInstance().getAllContacts();
         //Contact contact = Model.getInstance().getContact("000-1255");
+    }
+
+    @Override
+    protected void onStart() {
+        super.onStart();
+        new AlarmReceiver().SetAlarm(this);
+        GeofenceController.getInstance().connectToApiClient();
+    }
+
+    @Override
+    protected void onStop() {
+        GeofenceController.getInstance().disconnectApiClient();
+        super.onStop();
     }
 }
