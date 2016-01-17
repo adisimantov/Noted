@@ -97,12 +97,14 @@ public class GeofenceTransitionsIntentService extends IntentService {
             );
 
             GeofenceController.getInstance().removeGeofencesButtonHandler(triggeringGeofences);
-
+/*
             String id = intent.getStringExtra("noteID");
             String from = intent.getStringExtra("noteFrom");
             String details = intent.getStringExtra("noteDetails");
 
-            NotificationController.getInstance().notify(from,details,id,this);
+            NotificationController.getInstance().notify(from,details,id,this);*/
+
+            NotificationController.getInstance().notify(intent,this);
 /*
             // Send notification and log the transition details.
             sendNotification(from, details);*/

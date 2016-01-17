@@ -21,20 +21,23 @@ public class AlarmReceiver extends BroadcastReceiver {
     @Override
     public void onReceive(final Context context, Intent intent) {
 
+        Model.getInstance().init(context);
         Model.getInstance().syncNotesFromServer(new Model.SyncNotesListener() {
             @Override
             public void onResult(List<Note> data) {
                 Log.d("alarm", "syncing data......");
-                GeofenceController geofenceController = GeofenceController.getInstance();
+                GeofenceController.getInstance().init(context);
+                GeofenceController.getInstance().connectToApiClient();
                 for (Note note : data) {
                     if (note.getTimeToShow() != null) {
                         new NotificationAlarmReceiver().SetAlarm(context, note);
 
                     } else if (note.getLocationToShow() != null) {
 
-                        geofenceController.addGeofence(note);
+                        GeofenceController.getInstance().addGeofence(note);
                     }
                 }
+                GeofenceController.getInstance().disconnectApiClient();
 
                /* new NotificationAlarmReceiver().SetAlarm(context, data.get(0));
                 geofenceController.addGeofence(data.get(0));
@@ -46,9 +49,9 @@ public class AlarmReceiver extends BroadcastReceiver {
 
     public void SetAlarm(final Context context) {
         Log.d("alarm", "set alarm sync");
-        Intent downloader = new Intent(context, AlarmReceiver.class);
+        Intent intent = new Intent(context, AlarmReceiver.class);
         PendingIntent recurringDownload = PendingIntent.getBroadcast(context,
-                0, downloader, PendingIntent.FLAG_CANCEL_CURRENT);
+                0, intent, PendingIntent.FLAG_CANCEL_CURRENT);
         AlarmManager alarms = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
         alarms.setInexactRepeating(AlarmManager.ELAPSED_REALTIME_WAKEUP, 0,
                 AlarmManager.INTERVAL_HALF_HOUR,

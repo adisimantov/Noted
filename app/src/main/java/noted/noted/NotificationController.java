@@ -6,6 +6,9 @@ import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
 
+import noted.noted.Models.Contact;
+import noted.noted.Models.Model;
+
 /**
  * Created by adi on 17-Jan-16.
  */
@@ -22,6 +25,19 @@ public class NotificationController {
     public static NotificationController getInstance(){
 
         return instance;
+    }
+
+    public void notify(Intent intent, Context context){
+        String id = intent.getStringExtra("noteID");
+        String from = intent.getStringExtra("noteFrom");
+
+        Contact c = Model.getInstance().getContact(from);
+        if (c != null) {
+            from = c.getName();
+        }
+
+        String details = intent.getStringExtra("noteDetails");
+        notify(from,details,id,context);
     }
 
 

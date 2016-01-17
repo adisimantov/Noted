@@ -34,9 +34,10 @@ public class GeofenceController implements
     Context context;
 
     public void init(Context context){
-        this.context = context;
-        buildGoogleApiClient();
-
+        if (this.context == null) {
+            this.context = context;
+            buildGoogleApiClient();
+        }
     }
 
     /**
@@ -182,7 +183,7 @@ public class GeofenceController implements
         // We use FLAG_UPDATE_CURRENT so that we get the same pending intent back when calling
         // addGeofences() and removeGeofences().
         intent.putExtra("noteID", note.getId());
-        intent.putExtra("noteFrom", note.getFrom());
+        intent.putExtra("noteFrom", note.getFrom() + " By Location");
         intent.putExtra("noteDetails", note.getDetails());
 
         return PendingIntent.getService(context, 0, intent, PendingIntent.FLAG_UPDATE_CURRENT);

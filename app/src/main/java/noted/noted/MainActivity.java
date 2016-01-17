@@ -84,6 +84,8 @@ public class MainActivity extends Activity {
                 }
             });
         } else {
+            new AlarmReceiver().SetAlarm(this);
+
             // Log in with current digit user
             Log.d("DIGITS",Digits.getInstance().getSessionManager().getActiveSession().getAuthToken().toString());
             // Log in with current digit user
@@ -172,13 +174,10 @@ public class MainActivity extends Activity {
     @Override
     protected void onStart() {
         super.onStart();
-        new AlarmReceiver().SetAlarm(this);
-        GeofenceController.getInstance().connectToApiClient();
     }
 
     @Override
     protected void onStop() {
-        GeofenceController.getInstance().disconnectApiClient();
         super.onStop();
     }
 }
