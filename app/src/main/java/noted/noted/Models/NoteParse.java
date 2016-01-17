@@ -33,6 +33,7 @@ public class NoteParse {
     private final static String NOTE_TIME_TO_SHOW     = "TIME_TO_SHOW";
     private final static String NOTE_LOCATION_TO_SHOW = "LOCATION_TO_SHOW";
     private final static String NOTE_IS_SHOWN         = "IS_SHOWN";
+    private final static String NOTE_CREATED_AT       = "createdAt";
 
     public static void addNote(final Note note, final Model.AddNoteListener listener) {
         final ParseObject parseNote = new ParseObject(NOTE_TABLE);
@@ -51,9 +52,9 @@ public class NoteParse {
             public void done(ParseException e) {
                 if (e == null) {
                     note.setId(parseNote.getObjectId());
-                    listener.onResult(true,note);
+                    listener.onResult(true, note);
                 } else {
-                    listener.onResult(false,note);
+                    listener.onResult(false, note);
                     Log.d(getClass().getSimpleName(), "Note add error: " + e);
                 }
             }
@@ -118,30 +119,37 @@ public class NoteParse {
         });
     }
 
-    public static void getAllNotes(final Model.GetNotesListener listener) {
+    public static void getAllNotes(final Model.GetNotesListener listener,String timestamp,String to) {
         ParseQuery<ParseObject> query = new ParseQuery<ParseObject>(NOTE_TABLE);
+        query.whereEqualTo(NOTE_TO, to);
+
+        // If timestamp is null get all user notes
+        if (timestamp != null) {
+            query.whereGreaterThanOrEqualTo(NOTE_CREATED_AT, timestamp);
+        }
+
         query.findInBackground(new FindCallback<ParseObject>() {
             @Override
             public void done(List<ParseObject> parseObjects, ParseException e) {
-                List<Note> notes = new LinkedList<Note>();
-                if (e == null) {
-                    for (ParseObject po : parseObjects) {
-                        String id = po.getObjectId();
-                        String from = po.getString(NOTE_FROM);
-                        String to = po.getString(NOTE_TO);
-                        String details = po.getString(NOTE_DETAILS);
-                        String sentTime = po.getString(NOTE_SENT_TIME);
-                        String receivedTime = po.getString(NOTE_RECEIVED_TIME);
-                        String showedTime = po.getString(NOTE_SHOWED_TIME);
-                        String timeToShow = po.getString(NOTE_TIME_TO_SHOW);
-                        String locationToShow = po.getString(NOTE_LOCATION_TO_SHOW);
-                        boolean isShown = (po.getInt(NOTE_IS_SHOWN) == 1);
+            List<Note> notes = new LinkedList<Note>();
+            if (e == null) {
+                for (ParseObject po : parseObjects) {
+                    String id = po.getObjectId();
+                    String from = po.getString(NOTE_FROM);
+                    String to = po.getString(NOTE_TO);
+                    String details = po.getString(NOTE_DETAILS);
+                    String sentTime = po.getString(NOTE_SENT_TIME);
+                    String receivedTime = po.getString(NOTE_RECEIVED_TIME);
+                    String showedTime = po.getString(NOTE_SHOWED_TIME);
+                    String timeToShow = po.getString(NOTE_TIME_TO_SHOW);
+                    String locationToShow = po.getString(NOTE_LOCATION_TO_SHOW);
+                    boolean isShown = (po.getInt(NOTE_IS_SHOWN) == 1);
 
-                        Note note = new Note(id, from, to, details, sentTime, receivedTime, showedTime, timeToShow, locationToShow, isShown);
-                        notes.add(note);
-                    }
+                    Note note = new Note(id, from, to, details, sentTime, receivedTime, showedTime, timeToShow, locationToShow, isShown);
+                    notes.add(note);
                 }
-                listener.onResult(notes);
+            }
+            listener.onResult(notes);
             }
         });
     }
