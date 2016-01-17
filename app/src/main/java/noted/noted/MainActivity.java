@@ -62,6 +62,17 @@ public class MainActivity extends Activity {
                 Log.d("Log out","" + result);
             }
         });*/
+        long mil = Model.getInstance().getMilisFromDateString("24/05/1993 10:00", Model.APP_DEFAULT_DATE_FORMAT);
+        Log.d("milis", "" + mil);
+        Log.d("string", Model.getInstance().getDateStringFromMilis(mil, Model.APP_DEFAULT_DATE_FORMAT));
+        Calendar c = Calendar.getInstance();
+        c.setTimeInMillis(mil);
+        Log.d("cal", "" + c.get(Calendar.YEAR) + "-"
+                + c.get(Calendar.MONTH)
+                + "-" + c.get(Calendar.DAY_OF_MONTH)
+                + " " + c.get(Calendar.HOUR_OF_DAY)
+                + ":" + c.get(Calendar.MINUTE)
+                + ":" + c.get((Calendar.SECOND)));
         // User is not signup to digits
         if (Digits.getInstance().getSessionManager().getActiveSession() == null) {
             setContentView(R.layout.activity_sign_in);
