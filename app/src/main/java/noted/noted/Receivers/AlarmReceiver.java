@@ -25,11 +25,11 @@ public class AlarmReceiver extends BroadcastReceiver {
         Model.getInstance().syncNotesFromServer(new Model.SyncNotesListener() {
             @Override
             public void onResult(List<Note> data) {
-                Log.d("alarm", "syncing data......");
+                Log.d("AlarmReceiver", "syncing data......" + data.size());
                 GeofenceController.getInstance().init(context);
                 GeofenceController.getInstance().connectToApiClient();
                 for (Note note : data) {
-                    Log.d("alarm note ", note.getId() + " " + note.getTimeToShow());
+                    Log.d("AlarmReceiver", note.getId() + " " + note.getTimeToShow());
                     if (note.getTimeToShow() != null) {
                         new NotificationAlarmReceiver().SetAlarm(context, note);
 
