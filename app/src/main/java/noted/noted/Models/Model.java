@@ -5,8 +5,10 @@ import android.content.SharedPreferences;
 import android.util.Log;
 
 import java.text.DateFormat;
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
 import java.util.TimeZone;
 
@@ -19,6 +21,9 @@ public class Model {
     private SharedPreferences sharedPrefs;
     private final static String PREF_FILE = "PREF_FILE";
     private final static String LAST_SYNC_TIME = "LAST_SYNC_TIME";
+
+    public final static String APP_DEFAULT_DATE_FORMAT = "dd/MM/yyyy hh:mm";
+    public final static String APP_DEFAULT_TIMESTAMP_FORMAT = "dd/MM/yyyy hh:mm:ss";
 
     ModelSql local = new ModelSql();
     ModelParse remote = new ModelParse();
@@ -45,6 +50,31 @@ public class Model {
         DateFormat formatter = new SimpleDateFormat(remote.DEFAULT_DATE_FORMAT);
         formatter.setTimeZone(TimeZone.getTimeZone(remote.DEFAULT_TIME_ZONE));
         return formatter.format((cal.getTime()));
+    }
+
+    public String getCurrentTimestamp() {
+        Calendar cal = Calendar.getInstance();
+        DateFormat formatter = new SimpleDateFormat(APP_DEFAULT_TIMESTAMP_FORMAT);
+        return formatter.format((cal.getTime()));
+    }
+
+    public long getMilisFromDateString(String date,String dateFormat) {
+        try {
+            Date parsedDate = new SimpleDateFormat(dateFormat).parse(date);
+            return parsedDate.getTime();
+        } catch (ParseException e) {
+            return -1;
+        }
+    }
+
+    public String getDateStringFromMilis(long miliseconds, String dateFormat) {
+        // Create a DateFormatter object for displaying date in specified format.
+        SimpleDateFormat formatter = new SimpleDateFormat(dateFormat);
+
+        // Create a calendar object that will convert the date and time value in milliseconds to date.
+        Calendar calendar = Calendar.getInstance();
+        calendar.setTimeInMillis(miliseconds);
+        return formatter.format(calendar.getTime());
     }
 
     // Shared Preferences
