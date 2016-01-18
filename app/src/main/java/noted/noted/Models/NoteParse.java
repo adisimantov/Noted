@@ -40,8 +40,12 @@ public class NoteParse {
         String details = po.getString(NOTE_DETAILS);
         String sentTime = po.getString(NOTE_SENT_TIME);
         String timeToShow = po.getString(NOTE_TIME_TO_SHOW);
+
         ParseGeoPoint locationToShow = po.getParseGeoPoint(NOTE_LOCATION_TO_SHOW);
-        Location location = new Location(locationToShow.getLongitude(),locationToShow.getLatitude());
+        Location location = null;
+        if (locationToShow != null) {
+            location = new Location(locationToShow.getLongitude(), locationToShow.getLatitude());
+        }
 
         return (new Note(id, from, to, details, sentTime, timeToShow, location));
     }
@@ -82,7 +86,7 @@ public class NoteParse {
         });
     }
 
-    public static void updateNote(final Note note, final Model.UpdateNoteListener listener) {
+    public static void updateNote(final Note note, final Model.SimpleSuccessListener listener) {
         ParseQuery<ParseObject> query = ParseQuery.getQuery(NOTE_TABLE);
 
         // Retrieve the object by id
