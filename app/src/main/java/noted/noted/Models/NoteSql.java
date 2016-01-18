@@ -23,7 +23,7 @@ public class NoteSql {
     private final static String NOTE_LAT_TO_SHOW    = "LAT_TO_SHOW";
     private final static String NOTE_IS_SHOWN       = "IS_SHOWN";
 
-    private static List<Note> getNoteListByCursor(Cursor cursor) {
+    private static List<Note> getNoteListFromCursor(Cursor cursor) {
         List<Note> data = new LinkedList<Note>();
 
         if (cursor.moveToFirst()) {
@@ -100,13 +100,13 @@ public class NoteSql {
     public static List<Note> getReceivedNotes(ModelSql.Helper dbHelper, String receivedPhone) {
         SQLiteDatabase db = dbHelper.getReadableDatabase();
         Cursor cursor = db.query(NOTE_TABLE, null, NOTE_TO + "=?", new String[]{receivedPhone}, null, null, null);
-        return getNoteListByCursor(cursor);
+        return getNoteListFromCursor(cursor);
     }
 
     public static List<Note> getSentNotes(ModelSql.Helper dbHelper, String sentPhone) {
         SQLiteDatabase db = dbHelper.getReadableDatabase();
         Cursor cursor = db.query(NOTE_TABLE, null, NOTE_FROM + "=?", new String[]{sentPhone}, null, null, null);
-        return getNoteListByCursor(cursor);
+        return getNoteListFromCursor(cursor);
     }
 
     public static Note getNote(ModelSql.Helper dbHelper, String note_id) {
@@ -144,7 +144,7 @@ public class NoteSql {
     public static List<Note> getAllNotes(ModelSql.Helper dbHelper) {
         SQLiteDatabase db = dbHelper.getReadableDatabase();
         Cursor cursor = db.query(NOTE_TABLE, null, null, null, null, null, null);
-        return getNoteListByCursor(cursor);
+        return getNoteListFromCursor(cursor);
     }
 
     public static void create(SQLiteDatabase db) {

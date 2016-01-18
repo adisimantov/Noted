@@ -88,7 +88,33 @@ public class Model {
         editor.commit();
     }
 
+    public interface GetNotesListener{
+        public void onResult(List<Note> notes);
+    }
+
+    public interface GetNoteListener {
+        public void onResult(Note note);
+    }
+
+    public interface SimpleSuccessListener {
+        public void onResult(boolean result);
+    }
+
     // Local database
+
+    public Note getLocalNote(String id){
+        return local.getNote(id);
+    }
+
+    public long addLocalNote(Note note){
+        return local.addNote(note);
+    }
+    public int updateLocalNote(Note note){
+        return local.updateNote(note);
+    }
+    public int deleteLocalNote(String noteId){
+        return local.deleteNote(noteId);
+    }
 
     public void getLocalNoteAsync(final GetNoteListener listener, final String id){
         class GetNoteAsyncTask extends AsyncTask<String,String,Note> {
@@ -108,11 +134,6 @@ public class Model {
         task.execute();
     }
 
-    public Note getLocalNote(String id){
-        return local.getNote(id);
-    }
-
-
     public void addLocalNoteAsync(final SimpleSuccessListener listener, final Note note){
         class AddNoteAsyncTask extends AsyncTask<String,String,Long> {
             @Override
@@ -129,10 +150,6 @@ public class Model {
 
         AddNoteAsyncTask task = new AddNoteAsyncTask();
         task.execute();
-    }
-
-    public long addLocalNote(Note note){
-        return local.addNote(note);
     }
 
     public void updateLocalNoteAsync(final SimpleSuccessListener listener, final Note note){
@@ -153,10 +170,6 @@ public class Model {
         task.execute();
     }
 
-    public int updateLocalNote(Note note){
-        return local.updateNote(note);
-    }
-
     public void deleteLocalNoteAsync(final SimpleSuccessListener listener, final String noteId){
         class DeleteNoteAsyncTask extends AsyncTask<String,String,Integer> {
             @Override
@@ -175,11 +188,7 @@ public class Model {
         task.execute();
     }
 
-    public int deleteLocalNote(String noteId){
-        return local.deleteNote(noteId);
-    }
-
-    public void getAllLocalNotesAsync(final GetNotesListener listener){
+    public void getAllLocalNotesAsync(final GetNotesListener listener) {
         class GetNotesAsyncTask extends AsyncTask<String,String,List<Note>> {
             @Override
             protected List<Note> doInBackground(String... params) {
@@ -233,24 +242,7 @@ public class Model {
         task.execute();
     }
 
-    public List<Note> getAllLocalNotes(){
-        return local.getAllNotes();
-    }
-
-    public List<Note> getReceivedLocalNotes(String sentPhone){
-        return local.getReceivedNotes(sentPhone);
-    }
-
-    public List<Note> getSentLocalNotes(String receivedPhone){
-        return local.getSentNotes(receivedPhone);
-    }
-
     // Remote database
-
-    public interface SimpleSuccessListener {
-        public void onResult(boolean result);
-    }
-
     // Users
     public void logIn(User user, SimpleSuccessListener listener) {
         remote.userLogIn(user, listener);
@@ -287,32 +279,20 @@ public class Model {
     }
 
     // Notes
-    public interface GetNotesListener{
-        public void onResult(List<Note> notes);
-    }
-
-    public interface GetNoteListener {
-        public void onResult(Note note);
-    }
-
     public void getNote(String id, GetNoteListener listener) {
         remote.getNote(id, listener);
-    }
-
-    public interface AddNoteListener {
-        public void onResult(boolean result, Note id);
     }
 
     public void addRemoteNote(Note note, AddNoteListener listener) {
         remote.addNote(note, listener);
     }
 
-    public interface UpdateNoteListener {
-        public void onResult(boolean result);
+    public void updateRemoteNote(Note note, SimpleSuccessListener listener) {
+        remote.updateNote(note, listener);
     }
 
-    public void updateRemoteNote(Note note, UpdateNoteListener listener) {
-        remote.updateNote(note, listener);
+    public interface AddNoteListener {
+        public void onResult(boolean result, Note id);
     }
 
     public void addLocalAndRemoteNote(final Note note, final AddNoteListener listener) {
