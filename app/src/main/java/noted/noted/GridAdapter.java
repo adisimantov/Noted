@@ -25,8 +25,6 @@ public class GridAdapter extends BaseAdapter {
     public GridAdapter(Context context, boolean isReceived) {
         this.context = context;
         this.isReceived = isReceived;
-
-        List<Note> noteList;
 /*
         if (isReceived){
             noteList = Model.getInstance().getReceivedLocalNotes(Model.getInstance().getCurrUser().getPhoneNumber());
@@ -35,12 +33,15 @@ public class GridAdapter extends BaseAdapter {
             noteList = Model.getInstance().getSentLocalNotes(Model.getInstance().getCurrUser().getPhoneNumber());
         }*/
 
-        noteList = Model.getInstance().getAllLocalNotes();
-
-        for(Note note : noteList)
-        {
-            lNotes.add(note);
-        }
+        Model.getInstance().getAllLocalNotesAsync(new Model.GetNotesListener() {
+            @Override
+            public void onResult(List<Note> notes) {
+                for(Note note : notes)
+                {
+                    lNotes.add(note);
+                }
+            }
+        });
     }
 
     @Override
