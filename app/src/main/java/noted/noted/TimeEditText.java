@@ -34,7 +34,7 @@ public class TimeEditText extends EditText implements TimePickerFragment.onTimeS
     private void init() {
         setInputType(0);
         Calendar cal = Calendar.getInstance();
-        hour = cal.get(Calendar.HOUR);
+        hour = cal.get(Calendar.HOUR_OF_DAY);
         minute = cal.get(Calendar.MINUTE);
         setText();
 
