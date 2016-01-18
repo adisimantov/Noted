@@ -207,11 +207,11 @@ public class Model {
         task.execute();
     }
 
-    public void getReceivedLocalNotesAsync(final GetNotesListener listener, final String sentPhone){
+    public void getReceivedLocalNotesAsync(final GetNotesListener listener, final String receivedPhone){
         class GetNotesAsyncTask extends AsyncTask<String,String,List<Note>> {
             @Override
             protected List<Note> doInBackground(String... params) {
-                return local.getReceivedNotes(sentPhone);
+                return local.getReceivedNotes(receivedPhone);
             }
 
             @Override
@@ -225,11 +225,11 @@ public class Model {
         task.execute();
     }
 
-    public void getSentLocalNotesAsync(final GetNotesListener listener, final String receivedPhone){
+    public void getSentLocalNotesAsync(final GetNotesListener listener, final String sentPhone){
         class GetNotesAsyncTask extends AsyncTask<String,String,List<Note>> {
             @Override
             protected List<Note> doInBackground(String... params) {
-                return local.getSentNotes(receivedPhone);
+                return local.getSentNotes(sentPhone);
             }
 
             @Override
@@ -299,15 +299,16 @@ public class Model {
     public void addLocalAndRemoteNote(final Note note, final AddNoteListener listener) {
         addRemoteNote(note, new AddNoteListener() {
             @Override
-            public void onResult(boolean result, Note note) {
+            public void onResult(boolean result, final Note noteRemote) {
                 if (result) {
-                    if (addLocalNote(note) > -1) {
-                        listener.onResult(true, note);
-                    } else {
-                        listener.onResult(false, note);
-                    }
+                    addLocalNoteAsync(new SimpleSuccessListener() {
+                        @Override
+                        public void onResult(boolean result) {
+                            listener.onResult(result, noteRemote);
+                        }
+                    },note);
                 } else {
-                    listener.onResult(false, note);
+                    listener.onResult(false, noteRemote);
                 }
             }
         });

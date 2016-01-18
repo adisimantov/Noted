@@ -157,7 +157,7 @@ public class NoteSql {
                     NOTE_SENT_TIME          + " DATETIME NOT NULL," +
                     NOTE_TIME_TO_SHOW       + " DATETIME," +
                     NOTE_LNG_TO_SHOW        + " REAL," +
-                    NOTE_LAT_TO_SHOW        + " REAL" +
+                    NOTE_LAT_TO_SHOW        + " REAL," +
                     NOTE_IS_SHOWN           + " BOOLEAN" + ");");
     }
 
