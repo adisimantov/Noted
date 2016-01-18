@@ -189,5 +189,21 @@ public class MainActivity extends Activity {
         }*/
         //List<Contact> contactList = Model.getInstance().getAllContacts();
         //Contact contact = Model.getInstance().getContact("000-1255");
+/*
+        Note note = new Note("0525827248","0544783455","Anna->Noy","17/01/2016");
+        Model.getInstance().addLocalAndRemoteNote(note, new Model.AddNoteListener() {
+            @Override
+            public void onResult(boolean result, Note id) {
+
+            }
+        });
+
+        note = new Note("0543975063","0544783455","Anna->Noy","17/01/2016");
+        Model.getInstance().addLocalAndRemoteNote(note, new Model.AddNoteListener() {
+            @Override
+            public void onResult(boolean result, Note id) {
+
+            }
+        });*/
     }
 }
