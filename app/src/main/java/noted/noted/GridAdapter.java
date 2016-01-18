@@ -36,9 +36,12 @@ public class GridAdapter extends BaseAdapter {
         Model.getInstance().getAllLocalNotesAsync(new Model.GetNotesListener() {
             @Override
             public void onResult(List<Note> notes) {
-                for(Note note : notes)
-                {
-                    lNotes.add(note);
+                if (notes.size() > 0) {
+                    for(Note note : notes)
+                    {
+                        lNotes.add(note);
+                    }
+                    notifyDataSetChanged();
                 }
             }
         });
@@ -56,8 +59,7 @@ public class GridAdapter extends BaseAdapter {
 
     @Override
     public long getItemId(int position) {
-        //return lNotes.get(position).getId();
-        return 1;
+        return lNotes.get(position).getNumericId();
     }
 
     @Override

@@ -23,8 +23,8 @@ public class Model {
     private final static String PREF_FILE = "PREF_FILE";
     private final static String LAST_SYNC_TIME = "LAST_SYNC_TIME";
 
-    public final static String APP_DEFAULT_DATE_FORMAT = "dd/MM/yyyy hh:mm";
-    public final static String APP_DEFAULT_TIMESTAMP_FORMAT = "dd/MM/yyyy hh:mm:ss";
+    public final static String APP_DEFAULT_DATE_FORMAT = "dd.MM.yyyy hh:mm";
+    public final static String APP_DEFAULT_TIMESTAMP_FORMAT = "dd.MM.yyyy hh:mm:ss";
 
     ModelSql local = new ModelSql();
     ModelParse remote = new ModelParse();

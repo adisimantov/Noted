@@ -43,6 +43,15 @@ public class MainActivity extends Activity {
 
         // Init databse model with context
         Model.getInstance().init(this);
+        Model.getInstance().setLastSyncTime(null);
+        Model.getInstance().getAllLocalNotesAsync(new Model.GetNotesListener() {
+            @Override
+            public void onResult(List<Note> notes) {
+                for (Note note: notes) {
+                    Log.d("aa", note.getId());
+                }
+            }
+        });
         //Digits.getInstance().getSessionManager().clearActiveSession();
 
 /*

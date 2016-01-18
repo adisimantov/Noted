@@ -51,8 +51,8 @@ public class Note {
     }
 
     // To use in gridview
-    public Long getNumericId() {
-        return new Long(id);
+    public long getNumericId() {
+        return Long.parseLong(id,36);
     }
 
     public String getId() {
