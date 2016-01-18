@@ -31,13 +31,14 @@ public class NotificationAlarmReceiver extends BroadcastReceiver {
     public void onReceive(Context context, Intent intent) {
 
         Log.d("notificationAlarm", "again");
+        Log.d("TIME OF onReceive", Model.getInstance().getCurrentTimestamp());
     /*    String id = intent.getStringExtra("noteID");
         String from = intent.getStringExtra("noteFrom");
         String details = intent.getStringExtra("noteDetails");
 
         NotificationController.getInstance().notify(from,details,id,context);
     */
-        NotificationController.getInstance().notify(intent,context);
+        NotificationController.getInstance().notify(intent, context);
     }
 
     public void SetAlarm(Context context, Note note)
@@ -51,11 +52,13 @@ public class NotificationAlarmReceiver extends BroadcastReceiver {
 
         PendingIntent pendingIntent = PendingIntent.getBroadcast(context,
                 broadcastCode++, alarmIntent, PendingIntent.FLAG_CANCEL_CURRENT);
+        Log.d("TIME NOTE","TIME NOTE" + note.getTimeToShow());
 
+        long miliseconds = Model.getInstance().getMilisFromDateString(note.getTimeToShow(),
+                Model.APP_DEFAULT_DATE_FORMAT);
+        Log.d("TIME ALARM","" + miliseconds);
+        Log.d("TIME ALARM","" + Model.getInstance().getDateStringFromMilis(miliseconds,Model.APP_DEFAULT_DATE_FORMAT));
         AlarmManager alarmManager = (AlarmManager)context.getSystemService(Context.ALARM_SERVICE);
-        alarmManager.set(AlarmManager.RTC_WAKEUP,
-                    Model.getInstance().getMilisFromDateString(note.getTimeToShow(),
-                                                                Model.APP_DEFAULT_DATE_FORMAT),
-                    pendingIntent);
+        alarmManager.set(AlarmManager.RTC_WAKEUP,miliseconds,pendingIntent);
     }
 }

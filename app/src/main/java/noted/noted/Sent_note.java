@@ -100,10 +100,10 @@ public class Sent_note extends Activity {
                     toast.show();
                     return;
                 }
-
-                final Note note = new Note(Model.getInstance().getCurrUser().getPhoneNumber(), contactTo.getText().toString(),
-                        details.getText().toString(), Model.getInstance().getCurrentGMTDate(),
-                        det.getText().toString() + " " + tet.getText().toString(), null);
+                
+                final Note note = new Note(Model.getInstance().getCurrUser().getPhoneNumber(),contactTo.getText().toString(),
+                        details.getText().toString(),Model.getInstance().getCurrentTimestamp(),
+                        det.getText().toString() + " " + tet.getText().toString(), null, null);
                 Model.getInstance().addLocalAndRemoteNote(note, new Model.AddNoteListener() {
                     @Override
                     public void onResult(boolean result, Note id) {

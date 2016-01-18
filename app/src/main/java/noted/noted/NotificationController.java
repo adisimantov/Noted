@@ -5,9 +5,11 @@ import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
+import android.util.Log;
 
 import noted.noted.Models.Contact;
 import noted.noted.Models.Model;
+import noted.noted.Models.Note;
 
 /**
  * Created by adi on 17-Jan-16.
@@ -30,7 +32,18 @@ public class NotificationController {
     public void notify(Intent intent, Context context){
         String id = intent.getStringExtra("noteID");
         String from = intent.getStringExtra("noteFrom");
-
+        Model.getInstance().getLocalNoteAsync(new Model.GetNoteListener() {
+            @Override
+            public void onResult(Note note) {
+                note.setIsShown(true);
+                Model.getInstance().updateLocalNoteAsync(new Model.SimpleSuccessListener() {
+                    @Override
+                    public void onResult(boolean result) {
+                        Log.d("UPDATE IS SHOWN","" + result);
+                    }
+                },note);
+            }
+        },id);
         Contact c = Model.getInstance().getContact(from);
         if (c != null) {
             from = c.getName();
@@ -42,7 +55,10 @@ public class NotificationController {
 
 
     public void notify(String from, String details, String id, Context context){
-        Intent notificationIntent = new Intent(context, MainActivity.class);
+        Log.d("TIME OF notify", Model.getInstance().getCurrentTimestamp());
+        
+        Intent notificationIntent = new Intent(context, NoteActivity.class);
+        notificationIntent.putExtra("note_id", id);
         // use System.currentTimeMillis() to have a unique ID for the pending intent
         PendingIntent pIntent = PendingIntent.getActivity(context, (int) System.currentTimeMillis(), notificationIntent, 0);
 
