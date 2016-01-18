@@ -314,11 +314,7 @@ public class Model {
         });
     }
 
-    public interface SyncNotesListener {
-        public void onResult(List<Note> data);
-    }
-
-    public void syncNotesFromServer(final SyncNotesListener listener){
+    public void syncNotesFromServer(final GetNotesListener listener){
         String timestamp = getLastSyncTime();
         String to = getCurrUser().getPhoneNumber();
         remote.getAllNotes(new GetNotesListener() {
@@ -328,7 +324,7 @@ public class Model {
                     local.addNote(note);
                 }
                 listener.onResult(notes);
-                setLastSyncTime(getCurrentGMTDate());
+                setLastSyncTime(getCurrentTimestamp());
             }
         }, timestamp, to);
     }

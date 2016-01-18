@@ -133,7 +133,7 @@ public class NoteParse {
 
         // If timestamp is null get all user notes
         if (timestamp != null) {
-            query.whereGreaterThanOrEqualTo(NOTE_CREATED_AT, timestamp);
+            query.whereGreaterThanOrEqualTo(NOTE_SENT_TIME, timestamp);
         }
 
         query.findInBackground(new FindCallback<ParseObject>() {

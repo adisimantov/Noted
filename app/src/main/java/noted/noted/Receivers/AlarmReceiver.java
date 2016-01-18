@@ -7,9 +7,6 @@ import android.content.Context;
 import android.content.Intent;
 import android.util.Log;
 
-import com.google.android.gms.common.ConnectionResult;
-import com.google.android.gms.common.GooglePlayServicesUtil;
-
 import java.util.List;
 
 import noted.noted.GeofenceController;
@@ -22,16 +19,15 @@ public class AlarmReceiver extends BroadcastReceiver {
     public void onReceive(final Context context, Intent intent) {
 
         Model.getInstance().init(context);
-        Model.getInstance().syncNotesFromServer(new Model.SyncNotesListener() {
+        Model.getInstance().syncNotesFromServer(new Model.GetNotesListener() {
             @Override
-            public void onResult(List<Note> data) {
-                Log.d("alarm", "syncing data......");
+            public void onResult(List<Note> notes) {
+                Log.d("alarm", "syncing data....");
                 GeofenceController.getInstance().init(context);
                 GeofenceController.getInstance().connectToApiClient();
-                for (Note note : data) {
-                    Log.d("alarm note ", note.getId() + " " + note.getTimeToShow());
+                for (Note note : notes) {
                     if (note.getTimeToShow() != null) {
-                        new NotificationAlarmReceiver().SetAlarm(context, note);
+                        new NotificationAlarmReceiver().setAlarm(context, note);
 
                     } else if (note.getLocationToShow() != null) {
 
@@ -39,16 +35,12 @@ public class AlarmReceiver extends BroadcastReceiver {
                     }
                 }
                 GeofenceController.getInstance().disconnectApiClient();
-
-               /* new NotificationAlarmReceiver().SetAlarm(context, data.get(0));
-                geofenceController.addGeofence(data.get(0));
-*/
             }
         });
     }
 
 
-    public void SetAlarm(final Context context) {
+    public void setAlarm(final Context context) {
         Log.d("alarm", "set alarm sync");
         Intent intent = new Intent(context, AlarmReceiver.class);
         PendingIntent recurringDownload = PendingIntent.getBroadcast(context,

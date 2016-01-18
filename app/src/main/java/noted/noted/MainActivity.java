@@ -5,12 +5,14 @@ import android.app.Activity;
 import android.app.Fragment;
 import android.os.Bundle;
 import android.util.Log;
+import android.widget.Toast;
 
 import com.digits.sdk.android.AuthCallback;
 import com.digits.sdk.android.Digits;
 import com.digits.sdk.android.DigitsAuthButton;
 import com.digits.sdk.android.DigitsException;
 import com.digits.sdk.android.DigitsSession;
+import com.google.android.gms.maps.model.LatLng;
 import com.twitter.sdk.android.core.TwitterAuthConfig;
 import com.twitter.sdk.android.core.TwitterCore;
 
@@ -43,8 +45,17 @@ public class MainActivity extends Activity {
 
         // Init databse model with context
         Model.getInstance().init(this);
-        //Model.getInstance().setLastSyncTime(null);
         Model.getInstance().getAllLocalNotesAsync(new Model.GetNotesListener() {
+            @Override
+            public void onResult(List<Note> notes) {
+                for (Note note : notes) {
+                    Log.d("DEL","" + note.getId());
+                    Model.getInstance().deleteLocalNote(note.getId());
+                }
+            }
+        });
+       Model.getInstance().setLastSyncTime(null);
+        Model.getInstance().syncNotesFromServer(new Model.GetNotesListener() {
             @Override
             public void onResult(List<Note> notes) {
                 for (Note note : notes) {
@@ -63,7 +74,7 @@ public class MainActivity extends Activity {
                 public void success(DigitsSession session, String phoneNumber) {
 
                     User newUser = new User(phoneNumber, session.getAuthToken().toString(),
-                            Model.getInstance().getCurrentGMTDate(),true);
+                            Model.getInstance().getCurrentTimestamp(),true);
 
                     Model.getInstance().signOrLogin(newUser, new Model.SimpleSuccessListener() {
                         @Override
@@ -74,7 +85,7 @@ public class MainActivity extends Activity {
                                 finish();
                                 startActivity(getIntent());
                             } else {
-                                // TODO : show failure message
+                                Toast toast = Toast.makeText(getApplicationContext(),"Failed to log in",Toast.LENGTH_SHORT);
                             }
                         }
                     });
@@ -86,7 +97,7 @@ public class MainActivity extends Activity {
                 }
             });
         } else {
-            new AlarmReceiver().SetAlarm(this);
+            new AlarmReceiver().setAlarm(this);
 
             // Log in with current digit user
             Log.d("DIGITS",Digits.getInstance().getSessionManager().getActiveSession().getAuthToken().toString());
@@ -99,7 +110,7 @@ public class MainActivity extends Activity {
                     @Override
                     public void onResult(boolean result) {
                         Log.d("LOG IN", " " + result);
-                        Model.getInstance().syncNotesFromServer(new Model.SyncNotesListener() {
+                        Model.getInstance().syncNotesFromServer(new Model.GetNotesListener() {
                             @Override
                             public void onResult(List<Note> data) {
                                 Log.d(" number ", "" + data.size());
