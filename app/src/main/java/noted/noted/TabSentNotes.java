@@ -1,12 +1,15 @@
 package noted.noted;
 
+import android.annotation.TargetApi;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.os.Build;
 import android.os.Bundle;
 import android.app.Fragment;
 import android.provider.ContactsContract;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -80,12 +83,13 @@ public class TabSentNotes extends Fragment{
         });
 
         sentGrid.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @TargetApi(Build.VERSION_CODES.M)
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                Intent intent = new Intent(view.getContext(), NoteActivity.class);
+                Intent intent = new Intent(getContext(), TabSentNotes.class);
                 Note note = adapter.getItem(position);
                 intent.putExtra("note_id", note.getId());
-                startActivityForResult(intent,SENT_NOTE);
+                startActivityForResult(intent, SENT_NOTE);
             }
         });
 
@@ -94,6 +98,7 @@ public class TabSentNotes extends Fragment{
 
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        Log.d("noy","Activity result");
         if(resultCode == Activity.RESULT_OK && requestCode == SENT_NOTE){
             Bundle bundle = data.getExtras();
             /*

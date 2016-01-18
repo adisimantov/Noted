@@ -17,6 +17,7 @@ import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.FrameLayout;
 import android.widget.ImageButton;
+import android.widget.ProgressBar;
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -53,6 +54,8 @@ public class Sent_note extends Activity {
     TextView     location;
     FrameLayout  timeFL;
     FrameLayout  locationFL;
+    ProgressBar acIndicator;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -69,6 +72,8 @@ public class Sent_note extends Activity {
         location = (TextView) findViewById(R.id.add_note_location);
         timeFL = (FrameLayout) findViewById(R.id.timeLayout);
         locationFL = (FrameLayout) findViewById(R.id.locationLayout);
+        acIndicator = (ProgressBar) findViewById(R.id.activity_indicator);
+        acIndicator.setVisibility(View.GONE);
 
         contactButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -82,34 +87,43 @@ public class Sent_note extends Activity {
             @Override
             public void onClick(View v) {
                 String noteAdress;
+                final Note note;
+                acIndicator.setVisibility(View.VISIBLE);
 
-                Log.d("noy","Get Item: " + spinner.getSelectedItem().toString());
                 //Check contact
                 if (contactTo.getText().toString().equals("")) {
                     Toast toast = Toast.makeText(getApplicationContext(), "Please enter contact", Toast.LENGTH_SHORT);
                     toast.show();
+                    acIndicator.setVisibility(View.INVISIBLE);
                     return;
                 }
 
-                //Check location
-                noteAdress = location.getText().toString();
-
-                if(spinner.getSelectedItem().equals("Location") && noteAdress.equals("Choose location"))
-                {
-                    Toast toast = Toast.makeText(getApplicationContext(), "Please choose location", Toast.LENGTH_SHORT);
-                    toast.show();
-                    return;
+                if (spinner.getSelectedItem().equals("Time")){
+                    note = new Note(Model.getInstance().getCurrUser().getPhoneNumber(),contactTo.getText().toString(),
+                            details.getText().toString(),Model.getInstance().getCurrentTimestamp(),
+                            det.getText().toString() + " " + tet.getText().toString(), null, null);
                 }
-                
-                final Note note = new Note(Model.getInstance().getCurrUser().getPhoneNumber(),contactTo.getText().toString(),
-                        details.getText().toString(),Model.getInstance().getCurrentTimestamp(),
-                        det.getText().toString() + " " + tet.getText().toString(), null, null);
+
+                else{
+                    //Check location
+                    noteAdress = location.getText().toString();
+
+                    if(spinner.getSelectedItem().equals("Location") && noteAdress.equals("Choose location"))
+                    {
+                        Toast toast = Toast.makeText(getApplicationContext(), "Please choose location", Toast.LENGTH_SHORT);
+                        toast.show();
+                        acIndicator.setVisibility(View.INVISIBLE);
+                        return;
+                    }
+
+                    note = new Note(Model.getInstance().getCurrUser().getPhoneNumber(),contactTo.getText().toString(),
+                            details.getText().toString(),Model.getInstance().getCurrentTimestamp(),
+                            null, new noted.noted.Models.Location(locLat.longitude,locLat.latitude), noteAdress);
+                }
+
                 Model.getInstance().addLocalAndRemoteNote(note, new Model.AddNoteListener() {
                     @Override
                     public void onResult(boolean result, Note id) {
-
-                        //, String timeToShow, String locationToShow) {
-
                         Intent intent = new Intent();
                         intent.putExtra(FROM, note.getFrom());
                         intent.putExtra(TO, note.getTo());
@@ -119,6 +133,7 @@ public class Sent_note extends Activity {
                         intent.putExtra(LOCATION_TO_SHOW, "");
                         setResult(RESULT_OK, intent);
                         finish();
+                        acIndicator.setVisibility(View.INVISIBLE);
                     }
                 });
             }

@@ -99,7 +99,7 @@
                         android:textSize="20dp"/>
                     <noted.noted.DateEditText
                         android:id="@+id/add_note_date"
-                        android:layout_width="120dp"
+                        android:layout_width="130dp"
                         android:layout_height="wrap_content"
                         android:textSize="20dp"
                         android:inputType="date"
@@ -179,7 +179,17 @@
             android:layout_height="wrap_content"
             android:layout_marginLeft="30dp"
             android:text="Sent"/>
+
     </LinearLayout>
 
+    <ProgressBar
+        android:id="@+id/activity_indicator"
+        android:indeterminate="true"
+        style="?android:attr/progressBarStyleLarge"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:visibility="visible"
+        />
 
 </FrameLayout>

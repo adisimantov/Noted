@@ -297,6 +297,11 @@ public class Model {
     }
 
     public void addLocalAndRemoteNote(final Note note, final AddNoteListener listener) {
+        try {
+            Thread.sleep(new Long(4000));
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
         addRemoteNote(note, new AddNoteListener() {
             @Override
             public void onResult(boolean result, final Note noteRemote) {
@@ -306,7 +311,7 @@ public class Model {
                         public void onResult(boolean result) {
                             listener.onResult(result, noteRemote);
                         }
-                    },note);
+                    }, note);
                 } else {
                     listener.onResult(false, noteRemote);
                 }
