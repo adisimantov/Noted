@@ -1,6 +1,7 @@
 package noted.noted;
 
 import android.app.Activity;
+import android.app.AlertDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.database.Cursor;
@@ -14,6 +15,7 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.FrameLayout;
 import android.widget.ImageButton;
 import android.widget.Spinner;
 import android.widget.TextView;
@@ -23,6 +25,7 @@ import com.google.android.gms.common.GooglePlayServicesNotAvailableException;
 import com.google.android.gms.common.GooglePlayServicesRepairableException;
 import com.google.android.gms.location.places.Place;
 import com.google.android.gms.location.places.ui.PlacePicker;
+import com.google.android.gms.maps.model.LatLng;
 
 import noted.noted.Models.Contact;
 import noted.noted.Models.Model;
@@ -46,8 +49,10 @@ public class Sent_note extends Activity {
     Spinner      spinner;
     DateEditText det;
     TimeEditText tet;
-    Button       locationBtn;
+    LatLng       locLat;
     TextView     location;
+    FrameLayout  timeFL;
+    FrameLayout  locationFL;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -62,36 +67,56 @@ public class Sent_note extends Activity {
         det = (DateEditText) findViewById(R.id.add_note_date);
         tet = (TimeEditText) findViewById(R.id.add_note_time);
         location = (TextView) findViewById(R.id.add_note_location);
-        locationBtn = (Button) findViewById(R.id.add_note_location_btn);
+        timeFL = (FrameLayout) findViewById(R.id.timeLayout);
+        locationFL = (FrameLayout) findViewById(R.id.locationLayout);
 
         contactButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(Intent.ACTION_PICK, ContactsContract.Contacts.CONTENT_URI);
                 startActivityForResult(intent, PICK_CONTACT);
-
             }
         });
 
         sentBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                final Note note = new Note(Model.getInstance().getCurrUser().getPhoneNumber(),contactTo.getText().toString(),
-                        details.getText().toString(),Model.getInstance().getCurrentGMTDate(),
+                String noteAdress;
+
+                Log.d("noy","Get Item: " + spinner.getSelectedItem().toString());
+                //Check contact
+                if (contactTo.getText().toString().equals("")) {
+                    Toast toast = Toast.makeText(getApplicationContext(), "Please enter contact", Toast.LENGTH_SHORT);
+                    toast.show();
+                    return;
+                }
+
+                //Check location
+                noteAdress = location.getText().toString();
+
+                if(spinner.getSelectedItem().equals("Location") && noteAdress.equals("Choose location"))
+                {
+                    Toast toast = Toast.makeText(getApplicationContext(), "Please choose location", Toast.LENGTH_SHORT);
+                    toast.show();
+                    return;
+                }
+
+                final Note note = new Note(Model.getInstance().getCurrUser().getPhoneNumber(), contactTo.getText().toString(),
+                        details.getText().toString(), Model.getInstance().getCurrentGMTDate(),
                         det.getText().toString() + " " + tet.getText().toString(), null);
                 Model.getInstance().addLocalAndRemoteNote(note, new Model.AddNoteListener() {
                     @Override
                     public void onResult(boolean result, Note id) {
-                        Log.d("noy", "note add");
+
                         //, String timeToShow, String locationToShow) {
 
                         Intent intent = new Intent();
-                        intent.putExtra(FROM,note.getFrom());
+                        intent.putExtra(FROM, note.getFrom());
                         intent.putExtra(TO, note.getTo());
-                        intent.putExtra(DETAILS,note.getDetails());
-                        intent.putExtra(SENT_TIME,note.getSentTime());
-                        intent.putExtra(TIME_TO_SHOW,note.getTimeToShow());
-                        intent.putExtra(LOCATION_TO_SHOW,"");
+                        intent.putExtra(DETAILS, note.getDetails());
+                        intent.putExtra(SENT_TIME, note.getSentTime());
+                        intent.putExtra(TIME_TO_SHOW, note.getTimeToShow());
+                        intent.putExtra(LOCATION_TO_SHOW, "");
                         setResult(RESULT_OK, intent);
                         finish();
                     }
@@ -107,7 +132,17 @@ public class Sent_note extends Activity {
         spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-
+                String item = spinner.getItemAtPosition(position).toString();
+                switch (item) {
+                    case ("Time"):
+                        timeFL.setVisibility(FrameLayout.VISIBLE);
+                        locationFL.setVisibility(FrameLayout.INVISIBLE);
+                        break;
+                    case ("Location"):
+                        timeFL.setVisibility(FrameLayout.INVISIBLE);
+                        locationFL.setVisibility(FrameLayout.VISIBLE);
+                        break;
+                }
             }
 
             @Override
@@ -116,10 +151,9 @@ public class Sent_note extends Activity {
             }
         });
 
-        locationBtn.setOnClickListener(new View.OnClickListener() {
+        location.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                /*
                 PlacePicker.IntentBuilder builder = new PlacePicker.IntentBuilder();
 
                 try {
@@ -129,10 +163,8 @@ public class Sent_note extends Activity {
                 } catch (GooglePlayServicesNotAvailableException e) {
                     e.printStackTrace();
                 }
-*/
             }
         });
-
     }
 
     @Override
@@ -150,7 +182,6 @@ public class Sent_note extends Activity {
                         int contactIdIdx = c.getColumnIndex(ContactsContract.CommonDataKinds.Phone._ID);
                         String idContact = c.getString(contactIdIdx);
 
-
                         String name = c.getString(c.getColumnIndexOrThrow(ContactsContract.CommonDataKinds.Phone.DISPLAY_NAME));
                         Contact contact = Model.getInstance().getContactByName(name);
 
@@ -166,9 +197,9 @@ public class Sent_note extends Activity {
                 if (resultCode == Activity.RESULT_OK) {
                     Place place = PlacePicker.getPlace(data, this);
                     location.setText(place.getAddress());
+                    locLat = place.getLatLng();
                 }
                     break;
         }
-
     }
 }
