@@ -3,9 +3,11 @@ package noted.noted;
 import android.app.Activity;
 import android.content.Context;
 import android.util.AttributeSet;
+import android.util.Log;
 import android.view.MotionEvent;
 import android.widget.DatePicker;
 import android.widget.EditText;
+import android.widget.TextView;
 
 import java.util.Calendar;
 
@@ -39,7 +41,7 @@ public class DateEditText extends EditText implements DatePickerFragment.onDateS
         month = cal.get(Calendar.MONTH);
         day = cal.get(Calendar.DAY_OF_MONTH);
 
-        setText("" + day + "." + month + "." + year);
+        setText();
     }
 
     public boolean onTouchEvent(MotionEvent event) {
@@ -52,12 +54,18 @@ public class DateEditText extends EditText implements DatePickerFragment.onDateS
         return true;
     }
 
+    public void setText() {
+        Log.d("DateEditText",(((month + 1) < 10) ? "0" : ""));
+        Log.d("DateEditText",month + "");
+        setText("" + ((day < 10) ? "0" : "") + day + "/" + (((month + 1) < 10) ? "0" : "") + (month + 1) + "/" + year);
+    }
+
     @Override
     public void onDateSet(DatePicker view, int year, int monthOfYear, int dayOfMonth) {
         this.year = year;
         this.month = monthOfYear;
         this.day = dayOfMonth;
 
-        setText("" + this.day + "." + this.month + "." + this.year);
+        setText();
     }
 }
