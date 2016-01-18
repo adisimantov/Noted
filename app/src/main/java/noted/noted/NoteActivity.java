@@ -25,8 +25,12 @@ public class NoteActivity extends Activity {
 
         String id = intent.getStringExtra("note_id");
         Note note = Model.getInstance().getLocalNote(id);
-        Contact contact = Model.getInstance().getContact(note.getFrom());
-        from.setText(contact.getName());
+        String fromString = note.getFrom();
+        Contact contact = Model.getInstance().getContact(fromString);
+        if (contact != null){
+            fromString = contact.getName();
+        }
+        from.setText(fromString);
         details.setText(note.getDetails());
     }
 }
