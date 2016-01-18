@@ -44,4 +44,5 @@ dependencies {
     compile('com.digits.sdk.android:digits:1.9.3@aar') {
         transitive = true;
     }
+    compile 'com.google.android.gms:play-services:8.1.0'
 }

@@ -5,4 +5,8 @@
     <string name="delete_note_message">Do you want to delete the note?</string>
     <string name="yes_button">Yes</string>
     <string name="no_button">No</string>
+    <string-array name="spinner_array">
+        <item>Time</item>
+        <item>Location</item>
+    </string-array>
 </resources>

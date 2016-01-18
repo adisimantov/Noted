@@ -12,6 +12,7 @@ import android.widget.TextView;
 import java.util.ArrayList;
 import java.util.List;
 
+import noted.noted.Models.Contact;
 import noted.noted.Models.Model;
 import noted.noted.Models.Note;
 
@@ -26,13 +27,13 @@ public class GridAdapter extends BaseAdapter {
         this.isReceived = isReceived;
 
         List<Note> noteList;
-
+/*
         if (isReceived){
-            noteList = Model.getInstance().getReceivedLocalNotes("");
+            noteList = Model.getInstance().getReceivedLocalNotes(Model.getInstance().getCurrUser().getPhoneNumber());
         }
         else{
-            noteList = Model.getInstance().getSentLocalNotes("");
-        }
+            noteList = Model.getInstance().getSentLocalNotes(Model.getInstance().getCurrUser().getPhoneNumber());
+        }*/
 
         noteList = Model.getInstance().getAllLocalNotes();
 
@@ -40,16 +41,6 @@ public class GridAdapter extends BaseAdapter {
         {
             lNotes.add(note);
         }
-        /**Note note = new Note("from1","to1","details1","1111");
-        lNotes.add(note);
-        lNotes.add(note);
-        lNotes.add(note);
-        lNotes.add(note);*/
-        Log.d("noy", "enter");
-        //lNotes.add(new Note(1, 1111, 2222, "blabla", false));
-        //lNotes.add(new Note(2, 1111, 2222, "blabla", false));
-        //lNotes.add(new Note(3, 1111, 2222, "blabla", false));
-        //lNotes.add(new Note(4, 1111, 2222, "blabla", false));
     }
 
     @Override
@@ -68,8 +59,6 @@ public class GridAdapter extends BaseAdapter {
         return 1;
     }
 
-
-
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
         if (convertView == null) {
@@ -81,11 +70,23 @@ public class GridAdapter extends BaseAdapter {
         TextView details = (TextView) convertView.findViewById(R.id.noteDetails);
 
         Note note = getItem(position);
+        Contact contact;
+        String show;
         if (isReceived) {
-            noteContact.setText("FROM " + note.getFrom());
+            contact = Model.getInstance().getContact(note.getFrom());
+            show = note.getFrom();
+            if (contact != null){
+                show = contact.getName();
+            }
+            noteContact.setText("FROM " + show);
         }
         else{
-            noteContact.setText("TO " + note.getTo());
+            contact = Model.getInstance().getContact(note.getTo());
+            show = note.getTo();
+            if (contact != null){
+                show = contact.getName();
+            }
+            noteContact.setText("TO " + show);
         }
         details.setText(note.getDetails() + "");
 

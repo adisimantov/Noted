@@ -22,6 +22,15 @@ public class Note {
         this.sentTime = sentTime;
     }
 
+    public Note(String from, String to, String details, String sentTime, String timeToShow, String locationToShow) {
+        this.from = from;
+        this.to = to;
+        this.details = details;
+        this.sentTime = sentTime;
+        this.timeToShow = timeToShow;
+        this.locationToShow = locationToShow;
+    }
+
     public Note(String id, String from, String to, String details, String sentTime, String receivedTime, String showedTime, String timeToShow, String locationToShow, boolean isShown) {
         this.id = id;
         this.from = from;

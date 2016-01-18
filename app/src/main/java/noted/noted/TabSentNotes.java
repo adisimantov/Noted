@@ -1,5 +1,6 @@
 package noted.noted;
 
+import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -20,6 +21,14 @@ import noted.noted.Models.Note;
  * Created by adi on 26-Dec-15.
  */
 public class TabSentNotes extends Fragment{
+    static final int SENT_NOTE=1;
+    private final static String FROM = "FROM";
+    private final static String TO = "TO";
+    private final static String DETAILS = "DETAILS";
+    private final static String SENT_TIME = "SENT_TIME";
+    private final static String TIME_TO_SHOW = "TIME_TO_SHOW";
+    private final static String LOCATION_TO_SHOW = "LOCATION_TO_SHOW";
+
     GridView sentGrid;
     ImageButton addButton;
     GridAdapter adapter;
@@ -76,10 +85,24 @@ public class TabSentNotes extends Fragment{
                 Intent intent = new Intent(view.getContext(), NoteActivity.class);
                 Note note = adapter.getItem(position);
                 intent.putExtra("note_id", note.getId());
-                startActivity(intent);
+                startActivityForResult(intent,SENT_NOTE);
             }
         });
 
         return viewTab;
+    }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        if(resultCode == Activity.RESULT_OK && requestCode == SENT_NOTE){
+            Bundle bundle = data.getExtras();
+            /*
+            listAdapter.notifyDataSetChanged();
+            listView1.setAdapter(listAdapter);*/
+            Note note = new Note(bundle.getString(FROM), bundle.getString(TO), bundle.getString(DETAILS),
+                    bundle.getString(SENT_TIME),bundle.getString(TIME_TO_SHOW), bundle.getString(LOCATION_TO_SHOW));
+            adapter.lNotes.add(note);
+            adapter.notifyDataSetChanged();
+        }
     }
 }

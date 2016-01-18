@@ -9,7 +9,8 @@
     <ImageView
         android:layout_height="fill_parent"
         android:layout_width="fill_parent"
-        android:layout_margin="10dp"
+        android:layout_marginLeft="20dp"
+        android:layout_marginBottom="20dp"
         android:src="@drawable/note_background"/>
 
     <LinearLayout
@@ -29,7 +30,7 @@
                 android:textSize="22dp"
                 android:layout_alignParentLeft="true"
                 android:layout_alignParentTop="true"
-                android:layout_marginTop="120dp"
+                android:layout_marginTop="100dp"
                 android:layout_marginLeft="30dp"
                 />
 
@@ -40,7 +41,7 @@
                 android:text="Contact"
                 android:layout_alignParentLeft="true"
                 android:layout_alignParentTop="true"
-                android:layout_marginTop="120dp"
+                android:layout_marginTop="100dp"
                 android:layout_marginLeft="30dp"
                 />
 
@@ -51,10 +52,106 @@
                 android:src="@android:drawable/stat_sys_phone_call_on_hold"
                 android:layout_alignParentLeft="true"
                 android:layout_alignParentTop="true"
-                android:layout_marginTop="120dp"
+                android:layout_marginTop="100dp"
                 android:layout_marginLeft="30dp"/>
 
         </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content">
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Type"
+                android:textSize="20dp"
+                android:layout_marginLeft="30dp"
+                />
+
+            <Spinner
+                android:id="@+id/typeSpinner"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content">
+            </Spinner>
+
+        </LinearLayout>
+
+        <FrameLayout
+            android:id="@+id/timeLayout"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:visibility="visible">
+            <LinearLayout
+                xmlns:android="http://schemas.android.com/apk/res/android"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="vertical"
+                android:layout_marginLeft="30dp">
+
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content">
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Date"
+                        android:textSize="20dp"/>
+                    <noted.noted.DateEditText
+                        android:id="@+id/add_note_date"
+                        android:layout_width="120dp"
+                        android:layout_height="wrap_content"
+                        android:textSize="20dp"
+                        android:inputType="date"
+                        />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Time"
+                        android:textSize="20dp"
+                        />
+
+                    <noted.noted.TimeEditText
+                        android:id="@+id/add_note_time"
+                        android:layout_width="80dp"
+                        android:layout_height="wrap_content"
+                        android:textSize="20dp"
+                        android:inputType="time"
+                        />
+
+                </LinearLayout>
+            </LinearLayout>
+        </FrameLayout>
+
+        <FrameLayout
+            android:id="@+id/locationLayout"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:visibility="invisible">
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textSize="20dp"
+                    android:text="Location"
+                    android:layout_marginLeft="30dp"/>
+
+                <EditText
+                    android:id="@+id/add_note_location"
+                    android:layout_width="150dp"
+                    android:layout_height="wrap_content" />
+                <Button
+                    android:id="@+id/add_note_location_btn"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Choose"/>
+            </LinearLayout>
+
+        </FrameLayout>
 
         <LinearLayout
             android:layout_width="wrap_content"
@@ -71,8 +168,8 @@
 
             <EditText
                 android:id="@+id/sentViewDetails"
-                android:layout_width="200dp"
-                android:layout_height="250dp"
+                android:layout_width="220dp"
+                android:layout_height="100dp"
                 android:layout_marginLeft="10dp"
                 android:text="Note details"
                 />
