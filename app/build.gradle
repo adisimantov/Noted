@@ -49,4 +49,5 @@ dependencies {
     compile 'com.github.shell-software:fab:1.0.5'
 
     compile 'com.google.android.gms:play-services-location:6.5.87'
+    compile 'com.google.android.gms:play-services:8.1.0'
 }

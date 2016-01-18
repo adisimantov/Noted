@@ -1,7 +1,5 @@
 package noted.noted.Models;
 
-import java.util.Calendar;
-
 /**
  * Created by adi on 26-Dec-15.
  */
@@ -24,6 +22,15 @@ public class Note {
 
     public Note(String id, String from, String to, String details, String sentTime, String timeToShow, Location locationToShow) {
         this.id = id;
+        this.from = from;
+        this.to = to;
+        this.details = details;
+        this.sentTime = sentTime;
+        this.timeToShow = timeToShow;
+        this.locationToShow = locationToShow;
+    }
+
+    public Note(String from, String to, String details, String sentTime, String timeToShow, Location locationToShow) {
         this.from = from;
         this.to = to;
         this.details = details;

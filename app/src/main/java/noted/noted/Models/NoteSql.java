@@ -23,7 +23,7 @@ public class NoteSql {
     private final static String NOTE_LAT_TO_SHOW    = "LAT_TO_SHOW";
     private final static String NOTE_IS_SHOWN       = "IS_SHOWN";
 
-    private static List<Note> getNoteListByCursor(Cursor cursor) {
+    private static List<Note> getNoteListFromCursor(Cursor cursor) {
         List<Note> data = new LinkedList<Note>();
 
         if (cursor.moveToFirst()) {
@@ -48,6 +48,7 @@ public class NoteSql {
                 double latToShow = cursor.getDouble(lat_to_show_index);
                 boolean isShown = (cursor.getInt(is_shown_index) == 1);
 
+
                 Note st = new Note(id,from,to,details,sentTime,timeToShow,new Location(lngToShow,latToShow),isShown);
                 data.add(st);
             } while (cursor.moveToNext());
@@ -65,9 +66,8 @@ public class NoteSql {
         values.put(NOTE_DETAILS, note.getDetails());
         values.put(NOTE_SENT_TIME, note.getSentTime());
         values.put(NOTE_TIME_TO_SHOW, note.getTimeToShow());
-        values.put(NOTE_LNG_TO_SHOW, (note.getLocationToShow() == null) ? null : note.getLocationToShow().getLongitudeToShow());
-        values.put(NOTE_LAT_TO_SHOW, (note.getLocationToShow() == null) ? null : note.getLocationToShow().getLatitudeToShow());
-
+        values.put(NOTE_LNG_TO_SHOW,(note.getLocationToShow() == null) ? null : note.getLocationToShow().getLongitudeToShow());
+        values.put(NOTE_LAT_TO_SHOW,(note.getLocationToShow() == null) ? null : note.getLocationToShow().getLatitudeToShow());
         values.put(NOTE_IS_SHOWN, note.isShown());
 
         long note_id = db.insert(NOTE_TABLE, NOTE_ID, values);
@@ -90,7 +90,7 @@ public class NoteSql {
         values.put(NOTE_DETAILS, note.getDetails());
         values.put(NOTE_SENT_TIME, note.getSentTime());
         values.put(NOTE_TIME_TO_SHOW, note.getTimeToShow());
-        values.put(NOTE_LNG_TO_SHOW, (note.getLocationToShow() == null) ? null : note.getLocationToShow().getLongitudeToShow());
+        values.put(NOTE_LNG_TO_SHOW,(note.getLocationToShow() == null) ? null : note.getLocationToShow().getLongitudeToShow());
         values.put(NOTE_LAT_TO_SHOW, (note.getLocationToShow() == null) ? null : note.getLocationToShow().getLatitudeToShow());
         values.put(NOTE_IS_SHOWN, note.isShown());
 
@@ -101,13 +101,13 @@ public class NoteSql {
     public static List<Note> getReceivedNotes(ModelSql.Helper dbHelper, String receivedPhone) {
         SQLiteDatabase db = dbHelper.getReadableDatabase();
         Cursor cursor = db.query(NOTE_TABLE, null, NOTE_TO + "=?", new String[]{receivedPhone}, null, null, null);
-        return getNoteListByCursor(cursor);
+        return getNoteListFromCursor(cursor);
     }
 
     public static List<Note> getSentNotes(ModelSql.Helper dbHelper, String sentPhone) {
         SQLiteDatabase db = dbHelper.getReadableDatabase();
         Cursor cursor = db.query(NOTE_TABLE, null, NOTE_FROM + "=?", new String[]{sentPhone}, null, null, null);
-        return getNoteListByCursor(cursor);
+        return getNoteListFromCursor(cursor);
     }
 
     public static Note getNote(ModelSql.Helper dbHelper, String note_id) {
@@ -145,7 +145,7 @@ public class NoteSql {
     public static List<Note> getAllNotes(ModelSql.Helper dbHelper) {
         SQLiteDatabase db = dbHelper.getReadableDatabase();
         Cursor cursor = db.query(NOTE_TABLE, null, null, null, null, null, null);
-        return getNoteListByCursor(cursor);
+        return getNoteListFromCursor(cursor);
     }
 
     public static void create(SQLiteDatabase db) {

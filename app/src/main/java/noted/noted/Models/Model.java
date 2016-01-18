@@ -2,6 +2,7 @@ package noted.noted.Models;
 
 import android.content.Context;
 import android.content.SharedPreferences;
+import android.os.AsyncTask;
 import android.util.Log;
 
 import java.text.DateFormat;
@@ -41,6 +42,7 @@ public class Model {
             sharedPrefs = context.getSharedPreferences(PREF_FILE, Context.MODE_PRIVATE);
             remote.init(context);
             local.init(context);
+            contacts.init(context);
         }
     }
 
@@ -87,7 +89,20 @@ public class Model {
         editor.commit();
     }
 
+    public interface GetNotesListener{
+        public void onResult(List<Note> notes);
+    }
+
+    public interface GetNoteListener {
+        public void onResult(Note note);
+    }
+
+    public interface SimpleSuccessListener {
+        public void onResult(boolean result);
+    }
+
     // Local database
+
     public Note getLocalNote(String id){
         return local.getNote(id);
     }
@@ -95,33 +110,140 @@ public class Model {
     public long addLocalNote(Note note){
         return local.addNote(note);
     }
-
     public int updateLocalNote(Note note){
         return local.updateNote(note);
     }
-
     public int deleteLocalNote(String noteId){
         return local.deleteNote(noteId);
     }
 
-    public List<Note> getAllLocalNotes(){
-        return local.getAllNotes();
+    public void getLocalNoteAsync(final GetNoteListener listener, final String id){
+        class GetNoteAsyncTask extends AsyncTask<String,String,Note> {
+            @Override
+            protected Note doInBackground(String... params) {
+                return local.getNote(id);
+            }
+
+            @Override
+            protected void onPostExecute(Note note) {
+                super.onPostExecute(note);
+                listener.onResult(note);
+            }
+        }
+
+        GetNoteAsyncTask task = new GetNoteAsyncTask();
+        task.execute();
     }
 
-    public List<Note> getReceivedLocalNotes(String sentPhone){
-        return local.getReceivedNotes(sentPhone);
+    public void addLocalNoteAsync(final SimpleSuccessListener listener, final Note note){
+        class AddNoteAsyncTask extends AsyncTask<String,String,Long> {
+            @Override
+            protected Long doInBackground(String... params) {
+                return local.addNote(note);
+            }
+
+            @Override
+            protected void onPostExecute(Long id) {
+                super.onPostExecute(id);
+                listener.onResult(id > -1);
+            }
+        }
+
+        AddNoteAsyncTask task = new AddNoteAsyncTask();
+        task.execute();
     }
 
-    public List<Note> getSentLocalNotes(String receivedPhone){
-        return local.getSentNotes(receivedPhone);
+    public void updateLocalNoteAsync(final SimpleSuccessListener listener, final Note note){
+        class UpdateNoteAsyncTask extends AsyncTask<String,String,Integer> {
+            @Override
+            protected Integer doInBackground(String... params) {
+                return local.updateNote(note);
+            }
+
+            @Override
+            protected void onPostExecute(Integer id) {
+                super.onPostExecute(id);
+                listener.onResult(id > -1);
+            }
+        }
+
+        UpdateNoteAsyncTask task = new UpdateNoteAsyncTask();
+        task.execute();
+    }
+
+    public void deleteLocalNoteAsync(final SimpleSuccessListener listener, final String noteId){
+        class DeleteNoteAsyncTask extends AsyncTask<String,String,Integer> {
+            @Override
+            protected Integer doInBackground(String... params) {
+                return local.deleteNote(noteId);
+            }
+
+            @Override
+            protected void onPostExecute(Integer id) {
+                super.onPostExecute(id);
+                listener.onResult(id > -1);
+            }
+        }
+
+        DeleteNoteAsyncTask task = new DeleteNoteAsyncTask();
+        task.execute();
+    }
+
+    public void getAllLocalNotesAsync(final GetNotesListener listener) {
+        class GetNotesAsyncTask extends AsyncTask<String,String,List<Note>> {
+            @Override
+            protected List<Note> doInBackground(String... params) {
+                return local.getAllNotes();
+            }
+
+            @Override
+            protected void onPostExecute(List<Note> notes) {
+                super.onPostExecute(notes);
+                listener.onResult(notes);
+            }
+        }
+
+        GetNotesAsyncTask task = new GetNotesAsyncTask();
+        task.execute();
+    }
+
+    public void getReceivedLocalNotesAsync(final GetNotesListener listener, final String sentPhone){
+        class GetNotesAsyncTask extends AsyncTask<String,String,List<Note>> {
+            @Override
+            protected List<Note> doInBackground(String... params) {
+                return local.getReceivedNotes(sentPhone);
+            }
+
+            @Override
+            protected void onPostExecute(List<Note> notes) {
+                super.onPostExecute(notes);
+                listener.onResult(notes);
+            }
+        }
+
+        GetNotesAsyncTask task = new GetNotesAsyncTask();
+        task.execute();
+    }
+
+    public void getSentLocalNotesAsync(final GetNotesListener listener, final String receivedPhone){
+        class GetNotesAsyncTask extends AsyncTask<String,String,List<Note>> {
+            @Override
+            protected List<Note> doInBackground(String... params) {
+                return local.getSentNotes(receivedPhone);
+            }
+
+            @Override
+            protected void onPostExecute(List<Note> notes) {
+                super.onPostExecute(notes);
+                listener.onResult(notes);
+            }
+        }
+
+        GetNotesAsyncTask task = new GetNotesAsyncTask();
+        task.execute();
     }
 
     // Remote database
-
-    public interface SimpleSuccessListener {
-        public void onResult(boolean result);
-    }
-
     // Users
     public void logIn(User user, SimpleSuccessListener listener) {
         remote.userLogIn(user, listener);
@@ -158,32 +280,20 @@ public class Model {
     }
 
     // Notes
-    public interface GetNotesListener{
-        public void onResult(List<Note> notes);
-    }
-
-    public interface GetNoteListener {
-        public void onResult(Note note);
-    }
-
     public void getNote(String id, GetNoteListener listener) {
         remote.getNote(id, listener);
-    }
-
-    public interface AddNoteListener {
-        public void onResult(boolean result, Note id);
     }
 
     public void addRemoteNote(Note note, AddNoteListener listener) {
         remote.addNote(note, listener);
     }
 
-    public interface UpdateNoteListener {
-        public void onResult(boolean result);
+    public void updateRemoteNote(Note note, SimpleSuccessListener listener) {
+        remote.updateNote(note, listener);
     }
 
-    public void updateRemoteNote(Note note, UpdateNoteListener listener) {
-        remote.updateNote(note, listener);
+    public interface AddNoteListener {
+        public void onResult(boolean result, Note id);
     }
 
     public void addLocalAndRemoteNote(final Note note, final AddNoteListener listener) {
@@ -230,4 +340,13 @@ public class Model {
     public Contact getContact(String phoneNumber){
         return contacts.getContact(phoneNumber);
     }
+
+    public Contact getContactById(String id){
+        return contacts.getContactById(id);
+    }
+
+    public Contact getContactByName(String name){
+        return contacts.getContactByName(name);
+    }
+
 }
