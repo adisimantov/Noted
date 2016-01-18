@@ -1,7 +1,5 @@
 package noted.noted.Models;
 
-import java.util.Calendar;
-
 /**
  * Created by adi on 26-Dec-15.
  */
@@ -13,6 +11,7 @@ public class Note {
     private String sentTime;
     private String timeToShow;
     private Location locationToShow;
+    private String locationToShowName;
     private boolean isShown;
 
     public Note(String from, String to, String details, String sentTime) {
@@ -22,7 +21,7 @@ public class Note {
         this.sentTime = sentTime;
     }
 
-    public Note(String id, String from, String to, String details, String sentTime, String timeToShow, Location locationToShow) {
+    public Note(String id, String from, String to, String details, String sentTime, String timeToShow, Location locationToShow, String locationToShowName) {
         this.id = id;
         this.from = from;
         this.to = to;
@@ -30,9 +29,20 @@ public class Note {
         this.sentTime = sentTime;
         this.timeToShow = timeToShow;
         this.locationToShow = locationToShow;
+        this.locationToShowName = locationToShowName;
     }
 
-    public Note(String id, String from, String to, String details, String sentTime, String timeToShow, Location locationToShow, boolean isShown) {
+    public Note(String from, String to, String details, String sentTime, String timeToShow, Location locationToShow, String locationToShowName) {
+        this.from = from;
+        this.to = to;
+        this.details = details;
+        this.sentTime = sentTime;
+        this.timeToShow = timeToShow;
+        this.locationToShow = locationToShow;
+        this.locationToShowName = locationToShowName;
+    }
+
+    public Note(String id, String from, String to, String details, String sentTime, String timeToShow, Location locationToShow, String locationToShowName, boolean isShown) {
         this.id = id;
         this.from = from;
         this.to = to;
@@ -40,12 +50,13 @@ public class Note {
         this.sentTime = sentTime;
         this.timeToShow = timeToShow;
         this.locationToShow = locationToShow;
+        this.locationToShowName = locationToShowName;
         this.isShown = isShown;
     }
 
     // To use in gridview
-    public Long getNumericId() {
-        return new Long(id);
+    public long getNumericId() {
+        return Long.parseLong(id,36);
     }
 
     public String getId() {
@@ -108,6 +119,14 @@ public class Note {
 
     public void setIsShown(boolean isShown) {
         this.isShown = isShown;
+    }
+
+    public String getLocationToShowName() {
+        return locationToShowName;
+    }
+
+    public void setLocationToShowName(String locationToShowName) {
+        this.locationToShowName = locationToShowName;
     }
 }
 

@@ -3,35 +3,25 @@ package noted.noted;
 import android.app.ActionBar;
 import android.app.Activity;
 import android.app.Fragment;
-import android.content.Intent;
-import android.graphics.AvoidXfermode;
 import android.os.Bundle;
 import android.util.Log;
-import android.widget.Toast;
 
 import com.digits.sdk.android.AuthCallback;
 import com.digits.sdk.android.Digits;
 import com.digits.sdk.android.DigitsAuthButton;
-import com.digits.sdk.android.DigitsAuthConfig;
 import com.digits.sdk.android.DigitsException;
-import com.digits.sdk.android.DigitsOAuthSigning;
 import com.digits.sdk.android.DigitsSession;
-import com.digits.sdk.android.DigitsUser;
-import com.parse.LogInCallback;
-import com.parse.Parse;
-import com.parse.ParseException;
-import com.parse.ParseUser;
 import com.twitter.sdk.android.core.TwitterAuthConfig;
-import com.twitter.sdk.android.core.TwitterAuthToken;
 import com.twitter.sdk.android.core.TwitterCore;
-import io.fabric.sdk.android.Fabric;
+
 import java.util.Calendar;
 import java.util.List;
 
-import noted.noted.Models.Contact;
+import io.fabric.sdk.android.Fabric;
 import noted.noted.Models.Model;
 import noted.noted.Models.Note;
 import noted.noted.Models.User;
+import noted.noted.Receivers.AlarmReceiver;
 
 public class MainActivity extends Activity {
 
@@ -53,26 +43,16 @@ public class MainActivity extends Activity {
 
         // Init databse model with context
         Model.getInstance().init(this);
-        //Digits.getInstance().getSessionManager().clearActiveSession();
-
-/*
-        Model.getInstance().logOut(new Model.LogOutListener() {
+        //Model.getInstance().setLastSyncTime(null);
+        Model.getInstance().getAllLocalNotesAsync(new Model.GetNotesListener() {
             @Override
-            public void onResult(boolean result) {
-                Log.d("Log out","" + result);
+            public void onResult(List<Note> notes) {
+                for (Note note : notes) {
+                    Log.d("aa", note.getId() + " " + note.isShown() + " " + note.getTimeToShow());
+                }
             }
-        });*/
-        long mil = Model.getInstance().getMilisFromDateString("24/05/1993 10:00", Model.APP_DEFAULT_DATE_FORMAT);
-        Log.d("milis", "" + mil);
-        Log.d("string", Model.getInstance().getDateStringFromMilis(mil, Model.APP_DEFAULT_DATE_FORMAT));
-        Calendar c = Calendar.getInstance();
-        c.setTimeInMillis(mil);
-        Log.d("cal", "" + c.get(Calendar.YEAR) + "-"
-                + c.get(Calendar.MONTH)
-                + "-" + c.get(Calendar.DAY_OF_MONTH)
-                + " " + c.get(Calendar.HOUR_OF_DAY)
-                + ":" + c.get(Calendar.MINUTE)
-                + ":" + c.get((Calendar.SECOND)));
+        });
+
         // User is not signup to digits
         if (Digits.getInstance().getSessionManager().getActiveSession() == null) {
             setContentView(R.layout.activity_sign_in);
@@ -106,6 +86,8 @@ public class MainActivity extends Activity {
                 }
             });
         } else {
+            new AlarmReceiver().SetAlarm(this);
+
             // Log in with current digit user
             Log.d("DIGITS",Digits.getInstance().getSessionManager().getActiveSession().getAuthToken().toString());
             // Log in with current digit user
@@ -189,5 +171,31 @@ public class MainActivity extends Activity {
         }*/
         //List<Contact> contactList = Model.getInstance().getAllContacts();
         //Contact contact = Model.getInstance().getContact("000-1255");
+/*
+        Note note = new Note("0525827248","0544783455","Anna->Noy","17/01/2016");
+        Model.getInstance().addLocalAndRemoteNote(note, new Model.AddNoteListener() {
+            @Override
+            public void onResult(boolean result, Note id) {
+
+            }
+        });
+
+        note = new Note("0543975063","0544783455","Anna->Noy","17/01/2016");
+        Model.getInstance().addLocalAndRemoteNote(note, new Model.AddNoteListener() {
+            @Override
+            public void onResult(boolean result, Note id) {
+
+            }
+        });*/
+    }
+
+    @Override
+    protected void onStart() {
+        super.onStart();
+    }
+
+    @Override
+    protected void onStop() {
+        super.onStop();
     }
 }

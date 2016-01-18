@@ -31,7 +31,7 @@ public class ModelParse {
         NoteParse.addNote(note, listener);
     }
 
-    public void updateNote(Note note, Model.UpdateNoteListener listener){
+    public void updateNote(Note note, Model.SimpleSuccessListener listener){
         NoteParse.updateNote(note, listener);
     }
 
