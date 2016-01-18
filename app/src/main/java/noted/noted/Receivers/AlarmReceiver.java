@@ -29,6 +29,7 @@ public class AlarmReceiver extends BroadcastReceiver {
                 GeofenceController.getInstance().init(context);
                 GeofenceController.getInstance().connectToApiClient();
                 for (Note note : data) {
+                    Log.d("alarm note ", note.getId() + " " + note.getTimeToShow());
                     if (note.getTimeToShow() != null) {
                         new NotificationAlarmReceiver().SetAlarm(context, note);
 

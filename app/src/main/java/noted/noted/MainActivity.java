@@ -43,35 +43,16 @@ public class MainActivity extends Activity {
 
         // Init databse model with context
         Model.getInstance().init(this);
-        Model.getInstance().setLastSyncTime(null);
+        //Model.getInstance().setLastSyncTime(null);
         Model.getInstance().getAllLocalNotesAsync(new Model.GetNotesListener() {
             @Override
             public void onResult(List<Note> notes) {
-                for (Note note: notes) {
-                    Log.d("aa", note.getId());
+                for (Note note : notes) {
+                    Log.d("aa", note.getId() + " " + note.isShown() + " " + note.getTimeToShow());
                 }
             }
         });
-        //Digits.getInstance().getSessionManager().clearActiveSession();
 
-/*
-        Model.getInstance().logOut(new Model.LogOutListener() {
-            @Override
-            public void onResult(boolean result) {
-                Log.d("Log out","" + result);
-            }
-        });*/
-        long mil = Model.getInstance().getMilisFromDateString("24/05/1993 10:00", Model.APP_DEFAULT_DATE_FORMAT);
-        Log.d("milis", "" + mil);
-        Log.d("string", Model.getInstance().getDateStringFromMilis(mil, Model.APP_DEFAULT_DATE_FORMAT));
-        Calendar c = Calendar.getInstance();
-        c.setTimeInMillis(mil);
-        Log.d("cal", "" + c.get(Calendar.YEAR) + "-"
-                + c.get(Calendar.MONTH)
-                + "-" + c.get(Calendar.DAY_OF_MONTH)
-                + " " + c.get(Calendar.HOUR_OF_DAY)
-                + ":" + c.get(Calendar.MINUTE)
-                + ":" + c.get((Calendar.SECOND)));
         // User is not signup to digits
         if (Digits.getInstance().getSessionManager().getActiveSession() == null) {
             setContentView(R.layout.activity_sign_in);
