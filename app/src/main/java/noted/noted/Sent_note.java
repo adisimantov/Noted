@@ -78,7 +78,7 @@ public class Sent_note extends Activity {
             public void onClick(View v) {
                 final Note note = new Note(Model.getInstance().getCurrUser().getPhoneNumber(),contactTo.getText().toString(),
                         details.getText().toString(),Model.getInstance().getCurrentGMTDate(),
-                        det.getText().toString() + " " + tet.getText().toString(), "");
+                        det.getText().toString() + " " + tet.getText().toString(), null);
                 Model.getInstance().addLocalAndRemoteNote(note, new Model.AddNoteListener() {
                     @Override
                     public void onResult(boolean result, Note id) {
@@ -91,7 +91,7 @@ public class Sent_note extends Activity {
                         intent.putExtra(DETAILS,note.getDetails());
                         intent.putExtra(SENT_TIME,note.getSentTime());
                         intent.putExtra(TIME_TO_SHOW,note.getTimeToShow());
-                        intent.putExtra(LOCATION_TO_SHOW,note.getLocationToShow());
+                        intent.putExtra(LOCATION_TO_SHOW,"");
                         setResult(RESULT_OK, intent);
                         finish();
                     }
@@ -119,6 +119,7 @@ public class Sent_note extends Activity {
         locationBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                /*
                 PlacePicker.IntentBuilder builder = new PlacePicker.IntentBuilder();
 
                 try {
@@ -128,7 +129,7 @@ public class Sent_note extends Activity {
                 } catch (GooglePlayServicesNotAvailableException e) {
                     e.printStackTrace();
                 }
-
+*/
             }
         });
 

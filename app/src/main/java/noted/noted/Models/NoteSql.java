@@ -48,6 +48,7 @@ public class NoteSql {
                 double latToShow = cursor.getDouble(lat_to_show_index);
                 boolean isShown = (cursor.getInt(is_shown_index) == 1);
 
+
                 Note st = new Note(id,from,to,details,sentTime,timeToShow,new Location(lngToShow,latToShow),isShown);
                 data.add(st);
             } while (cursor.moveToNext());

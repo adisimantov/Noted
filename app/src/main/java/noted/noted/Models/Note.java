@@ -9,10 +9,8 @@ public class Note {
     private String to;
     private String details;
     private String sentTime;
-    private String receivedTime;
-    private String showedTime;
     private String timeToShow;
-    private String locationToShow;
+    private Location locationToShow;
     private boolean isShown;
 
     public Note(String from, String to, String details, String sentTime) {
@@ -22,7 +20,8 @@ public class Note {
         this.sentTime = sentTime;
     }
 
-    public Note(String from, String to, String details, String sentTime, String timeToShow, String locationToShow) {
+    public Note(String id, String from, String to, String details, String sentTime, String timeToShow, Location locationToShow) {
+        this.id = id;
         this.from = from;
         this.to = to;
         this.details = details;
@@ -31,8 +30,7 @@ public class Note {
         this.locationToShow = locationToShow;
     }
 
-    public Note(String id, String from, String to, String details, String sentTime, String receivedTime, String showedTime, String timeToShow, String locationToShow, boolean isShown) {
-        this.id = id;
+    public Note(String from, String to, String details, String sentTime, String timeToShow, Location locationToShow) {
         this.from = from;
         this.to = to;
         this.details = details;
