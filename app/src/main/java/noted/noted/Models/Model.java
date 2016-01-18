@@ -45,14 +45,7 @@ public class Model {
             contacts.init(context);
         }
     }
-
-    public String getCurrentGMTDate() {
-        Calendar cal = Calendar.getInstance();
-        DateFormat formatter = new SimpleDateFormat(remote.DEFAULT_DATE_FORMAT);
-        formatter.setTimeZone(TimeZone.getTimeZone(remote.DEFAULT_TIME_ZONE));
-        return formatter.format((cal.getTime()));
-    }
-
+    
     public String getCurrentTimestamp() {
         Calendar cal = Calendar.getInstance();
         DateFormat formatter = new SimpleDateFormat(APP_DEFAULT_TIMESTAMP_FORMAT);
