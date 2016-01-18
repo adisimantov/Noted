@@ -100,7 +100,7 @@ public class TabSentNotes extends Fragment{
             listAdapter.notifyDataSetChanged();
             listView1.setAdapter(listAdapter);*/
             Note note = new Note(bundle.getString(FROM), bundle.getString(TO), bundle.getString(DETAILS),
-                    bundle.getString(SENT_TIME),bundle.getString(TIME_TO_SHOW), null);
+                    bundle.getString(SENT_TIME),bundle.getString(TIME_TO_SHOW), null,null);
             adapter.lNotes.add(note);
             adapter.notifyDataSetChanged();
         }

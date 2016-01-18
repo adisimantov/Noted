@@ -24,14 +24,15 @@ import java.util.List;
 public class NoteParse {
     private static final String TAG = "NoteParse";
 
-    private final static String NOTE_TABLE            = "NOTES";
-    private final static String NOTE_FROM             = "SENDER";
-    private final static String NOTE_TO               = "RECEIVER";
-    private final static String NOTE_DETAILS          = "DETAILS";
-    private final static String NOTE_SENT_TIME        = "SENT_TIME";
-    private final static String NOTE_TIME_TO_SHOW     = "TIME_TO_SHOW";
-    private final static String NOTE_LOCATION_TO_SHOW = "LOCATION_TO_SHOW";
-    private final static String NOTE_CREATED_AT       = "createdAt";
+    private final static String NOTE_TABLE                  = "NOTES";
+    private final static String NOTE_FROM                   = "SENDER";
+    private final static String NOTE_TO                     = "RECEIVER";
+    private final static String NOTE_DETAILS                = "DETAILS";
+    private final static String NOTE_SENT_TIME              = "SENT_TIME";
+    private final static String NOTE_TIME_TO_SHOW           = "TIME_TO_SHOW";
+    private final static String NOTE_LOCATION_TO_SHOW       = "LOCATION_TO_SHOW";
+    private final static String NOTE_LOCATION_TO_SHOW_NAME  = "LOCATION_TO_SHOW_NAME";
+    private final static String NOTE_CREATED_AT             = "createdAt";
 
     private static Note createNoteFromParse(ParseObject po) {
         String id = po.getObjectId();
@@ -40,14 +41,15 @@ public class NoteParse {
         String details = po.getString(NOTE_DETAILS);
         String sentTime = po.getString(NOTE_SENT_TIME);
         String timeToShow = po.getString(NOTE_TIME_TO_SHOW);
-
+        String locationToShowName = po.getString(NOTE_LOCATION_TO_SHOW_NAME);
         ParseGeoPoint locationToShow = po.getParseGeoPoint(NOTE_LOCATION_TO_SHOW);
+
         Location location = null;
         if (locationToShow != null) {
             location = new Location(locationToShow.getLongitude(), locationToShow.getLatitude());
         }
 
-        return (new Note(id, from, to, details, sentTime, timeToShow, location));
+        return (new Note(id, from, to, details, sentTime, timeToShow, location, locationToShowName));
     }
 
     private static ParseObject createParseFromNote(Note note) {
@@ -55,7 +57,7 @@ public class NoteParse {
         parseNote.put(NOTE_FROM, note.getFrom());
         parseNote.put(NOTE_TO, note.getTo());
         parseNote.put(NOTE_DETAILS, note.getDetails());
-        parseNote.put(NOTE_SENT_TIME, (note.getSentTime() == null) ? JSONObject.NULL : note.getSentTime());
+        parseNote.put(NOTE_SENT_TIME, note.getSentTime());
         parseNote.put(NOTE_TIME_TO_SHOW, (note.getTimeToShow() == null) ? JSONObject.NULL : note.getTimeToShow());
 
         ParseGeoPoint location = null;
@@ -65,6 +67,7 @@ public class NoteParse {
         }
 
         parseNote.put(NOTE_LOCATION_TO_SHOW, (location == null) ? JSONObject.NULL : location);
+        parseNote.put(NOTE_LOCATION_TO_SHOW_NAME, (note.getLocationToShowName() == null) ? JSONObject.NULL : note.getLocationToShowName());
 
         return parseNote;
     }
