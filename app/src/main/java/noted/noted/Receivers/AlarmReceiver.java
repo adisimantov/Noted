@@ -54,7 +54,8 @@ public class AlarmReceiver extends BroadcastReceiver {
                 0, intent, PendingIntent.FLAG_CANCEL_CURRENT);
         AlarmManager alarms = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
         alarms.setInexactRepeating(AlarmManager.ELAPSED_REALTIME_WAKEUP, 0,
-                AlarmManager.INTERVAL_HALF_HOUR,
+                //AlarmManager.INTERVAL_HALF_HOUR,
+                5 * 60 * 1000,
                 recurringDownload);
     }
 }
