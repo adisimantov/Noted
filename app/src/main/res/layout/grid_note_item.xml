@@ -8,7 +8,7 @@
         android:layout_width="186dp"
         android:layout_height="248dp"
         android:src="@drawable/note_background"
-        android:layout_marginTop="5dp"
+        android:layout_marginTop="2dp"
         android:layout_marginLeft="7dp" />
 
     <LinearLayout
@@ -24,7 +24,7 @@
         android:text="Contact"
         android:layout_alignParentLeft="true"
         android:layout_alignParentTop="true"
-        android:layout_marginTop="60dp"
+        android:layout_marginTop="50dp"
         android:layout_marginLeft="15dp"
         />
 

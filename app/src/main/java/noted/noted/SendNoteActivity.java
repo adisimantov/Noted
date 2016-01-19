@@ -32,6 +32,8 @@ public class SendNoteActivity extends Activity {
     static final int PICK_CONTACT = 1;
     static final int PLACE_PICKER_RESULT = 2;
 
+    private final static String RTL_CHAR = "\u200E";
+
     private final static String ID = "ID";
     private final static String FROM = "FROM";
     private final static String TO = "TO";
@@ -43,7 +45,7 @@ public class SendNoteActivity extends Activity {
     ImageButton  contactButton;
     TextView     contactTo;
     TextView     details;
-    ImageButton sendBtn;
+    Button sendBtn;
     Spinner      spinner;
     DateEditText det;
     TimeEditText tet;
@@ -61,7 +63,7 @@ public class SendNoteActivity extends Activity {
 
         contactButton = (ImageButton) findViewById(R.id.sentViewContactBtn);
         contactTo = (TextView) findViewById(R.id.sentViewTo);
-        sendBtn = (ImageButton) findViewById(R.id.sentBtn);
+        sendBtn = (Button) findViewById(R.id.sentBtn);
         details = (TextView) findViewById(R.id.sentViewDetails);
         spinner = (Spinner) findViewById(R.id.typeSpinner);
         det = (DateEditText) findViewById(R.id.add_note_date);
@@ -96,9 +98,10 @@ public class SendNoteActivity extends Activity {
                 }
 
                 if (spinner.getSelectedItem().equals("Time")) {
-                    note = new Note(Model.getInstance().getCurrUser().getPhoneNumber(), contactTo.getText().toString(),
-                            details.getText().toString(), Model.getInstance().getCurrentTimestamp(),
-                            det.getText().toString() + " " + tet.getText().toString(), null, null);
+                    note = new Note(Model.getInstance().getCurrUser().getPhoneNumber(),
+                                    Model.getInstance().getPhoneNumberWithCountry(contactTo.getText().toString()),
+                                    details.getText().toString(), Model.getInstance().getCurrentTimestamp(),
+                                    det.getText().toString() + " " + tet.getText().toString(), null, null);
                 } else {
                     //Check location
                     noteAdress = location.getText().toString();
@@ -110,9 +113,10 @@ public class SendNoteActivity extends Activity {
                         return;
                     }
 
-                    note = new Note(Model.getInstance().getCurrUser().getPhoneNumber(), contactTo.getText().toString(),
-                            details.getText().toString(), Model.getInstance().getCurrentTimestamp(),
-                            null, new noted.noted.Models.Location(locLat.longitude, locLat.latitude), noteAdress);
+                    note = new Note(Model.getInstance().getCurrUser().getPhoneNumber(),
+                                    Model.getInstance().getPhoneNumberWithCountry(contactTo.getText().toString()),
+                                    details.getText().toString(), Model.getInstance().getCurrentTimestamp(),
+                                    null, new noted.noted.Models.Location(locLat.longitude, locLat.latitude), noteAdress);
                 }
 
                 Model.getInstance().addLocalAndRemoteNote(note, new Model.AddNoteListener() {
@@ -206,7 +210,7 @@ public class SendNoteActivity extends Activity {
             case (PLACE_PICKER_RESULT):
                 if (resultCode == Activity.RESULT_OK) {
                     Place place = PlacePicker.getPlace(data, this);
-                    location.setText(place.getName());
+                    location.setText(RTL_CHAR + place.getName());
                     locLat = place.getLatLng();
                 }
                 break;

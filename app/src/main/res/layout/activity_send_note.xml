@@ -9,9 +9,11 @@
     <ImageView
         android:layout_height="fill_parent"
         android:layout_width="fill_parent"
-        android:layout_marginLeft="20dp"
-        android:layout_marginBottom="20dp"
-        android:src="@drawable/note_background"/>
+        android:layout_marginLeft="10dp"
+        android:layout_marginBottom="5dp"
+        android:src="@drawable/note_background"
+        android:layout_marginTop="-30dp"
+        android:layout_marginRight="-20dp" />
 
     <LinearLayout
         android:layout_width="wrap_content"
@@ -21,29 +23,28 @@
         <LinearLayout
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:orientation="horizontal">
+            android:orientation="horizontal"
+            android:layout_marginTop="80dp">
 
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="To:"
-                android:textSize="22dp"
+                android:textSize="20dp"
                 android:layout_alignParentLeft="true"
                 android:layout_alignParentTop="true"
-                android:layout_marginTop="100dp"
-                android:layout_marginLeft="30dp"
+                android:layout_marginLeft="20dp"
                 />
 
             <EditText
                 android:id="@+id/sentViewTo"
-                android:layout_width="150dp"
+                android:layout_width="220dp"
                 android:layout_height="wrap_content"
-                android:hint="Phone number"
+                android:hint="Phone Number"
                 android:text=""
                 android:layout_alignParentLeft="true"
                 android:layout_alignParentTop="true"
-                android:layout_marginTop="100dp"
-                android:layout_marginLeft="30dp"
+                android:layout_marginLeft="20dp"
                 android:inputType="phone"
                 />
 
@@ -54,64 +55,59 @@
                 android:src="@android:drawable/ic_menu_call"
                 android:layout_alignParentLeft="true"
                 android:layout_alignParentTop="true"
-                android:layout_marginTop="100dp"
-                android:layout_marginLeft="30dp"
-                android:background="@null"/>
+                android:layout_marginLeft="10dp"
+                android:background="@null"
+                android:layout_marginRight="30dp" />
 
         </LinearLayout>
 
         <LinearLayout
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content">
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_marginTop="5dp"
+            android:layout_gravity="center_horizontal"
+            android:gravity="center_horizontal">
+
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Type"
+                android:text="Show at"
                 android:textSize="20dp"
-                android:layout_marginLeft="30dp"
-                />
+                android:layout_marginLeft="45dp"
+                android:layout_marginTop="2dp"
+                android:nestedScrollingEnabled="false" />
+
 
             <Spinner
                 android:id="@+id/typeSpinner"
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content">
+                android:layout_height="wrap_content"
+                android:layout_marginRight="35dp"
+                android:layout_marginLeft="10dp">
             </Spinner>
 
         </LinearLayout>
 
         <FrameLayout
             android:id="@+id/timeLayout"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
             android:visibility="visible">
             <LinearLayout
                 xmlns:android="http://schemas.android.com/apk/res/android"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:orientation="vertical"
-                android:layout_marginLeft="30dp">
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:layout_marginLeft="0dp"
+                android:layout_gravity="center_horizontal"
+                android:layout_margin="5dp">
 
-                <LinearLayout
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content">
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="Date"
-                        android:textSize="20dp"/>
-                    <noted.noted.DateEditText
+                <noted.noted.DateEditText
                         android:id="@+id/add_note_date"
                         android:layout_width="130dp"
                         android:layout_height="wrap_content"
                         android:textSize="20dp"
                         android:inputType="date"
-                        />
-
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="Time"
-                        android:textSize="20dp"
                         />
 
                     <noted.noted.TimeEditText
@@ -122,66 +118,66 @@
                         android:inputType="time"
                         />
 
-                </LinearLayout>
             </LinearLayout>
         </FrameLayout>
 
         <FrameLayout
             android:id="@+id/locationLayout"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:visibility="invisible">
-
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:visibility="invisible"
+            android:layout_marginTop="2dp">
             <LinearLayout
-                android:layout_width="wrap_content"
+                xmlns:android="http://schemas.android.com/apk/res/android"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:orientation="horizontal">
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:textSize="20dp"
-                    android:text="Location: "
-                    android:layout_marginLeft="30dp"/>
+                android:orientation="horizontal"
+                android:layout_marginLeft="12dp"
+                android:layout_marginTop="10dp"
+                android:layout_marginRight="2dp"
+                android:layout_gravity="center_horizontal|right"
+                android:gravity="center_horizontal"
+                android:layout_marginBottom="0dp"
+                android:paddingBottom="13dp">
 
                 <TextView
                     android:id="@+id/add_note_location"
-                    android:layout_width="200dp"
+                    android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="Choose location"
+                    android:layout_gravity="center_horizontal"
                     android:textSize="20dp"/>
-            </LinearLayout>
 
+            </LinearLayout>
         </FrameLayout>
 
         <LinearLayout
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal">
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Details"
-                android:textSize="20dp"
-                android:layout_marginLeft="30dp"
-                />
+            android:layout_width="fill_parent"
+            android:layout_height="fill_parent"
+            android:orientation="horizontal"
+            android:weightSum="1"
+            android:layout_marginLeft="20dp">
 
             <EditText
                 android:id="@+id/sentViewDetails"
-                android:layout_width="220dp"
-                android:layout_height="100dp"
+                android:layout_width="match_parent"
+                android:layout_height="205dp"
                 android:layout_marginLeft="10dp"
-                />
+                android:hint="Details"
+                android:editable="true"
+                android:elegantTextHeight="false"
+                android:foregroundGravity="top"
+                android:layout_marginRight="35dp"
+                android:gravity="center_horizontal" />
         </LinearLayout>
 
 
-        <ImageButton
+        <Button
             android:id="@+id/sentBtn"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginLeft="30dp"
-            android:src="@android:drawable/ic_menu_send"
-            android:background="@null"/>
+            android:layout_gravity="center_horizontal"
+            android:text="SEND NOTE" />
 
     </LinearLayout>
 

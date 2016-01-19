@@ -25,7 +25,7 @@ public class Model {
     private final static String LAST_SYNC_TIME = "LAST_SYNC_TIME";
 
     public final static String APP_DEFAULT_DATE_FORMAT = "dd/MM/yyyy kk:mm";
-    public final static String APP_DEFAULT_TIMESTAMP_FORMAT = "dd.MM.yyyy kk:mm:ss";
+    public final static String APP_DEFAULT_TIMESTAMP_FORMAT = "dd/MM/yyyy kk:mm:ss";
 
     ModelSql local = new ModelSql();
     ModelParse remote = new ModelParse();
@@ -328,6 +328,10 @@ public class Model {
     }
 
     // Contacts
+    public String getPhoneNumberWithCountry(String phoneNumber) {
+        return contacts.getPhoneNumberWithCountry(phoneNumber);
+    }
+
     public List<Contact> getAllContacts(){
         return contacts.getAllContactsList(context);
     }
