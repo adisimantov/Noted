@@ -3,6 +3,7 @@ package noted.noted;
 import android.app.ActionBar;
 import android.app.Activity;
 import android.app.Fragment;
+import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.widget.Toast;
@@ -45,7 +46,7 @@ public class MainActivity extends Activity {
 
         // Init databse model with context
         Model.getInstance().init(this);
-        Model.getInstance().getAllLocalNotesAsync(new Model.GetNotesListener() {
+        /*Model.getInstance().getAllLocalNotesAsync(new Model.GetNotesListener() {
             @Override
             public void onResult(List<Note> notes) {
                 for (Note note : notes) {
@@ -54,7 +55,7 @@ public class MainActivity extends Activity {
                 }
             }
         });
-       Model.getInstance().setLastSyncTime(null);
+       Model.getInstance().setLastSyncTime(null);*/
 /*        Model.getInstance().syncNotesFromServer(new Model.GetNotesListener() {
             @Override
             public void onResult(List<Note> notes) {

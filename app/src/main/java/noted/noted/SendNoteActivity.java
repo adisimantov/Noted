@@ -32,6 +32,7 @@ public class SendNoteActivity extends Activity {
     static final int PICK_CONTACT = 1;
     static final int PLACE_PICKER_RESULT = 2;
 
+    private final static String ID = "ID";
     private final static String FROM = "FROM";
     private final static String TO = "TO";
     private final static String DETAILS = "DETAILS";
@@ -118,6 +119,7 @@ public class SendNoteActivity extends Activity {
                     @Override
                     public void onResult(boolean result, Note id) {
                         Intent intent = new Intent();
+                        intent.putExtra(ID,note.getId());
                         intent.putExtra(FROM, note.getFrom());
                         intent.putExtra(TO, note.getTo());
                         intent.putExtra(DETAILS, note.getDetails());

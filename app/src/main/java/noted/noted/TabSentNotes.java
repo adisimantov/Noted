@@ -24,6 +24,7 @@ import noted.noted.Models.Note;
  */
 public class TabSentNotes extends Fragment{
     static final int SENT_NOTE=1;
+    private final static String ID = "ID";
     private final static String FROM = "FROM";
     private final static String TO = "TO";
     private final static String DETAILS = "DETAILS";
@@ -48,7 +49,7 @@ public class TabSentNotes extends Fragment{
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(v.getContext(),SendNoteActivity.class);
-                startActivityForResult(intent, 1);
+                startActivityForResult(intent, SENT_NOTE);
             }
         });
 
@@ -85,10 +86,10 @@ public class TabSentNotes extends Fragment{
             @TargetApi(Build.VERSION_CODES.M)
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                Intent intent = new Intent(getContext(), TabSentNotes.class);
+                Intent intent = new Intent(view.getContext(),ViewNoteActivity.class);
                 Note note = adapter.getItem(position);
                 intent.putExtra("note_id", note.getId());
-                startActivityForResult(intent, SENT_NOTE);
+                startActivity(intent);
             }
         });
 
@@ -99,15 +100,14 @@ public class TabSentNotes extends Fragment{
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode,resultCode,data);
         Log.d("noy","Activity result");
-        if (requestCode == 1) {
 
             if (resultCode == Activity.RESULT_OK && requestCode == SENT_NOTE) {
                 Bundle bundle = data.getExtras();
-                Note note = new Note(bundle.getString(FROM), bundle.getString(TO), bundle.getString(DETAILS),
+                Note note = new Note(bundle.getString(ID), bundle.getString(FROM), bundle.getString(TO), bundle.getString(DETAILS),
                         bundle.getString(SENT_TIME), bundle.getString(TIME_TO_SHOW), null, null);
                 adapter.lNotes.add(note);
                 adapter.notifyDataSetChanged();
             }
-        }
+
     }
 }
