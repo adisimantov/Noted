@@ -29,8 +29,8 @@ public class ModelSql {
         return NoteSql.getSentNotes(dbHelper, sentPhone);
     }
 
-    public List<Note> getReceivedNotes(String receivedPhone){
-        return NoteSql.getReceivedNotes(dbHelper,receivedPhone);
+    public List<Note> getReceivedNotes(String receivedPhone, boolean shown){
+        return NoteSql.getReceivedNotes(dbHelper, receivedPhone, shown);
     }
 
     public Note getNote(String id){

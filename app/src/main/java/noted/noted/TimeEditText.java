@@ -5,6 +5,7 @@ import android.content.Context;
 import android.util.AttributeSet;
 import android.view.MotionEvent;
 import android.widget.EditText;
+import android.widget.TextView;
 
 import java.util.Calendar;
 
@@ -33,10 +34,14 @@ public class TimeEditText extends EditText implements TimePickerFragment.onTimeS
     private void init() {
         setInputType(0);
         Calendar cal = Calendar.getInstance();
-        hour = cal.get(Calendar.HOUR);
+        hour = cal.get(Calendar.HOUR_OF_DAY);
         minute = cal.get(Calendar.MINUTE);
-        setText("" + hour + ":" + minute);
+        setText();
 
+    }
+
+    public void setText() {
+        setText("" + ((hour < 10) ? "0" : "") + hour + ":" + ((minute < 10) ? "0" : "") + minute);
     }
 
     @Override
@@ -54,6 +59,6 @@ public class TimeEditText extends EditText implements TimePickerFragment.onTimeS
     public void onTimeSet(int hourOfDay, int minute) {
         this.hour = hourOfDay;
         this.minute = minute;
-        setText("" + this.hour + ":" + this.minute);
+        setText();
     }
 }
