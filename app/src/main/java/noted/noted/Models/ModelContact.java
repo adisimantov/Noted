@@ -32,12 +32,7 @@ public class ModelContact {
             do {
                 String idContact = cursor.getString(contactIdIdx);
                 String name = cursor.getString(nameIdx);
-                String phoneNumber = cursor.getString(phoneNumberIdx);
-
-                // In future will pick the user country code somehow
-                if (!phoneNumber.startsWith("+")) {
-                    phoneNumber = DEFAULT_PHONE_PREFIX + phoneNumber.substring(1);
-                }
+                String phoneNumber = getPhoneNumberWithCountry(cursor.getString(phoneNumberIdx));
                 Contact contact = new Contact(idContact, name,phoneNumber);
                 contactsList.add(contact);
             } while (cursor.moveToNext());
@@ -48,6 +43,17 @@ public class ModelContact {
                 cursor.close();
             }
         }
+        Contact contact = new Contact("Me", "Me",Model.getInstance().getCurrUser().getPhoneNumber());
+        contactsList.add(contact);
+    }
+
+    // In future will pick the user country code somehow
+    public String getPhoneNumberWithCountry(String phoneNumber) {
+        if (!phoneNumber.startsWith("+")) {
+            phoneNumber = DEFAULT_PHONE_PREFIX + phoneNumber.substring(1);
+        }
+
+        return phoneNumber;
     }
 
     public List<Contact> getAllContacts(Context context){
