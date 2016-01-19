@@ -202,7 +202,7 @@ public class GeofenceNoteService extends Service implements GoogleApiClient.Conn
         // We use FLAG_UPDATE_CURRENT so that we get the same pending intent back when calling
         // addGeofences() and removeGeofences().
         intent.putExtra("noteID", note.getId());
-        intent.putExtra("noteFrom", note.getFrom() + " By Location");
+        intent.putExtra("noteFrom", note.getFrom());
         intent.putExtra("noteDetails", note.getDetails());
 
         return PendingIntent.getService(context, (int)System.currentTimeMillis(), intent, PendingIntent.FLAG_UPDATE_CURRENT);

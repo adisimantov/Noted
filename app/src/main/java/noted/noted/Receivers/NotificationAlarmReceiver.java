@@ -48,7 +48,7 @@ public class NotificationAlarmReceiver extends BroadcastReceiver {
         Intent alarmIntent = new Intent(context, NotificationAlarmReceiver.class);
         alarmIntent.putExtra("noteID", note.getId());
         alarmIntent.putExtra("noteFrom", note.getFrom());
-        alarmIntent.putExtra("noteDetails", note.getDetails() + " By Time");
+        alarmIntent.putExtra("noteDetails", note.getDetails());
         PendingIntent pendingIntent = PendingIntent.getBroadcast(context,
                 broadcastCode++, alarmIntent, PendingIntent.FLAG_CANCEL_CURRENT);
 
