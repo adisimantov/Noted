@@ -4,6 +4,7 @@ import android.content.ContentValues;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.location.*;
+import android.util.Log;
 
 import java.util.LinkedList;
 import java.util.List;
@@ -102,9 +103,12 @@ public class NoteSql {
         return rows_updated;
     }
 
-    public static List<Note> getReceivedNotes(ModelSql.Helper dbHelper, String receivedPhone) {
+
+    public static List<Note> getReceivedNotes(ModelSql.Helper dbHelper, String receivedPhone, boolean shown) {
         SQLiteDatabase db = dbHelper.getReadableDatabase();
-        Cursor cursor = db.query(NOTE_TABLE, null, NOTE_TO + "=?", new String[]{receivedPhone}, null, null, null);
+        String query = NOTE_TO + "=? AND " + NOTE_IS_SHOWN + " = ?";
+        Log.d("NoteSql", "query = " + query);
+        Cursor cursor = db.query(NOTE_TABLE, null,query , new String[]{receivedPhone,  (shown ? "1" : "0")}, null, null, null);
         return getNoteListFromCursor(cursor);
     }
 
