@@ -13,30 +13,30 @@ public class TimePickerFragment extends DialogFragment implements TimePickerDial
     int hour;
     int min;
 
-    public void setTime(int h, int m){
+    public void setTime(int h, int m) {
         hour = h;
         min = m;
     }
 
-    interface onTimeSetListener{
+    interface onTimeSetListener {
         public void onTimeSet(int hourOfDay, int minute);
     }
+
     private onTimeSetListener listener;
 
-    public void setOnTimeSetListener(onTimeSetListener ls){
+    public void setOnTimeSetListener(onTimeSetListener ls) {
         listener = ls;
     }
 
     @Override
     public Dialog onCreateDialog(Bundle savedInstanceState) {
 
-        TimePickerDialog dialog = new TimePickerDialog(getActivity(),this,hour,min,true);
+        TimePickerDialog dialog = new TimePickerDialog(getActivity(), this, hour, min, true);
         return dialog;
     }
 
     @Override
     public void onTimeSet(TimePicker view, int hourOfDay, int minute) {
-        listener.onTimeSet(hourOfDay,minute);
+        listener.onTimeSet(hourOfDay, minute);
     }
-
 }

@@ -21,8 +21,7 @@ public class UserParse {
             public void done(ParseUser user, ParseException e) {
                 if (e == null) {
                     listener.onResult(true);
-                }
-                else {
+                } else {
                     listener.onResult(false);
                 }
             }
@@ -33,8 +32,8 @@ public class UserParse {
         ParseUser newUser = new ParseUser();
         newUser.setUsername(user.getPhoneNumber());
         newUser.setPassword(user.getAuthCode());
-        newUser.put(USER_JOIN_DATE,user.getJoinDate());
-        newUser.put(USER_IS_ACTIVE,user.getIsActive());
+        newUser.put(USER_JOIN_DATE, user.getJoinDate());
+        newUser.put(USER_IS_ACTIVE, user.getIsActive());
         newUser.signUpInBackground(new SignUpCallback() {
             @Override
             public void done(ParseException e) {

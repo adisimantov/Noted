@@ -22,8 +22,8 @@ import noted.noted.Models.Note;
 /**
  * Created by adi on 26-Dec-15.
  */
-public class TabSentNotes extends Fragment{
-    static final int SENT_NOTE=1;
+public class TabSentNotes extends Fragment {
+    static final int SENT_NOTE = 1;
     private final static String ID = "ID";
     private final static String FROM = "FROM";
     private final static String TO = "TO";
@@ -41,14 +41,14 @@ public class TabSentNotes extends Fragment{
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         viewTab = inflater.inflate(R.layout.sent_notes_tab, container, false);
         sentGrid = (GridView) viewTab.findViewById(R.id.sentNotesGrid);
-        adapter =  new GridAdapter(viewTab.getContext(),false);
+        adapter = new GridAdapter(viewTab.getContext(), false);
         sentGrid.setAdapter(adapter);
 
         addButton = (ImageButton) viewTab.findViewById(R.id.add_new_note_fab);
         addButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(v.getContext(),SendNoteActivity.class);
+                Intent intent = new Intent(v.getContext(), SendNoteActivity.class);
                 startActivityForResult(intent, SENT_NOTE);
             }
         });
@@ -86,7 +86,7 @@ public class TabSentNotes extends Fragment{
             @TargetApi(Build.VERSION_CODES.M)
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                Intent intent = new Intent(view.getContext(),ViewNoteActivity.class);
+                Intent intent = new Intent(view.getContext(), ViewNoteActivity.class);
                 Note note = adapter.getItem(position);
                 intent.putExtra("note_id", note.getId());
                 startActivity(intent);
@@ -98,16 +98,14 @@ public class TabSentNotes extends Fragment{
 
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
-        super.onActivityResult(requestCode,resultCode,data);
-        Log.d("noy","Activity result");
+        super.onActivityResult(requestCode, resultCode, data);
 
-            if (resultCode == Activity.RESULT_OK && requestCode == SENT_NOTE) {
-                Bundle bundle = data.getExtras();
-                Note note = new Note(bundle.getString(ID), bundle.getString(FROM), bundle.getString(TO), bundle.getString(DETAILS),
-                        bundle.getString(SENT_TIME), bundle.getString(TIME_TO_SHOW), null, null);
-                adapter.lNotes.add(note);
-                adapter.notifyDataSetChanged();
-            }
-
+        if (resultCode == Activity.RESULT_OK && requestCode == SENT_NOTE) {
+            Bundle bundle = data.getExtras();
+            Note note = new Note(bundle.getString(ID), bundle.getString(FROM), bundle.getString(TO), bundle.getString(DETAILS),
+                    bundle.getString(SENT_TIME), bundle.getString(TIME_TO_SHOW), null, null);
+            adapter.lNotes.add(note);
+            adapter.notifyDataSetChanged();
+        }
     }
 }
