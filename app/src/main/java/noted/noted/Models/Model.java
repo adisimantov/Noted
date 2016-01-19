@@ -11,6 +11,7 @@ import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
+import java.util.Locale;
 import java.util.TimeZone;
 
 /**
@@ -23,7 +24,7 @@ public class Model {
     private final static String PREF_FILE = "PREF_FILE";
     private final static String LAST_SYNC_TIME = "LAST_SYNC_TIME";
 
-    public final static String APP_DEFAULT_DATE_FORMAT = "dd.MM.yyyy kk:mm";
+    public final static String APP_DEFAULT_DATE_FORMAT = "dd/MM/yyyy kk:mm";
     public final static String APP_DEFAULT_TIMESTAMP_FORMAT = "dd.MM.yyyy kk:mm:ss";
 
     ModelSql local = new ModelSql();
@@ -54,9 +55,13 @@ public class Model {
 
     public long getMilisFromDateString(String date,String dateFormat) {
         try {
-            Date parsedDate = new SimpleDateFormat(dateFormat).parse(date);
-            return parsedDate.getTime();
+            Calendar cal = Calendar.getInstance();
+            SimpleDateFormat sdf = new SimpleDateFormat(dateFormat);
+            cal.setTime(sdf.parse(date));
+            return cal.getTimeInMillis();
         } catch (ParseException e) {
+            Log.e("Model", e.getMessage());
+            e.printStackTrace();
             return -1;
         }
     }
@@ -200,11 +205,11 @@ public class Model {
         task.execute();
     }
 
-    public void getReceivedLocalNotesAsync(final GetNotesListener listener, final String receivedPhone){
+    public void getReceivedLocalNotesAsync(final GetNotesListener listener, final String receivedPhone, final boolean shown){
         class GetNotesAsyncTask extends AsyncTask<String,String,List<Note>> {
             @Override
             protected List<Note> doInBackground(String... params) {
-                return local.getReceivedNotes(receivedPhone);
+                return local.getReceivedNotes(receivedPhone, shown);
             }
 
             @Override

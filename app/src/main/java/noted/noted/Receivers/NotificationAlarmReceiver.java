@@ -30,8 +30,8 @@ public class NotificationAlarmReceiver extends BroadcastReceiver {
     @Override
     public void onReceive(Context context, Intent intent) {
 
-        Log.d("notificationAlarm", "again");
-        Log.d("TIME OF onReceive", Model.getInstance().getCurrentTimestamp());
+        Log.d("NotificationAlarmRecei", "again");
+        Log.d("NotificationAlarmRecei", Model.getInstance().getCurrentTimestamp());
     /*    String id = intent.getStringExtra("noteID");
         String from = intent.getStringExtra("noteFrom");
         String details = intent.getStringExtra("noteDetails");
@@ -43,21 +43,20 @@ public class NotificationAlarmReceiver extends BroadcastReceiver {
 
     public void setAlarm(Context context, Note note)
     {
-        Log.d("ntf", "set alarm notification!!!");
+        Log.d("NotificationAlarmRecei", "set alarm notification!");
 
         Intent alarmIntent = new Intent(context, NotificationAlarmReceiver.class);
         alarmIntent.putExtra("noteID", note.getId());
         alarmIntent.putExtra("noteFrom", note.getFrom());
         alarmIntent.putExtra("noteDetails", note.getDetails() + " By Time");
-
         PendingIntent pendingIntent = PendingIntent.getBroadcast(context,
                 broadcastCode++, alarmIntent, PendingIntent.FLAG_CANCEL_CURRENT);
-        Log.d("TIME NOTE","TIME NOTE" + note.getTimeToShow());
 
+        Log.d("NotificationAlarmRecei","TIME NOTE " +note.getId()+ " " + note.getTimeToShow());
         long miliseconds = Model.getInstance().getMilisFromDateString(note.getTimeToShow(),
                 Model.APP_DEFAULT_DATE_FORMAT);
-        Log.d("TIME ALARM","" + miliseconds);
-        Log.d("TIME ALARM","" + Model.getInstance().getDateStringFromMilis(miliseconds,Model.APP_DEFAULT_DATE_FORMAT));
+        Log.d("NotificationAlarmRecei","MILISECONDS NOTE " + note.getId()+ " " + miliseconds);
+        Log.d("NotificationAlarmRecei","DATE FROM MILLIS NOTE " + note.getId() + " " + Model.getInstance().getDateStringFromMilis(miliseconds,Model.APP_DEFAULT_DATE_FORMAT));
         AlarmManager alarmManager = (AlarmManager)context.getSystemService(Context.ALARM_SERVICE);
         alarmManager.set(AlarmManager.RTC_WAKEUP,miliseconds,pendingIntent);
     }
