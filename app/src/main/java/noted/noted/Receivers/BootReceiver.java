@@ -45,7 +45,7 @@ public class BootReceiver extends BroadcastReceiver {
                         context.startService(intentS);
                     }
                 }
-            }, Model.getInstance().getCurrUser().getPhoneNumber());
+            }, Model.getInstance().getCurrUser().getPhoneNumber(),false);
         }
     }
 }
