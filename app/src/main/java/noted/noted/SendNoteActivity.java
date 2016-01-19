@@ -96,9 +96,10 @@ public class SendNoteActivity extends Activity {
                 }
 
                 if (spinner.getSelectedItem().equals("Time")) {
-                    note = new Note(Model.getInstance().getCurrUser().getPhoneNumber(), contactTo.getText().toString(),
-                            details.getText().toString(), Model.getInstance().getCurrentTimestamp(),
-                            det.getText().toString() + " " + tet.getText().toString(), null, null);
+                    note = new Note(Model.getInstance().getCurrUser().getPhoneNumber(),
+                                    Model.getInstance().getPhoneNumberWithCountry(contactTo.getText().toString()),
+                                    details.getText().toString(), Model.getInstance().getCurrentTimestamp(),
+                                    det.getText().toString() + " " + tet.getText().toString(), null, null);
                 } else {
                     //Check location
                     noteAdress = location.getText().toString();
@@ -110,9 +111,10 @@ public class SendNoteActivity extends Activity {
                         return;
                     }
 
-                    note = new Note(Model.getInstance().getCurrUser().getPhoneNumber(), contactTo.getText().toString(),
-                            details.getText().toString(), Model.getInstance().getCurrentTimestamp(),
-                            null, new noted.noted.Models.Location(locLat.longitude, locLat.latitude), noteAdress);
+                    note = new Note(Model.getInstance().getCurrUser().getPhoneNumber(),
+                                    Model.getInstance().getPhoneNumberWithCountry(contactTo.getText().toString()),
+                                    details.getText().toString(), Model.getInstance().getCurrentTimestamp(),
+                                    null, new noted.noted.Models.Location(locLat.longitude, locLat.latitude), noteAdress);
                 }
 
                 Model.getInstance().addLocalAndRemoteNote(note, new Model.AddNoteListener() {
