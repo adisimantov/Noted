@@ -329,7 +329,7 @@ public class Model {
 
     // Contacts
     public List<Contact> getAllContacts(){
-        return contacts.getAllContacts(context);
+        return contacts.getAllContactsList(context);
     }
 
     public Contact getContact(String phoneNumber){

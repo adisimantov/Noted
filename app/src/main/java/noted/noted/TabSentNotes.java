@@ -15,6 +15,7 @@ import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.GridView;
 import android.widget.ImageButton;
+import android.widget.ProgressBar;
 
 import noted.noted.Models.Model;
 import noted.noted.Models.Note;
@@ -63,9 +64,9 @@ public class TabSentNotes extends Fragment{
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
                         Note note = adapter.getItem(position);
+                        Model.getInstance().deleteLocalNote(note.getId());
                         adapter.lNotes.remove(position);
                         adapter.notifyDataSetChanged();
-                        Model.getInstance().deleteLocalNote(note.getId());
                     }
                 });
                 builder.setNegativeButton(R.string.no_button, new DialogInterface.OnClickListener() {
@@ -99,7 +100,6 @@ public class TabSentNotes extends Fragment{
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode,resultCode,data);
-        Log.d("noy","Activity result");
 
             if (resultCode == Activity.RESULT_OK && requestCode == SENT_NOTE) {
                 Bundle bundle = data.getExtras();

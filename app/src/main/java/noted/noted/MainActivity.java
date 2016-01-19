@@ -6,6 +6,8 @@ import android.app.Fragment;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.View;
+import android.widget.ProgressBar;
 import android.widget.Toast;
 
 import com.digits.sdk.android.AuthCallback;
@@ -35,12 +37,15 @@ public class MainActivity extends Activity {
 
     // Declaring our tabs and the corresponding fragments.
     ActionBar.Tab receivedTab, sentTab;
-    Fragment tabReceivedNotes = new TabReceivedNotes();
-    Fragment tabSentNotes = new TabSentNotes();
+    Fragment tabReceivedNotes;
+    Fragment tabSentNotes;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        Log.d("noy", Model.getInstance().getCurrentTimestamp());
+
         TwitterAuthConfig authConfig = new TwitterAuthConfig(TWITTER_KEY, TWITTER_SECRET);
         Fabric.with(this, new TwitterCore(authConfig), new Digits());
 
@@ -133,6 +138,9 @@ public class MainActivity extends Activity {
             // Setting custom tab icons.
             receivedTab = actionBar.newTab().setText("Received Notes");
             sentTab = actionBar.newTab().setText("Sent Notes");
+
+            tabReceivedNotes = new TabReceivedNotes();
+            tabSentNotes = new TabSentNotes();
 
             // Setting tab listeners.
             receivedTab.setTabListener(new TabListener(tabReceivedNotes));
