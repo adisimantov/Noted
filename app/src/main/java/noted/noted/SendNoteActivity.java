@@ -6,6 +6,7 @@ import android.database.Cursor;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.ContactsContract;
+import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
@@ -41,7 +42,7 @@ public class SendNoteActivity extends Activity {
     ImageButton  contactButton;
     TextView     contactTo;
     TextView     details;
-    Button       sentBtn;
+    Button sendBtn;
     Spinner      spinner;
     DateEditText det;
     TimeEditText tet;
@@ -59,7 +60,7 @@ public class SendNoteActivity extends Activity {
 
         contactButton = (ImageButton) findViewById(R.id.sentViewContactBtn);
         contactTo = (TextView) findViewById(R.id.sentViewTo);
-        sentBtn = (Button) findViewById(R.id.sentBtn);
+        sendBtn = (Button) findViewById(R.id.sentBtn);
         details = (TextView) findViewById(R.id.sentViewDetails);
         spinner = (Spinner) findViewById(R.id.typeSpinner);
         det = (DateEditText) findViewById(R.id.add_note_date);
@@ -78,7 +79,7 @@ public class SendNoteActivity extends Activity {
             }
         });
 
-        sentBtn.setOnClickListener(new View.OnClickListener() {
+        sendBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 String noteAdress;
@@ -89,31 +90,28 @@ public class SendNoteActivity extends Activity {
                 if (contactTo.getText().toString().equals("")) {
                     Toast toast = Toast.makeText(getApplicationContext(), "Please enter contact", Toast.LENGTH_SHORT);
                     toast.show();
-                    acIndicator.setVisibility(View.INVISIBLE);
+                    acIndicator.setVisibility(View.GONE);
                     return;
                 }
 
-                if (spinner.getSelectedItem().equals("Time")){
-                    note = new Note(Model.getInstance().getCurrUser().getPhoneNumber(),contactTo.getText().toString(),
-                            details.getText().toString(),Model.getInstance().getCurrentTimestamp(),
+                if (spinner.getSelectedItem().equals("Time")) {
+                    note = new Note(Model.getInstance().getCurrUser().getPhoneNumber(), contactTo.getText().toString(),
+                            details.getText().toString(), Model.getInstance().getCurrentTimestamp(),
                             det.getText().toString() + " " + tet.getText().toString(), null, null);
-                }
-
-                else{
+                } else {
                     //Check location
                     noteAdress = location.getText().toString();
 
-                    if(spinner.getSelectedItem().equals("Location") && noteAdress.equals("Choose location"))
-                    {
+                    if (spinner.getSelectedItem().equals("Location") && noteAdress.equals("Choose location")) {
                         Toast toast = Toast.makeText(getApplicationContext(), "Please choose location", Toast.LENGTH_SHORT);
                         toast.show();
-                        acIndicator.setVisibility(View.INVISIBLE);
+                        acIndicator.setVisibility(View.GONE);
                         return;
                     }
 
-                    note = new Note(Model.getInstance().getCurrUser().getPhoneNumber(),contactTo.getText().toString(),
-                            details.getText().toString(),Model.getInstance().getCurrentTimestamp(),
-                            null, new noted.noted.Models.Location(locLat.longitude,locLat.latitude), noteAdress);
+                    note = new Note(Model.getInstance().getCurrUser().getPhoneNumber(), contactTo.getText().toString(),
+                            details.getText().toString(), Model.getInstance().getCurrentTimestamp(),
+                            null, new noted.noted.Models.Location(locLat.longitude, locLat.latitude), noteAdress);
                 }
 
                 Model.getInstance().addLocalAndRemoteNote(note, new Model.AddNoteListener() {
@@ -127,7 +125,7 @@ public class SendNoteActivity extends Activity {
                         intent.putExtra(TIME_TO_SHOW, note.getTimeToShow());
                         intent.putExtra(LOCATION_TO_SHOW, "");
                         setResult(RESULT_OK, intent);
-                        acIndicator.setVisibility(View.INVISIBLE);
+                        acIndicator.setVisibility(View.GONE);
                         finish();
                     }
                 });
@@ -206,10 +204,10 @@ public class SendNoteActivity extends Activity {
             case (PLACE_PICKER_RESULT):
                 if (resultCode == Activity.RESULT_OK) {
                     Place place = PlacePicker.getPlace(data, this);
-                    location.setText(place.getAddress());
+                    location.setText(place.getName());
                     locLat = place.getLatLng();
                 }
-                    break;
+                break;
         }
     }
 }
