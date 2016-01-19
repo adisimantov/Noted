@@ -16,22 +16,22 @@ import noted.noted.Models.Note;
  */
 public class NotificationController {
 
-    private  static int notificationCode = 1;
+    private static int notificationCode = 1;
 
     private final static NotificationController instance = new NotificationController();
 
-    private  NotificationController(){
-
+    private NotificationController() {
     }
 
-    public static NotificationController getInstance(){
-
+    public static NotificationController getInstance() {
         return instance;
     }
 
-    public void notify(Intent intent, Context context){
-        String id = intent.getStringExtra("noteID");
-        String from = intent.getStringExtra("noteFrom");
+    public void notify(Intent intent, Context context) {
+        String id = intent.getStringExtra(Utils.NOTE_ID_PARAM);
+        String from = intent.getStringExtra(Utils.NOTE_FROM_PARAM);
+
+        // Update this note as shown so it won't be shown again on boot
         Model.getInstance().getLocalNoteAsync(new Model.GetNoteListener() {
             @Override
             public void onResult(Note note) {
@@ -39,30 +39,31 @@ public class NotificationController {
                 Model.getInstance().updateLocalNoteAsync(new Model.SimpleSuccessListener() {
                     @Override
                     public void onResult(boolean result) {
-                        Log.d("UPDATE IS SHOWN","" + result);
                     }
-                },note);
+                }, note);
             }
-        },id);
+        }, id);
+
+        // Get contact display name if exists
         Contact c = Model.getInstance().getContact(from);
         if (c != null) {
             from = c.getName();
         }
 
-        String details = intent.getStringExtra("noteDetails");
-        notify(from,details,id,context);
+        String details = intent.getStringExtra(Utils.NOTE_DETAILS_PARAM);
+        notify(id, from, details, context);
     }
 
-
-    public void notify(String from, String details, String id, Context context){
+    /*
+        Push notification with note data
+     */
+    public void notify(String id, String from, String details, Context context) {
         Intent notificationIntent = new Intent(context, ViewNoteActivity.class);
-        notificationIntent.putExtra("note_id", id);
-        // use System.currentTimeMillis() to have a unique ID for the pending intent
+        notificationIntent.putExtra(Utils.NOTE_ID_PARAM, id);
+
         PendingIntent pIntent = PendingIntent.getActivity(context, (int) System.currentTimeMillis(), notificationIntent, 0);
 
-        // build notification
-        // the addAction re-use the same intent to keep the example short
-        Notification n  = new Notification.Builder(context)
+        Notification n = new Notification.Builder(context)
                 .setContentTitle(from)
                 .setContentText(details)
                 .setSmallIcon(R.mipmap.notedicon)
@@ -74,6 +75,5 @@ public class NotificationController {
                 (NotificationManager) context.getSystemService(context.NOTIFICATION_SERVICE);
 
         notificationManager.notify(notificationCode++, n);
-
     }
 }
