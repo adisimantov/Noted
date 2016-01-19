@@ -16,8 +16,6 @@ public class ViewNoteActivity extends Activity {
     TextView sentTime;
     TextView timeOrLoc;
 
-    public static final String RTL_CHAR = "\u200E";
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -30,8 +28,8 @@ public class ViewNoteActivity extends Activity {
         timeOrLoc = (TextView) findViewById(R.id.noteTimeOrLocDisplay);
 
         Intent intent = getIntent();
+        String id = intent.getStringExtra(Utils.NOTE_ID_PARAM);
 
-        String id = intent.getStringExtra("note_id");
         Model.getInstance().getLocalNoteAsync(new Model.GetNoteListener() {
             @Override
             public void onResult(Note note) {
@@ -42,22 +40,20 @@ public class ViewNoteActivity extends Activity {
                     fromString = contactFrom.getName();
                 }
 
-
                 String toString = note.getTo();
                 Contact contactTo = Model.getInstance().getContact(toString);
                 if (contactTo != null) {
                     toString = contactTo.getName();
                 }
 
-
-                to.setText(RTL_CHAR + toString);
-                from.setText(RTL_CHAR + fromString);
-                details.setText(RTL_CHAR + note.getDetails());
-                sentTime.setText(RTL_CHAR + note.getSentTime());
+                to.setText(Utils.LTR_CHAR + toString);
+                from.setText(Utils.LTR_CHAR + fromString);
+                details.setText(Utils.LTR_CHAR + note.getDetails());
+                sentTime.setText(Utils.LTR_CHAR + note.getSentTime());
                 if (note.getTimeToShow() != null) {
-                    timeOrLoc.setText(RTL_CHAR + note.getTimeToShow());
+                    timeOrLoc.setText(Utils.LTR_CHAR + note.getTimeToShow());
                 } else if (note.getLocationToShowName() != null) {
-                    timeOrLoc.setText(RTL_CHAR + note.getLocationToShowName());
+                    timeOrLoc.setText(Utils.LTR_CHAR + note.getLocationToShowName());
                 }
             }
         }, id);
