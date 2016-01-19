@@ -16,12 +16,15 @@ import noted.noted.Services.GeofenceNoteService;
 
 public class AlarmReceiver extends BroadcastReceiver {
 
+    protected static final String TAG = "AlarmReceiver";
+
     private static final AlarmReceiver instance = new AlarmReceiver();
     private static Context context;
 
-    private AlarmReceiver() {
-    }
-
+    /*
+        This class can't have a private constructor but it has static instance
+         so when called it won't set the alarm if it is already set
+    */
     public static AlarmReceiver getInstance() {
         return instance;
     }
@@ -44,7 +47,7 @@ public class AlarmReceiver extends BroadcastReceiver {
         Model.getInstance().syncNotesFromServer(new Model.GetNotesListener() {
             @Override
             public void onResult(List<Note> notes) {
-                Log.d("Alarm", "Syncing Data....");
+                Log.d(TAG, "Syncing Data....");
                 List<String> geoNotes = new ArrayList<String>();
 
                 for (Note note : notes) {
@@ -75,9 +78,7 @@ public class AlarmReceiver extends BroadcastReceiver {
                 PendingIntent.getBroadcast(context, 0, intent, PendingIntent.FLAG_CANCEL_CURRENT);
         AlarmManager alarms = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
         alarms.setInexactRepeating(AlarmManager.ELAPSED_REALTIME_WAKEUP, 0,
-                //AlarmManager.INTERVAL_HALF_HOUR,
-                5 * 60 * 1000,
-                receivedIntent);
+                                    AlarmManager.INTERVAL_HALF_HOUR, receivedIntent);
     }
 }
 

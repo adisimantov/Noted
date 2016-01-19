@@ -3,7 +3,7 @@
     package="noted.noted" >
 
     <receiver
-        android:name=".SampleBootReceiver"
+        android:name=".BootReceiver"
         android:enabled="true" >
         <intent-filter>
             <action android:name="android.intent.action.BOOT_COMPLETED" />
