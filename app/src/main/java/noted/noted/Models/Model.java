@@ -45,7 +45,7 @@ public class Model {
             contacts.init(context);
         }
     }
-    
+
     public String getCurrentTimestamp() {
         Calendar cal = Calendar.getInstance();
         DateFormat formatter = new SimpleDateFormat(APP_DEFAULT_TIMESTAMP_FORMAT);

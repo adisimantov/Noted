@@ -27,4 +27,9 @@ public class Location {
     public void setLatitudeToShow(double latitudeToShow) {
         this.latitudeToShow = latitudeToShow;
     }
+
+    @Override
+    public String toString() {
+        return getLongitudeToShow() + "," + getLatitudeToShow();
+    }
 }

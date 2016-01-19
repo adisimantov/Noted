@@ -21,8 +21,6 @@ import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
-import android.graphics.BitmapFactory;
-import android.graphics.Color;
 import android.support.v4.app.NotificationCompat;
 import android.support.v4.app.TaskStackBuilder;
 import android.text.TextUtils;
@@ -32,10 +30,8 @@ import com.google.android.gms.location.Geofence;
 import com.google.android.gms.location.GeofencingEvent;
 
 import java.util.ArrayList;
-import java.util.Calendar;
 import java.util.List;
 
-import noted.noted.GeofenceController;
 import noted.noted.MainActivity;
 import noted.noted.NotificationController;
 import noted.noted.R;
@@ -47,23 +43,18 @@ import noted.noted.R;
  * the transition type and geofence id(s) that triggered the transition. Creates a notification
  * as the output.
  */
-public class GeofenceTransitionsIntentService extends IntentService {
+public class GeofenceTransitionService extends IntentService {
 
-    protected static final String TAG = "GeofenceTransitionsIS";
+    protected static final String TAG = "GeofenceTransitionSrv";
     static  int notificationCode = 1000;
 
     /**
      * This constructor is required, and calls the super IntentService(String)
      * constructor with the name for a worker thread.
      */
-    public GeofenceTransitionsIntentService() {
+    public GeofenceTransitionService() {
         // Use the TAG to name the worker thread.
         super(TAG);
-    }
-
-    @Override
-    public void onCreate() {
-        super.onCreate();
     }
 
     /**
@@ -96,7 +87,6 @@ public class GeofenceTransitionsIntentService extends IntentService {
                     triggeringGeofences
             );
 
-            GeofenceController.getInstance().removeGeofencesButtonHandler(triggeringGeofences);
 /*
             String id = intent.getStringExtra("noteID");
             String from = intent.getStringExtra("noteFrom");
@@ -105,6 +95,19 @@ public class GeofenceTransitionsIntentService extends IntentService {
             NotificationController.getInstance().notify(from,details,id,this);*/
 
             NotificationController.getInstance().notify(intent,this);
+
+            List<String> geofencesToRemove = new ArrayList<>();
+            for (Geofence geofence : triggeringGeofences) {
+                geofencesToRemove.add(geofence.getRequestId());
+            }
+
+           if (geofencesToRemove.size() > 0) {
+                Log.d(TAG,"starting service");
+                Context context = getApplicationContext();
+                Intent intentS = new Intent(context, GeofenceNoteService.class);
+                intentS.putStringArrayListExtra(GeofenceNoteService.REMOVE_NOTE_PARAM_NAME,(ArrayList<String>)geofencesToRemove);
+                context.startService(intentS);
+            }
 /*
             // Send notification and log the transition details.
             sendNotification(from, details);*/

@@ -55,14 +55,14 @@ public class MainActivity extends Activity {
             }
         });
        Model.getInstance().setLastSyncTime(null);
-        Model.getInstance().syncNotesFromServer(new Model.GetNotesListener() {
+/*        Model.getInstance().syncNotesFromServer(new Model.GetNotesListener() {
             @Override
             public void onResult(List<Note> notes) {
                 for (Note note : notes) {
                     Log.d("aa", note.getId() + " " + note.isShown() + " " + note.getTimeToShow());
                 }
             }
-        });
+        });*/
 
         // User is not signup to digits
         if (Digits.getInstance().getSessionManager().getActiveSession() == null) {
@@ -93,14 +93,13 @@ public class MainActivity extends Activity {
 
                 @Override
                 public void failure(DigitsException exception) {
+                    Toast toast = Toast.makeText(getApplicationContext(), "Failed to sign in", Toast.LENGTH_SHORT);
                     Log.d("Digits", "Sign in with Digits failure", exception);
                 }
             });
         } else {
             new AlarmReceiver().setAlarm(this);
 
-            // Log in with current digit user
-            Log.d("DIGITS",Digits.getInstance().getSessionManager().getActiveSession().getAuthToken().toString());
             // Log in with current digit user
             if (Model.getInstance().getCurrUser() == null) {
                 String phone = Digits.getInstance().getSessionManager().getActiveSession().getPhoneNumber();
@@ -109,13 +108,9 @@ public class MainActivity extends Activity {
                 Model.getInstance().logIn(currUser, new Model.SimpleSuccessListener() {
                     @Override
                     public void onResult(boolean result) {
-                        Log.d("LOG IN", " " + result);
-                        Model.getInstance().syncNotesFromServer(new Model.GetNotesListener() {
-                            @Override
-                            public void onResult(List<Note> data) {
-                                Log.d(" number ", "" + data.size());
-                            }
-                        });
+                        if (!result) {
+                            Toast toast = Toast.makeText(getApplicationContext(), "Failed to log in", Toast.LENGTH_SHORT);
+                        }
                     }
                 });
             }
@@ -146,67 +141,5 @@ public class MainActivity extends Activity {
             actionBar.addTab(receivedTab);
             actionBar.addTab(sentTab);
         }
-/*
-        Note test = new Note("anna","anna","bla", "05/01/16");
-        final String[] delete_id = new String[1];
-
-        Model.getInstance().addLocalAndRemoteNote(test, new Model.AddNoteListener() {
-            @Override
-            public void onResult(boolean result, Note id) {
-                delete_id[0] = id.getId();
-                Log.d("a", "" + result + " " + id.getId());
-            }
-        });
-        Model.getInstance().getAllRemoteNotes(new Model.GetNotesListener() {
-            @Override
-            public void onResult(List<Note> notes) {
-                delete_id[0] = notes.get(0).getId();
-                for (Note note : notes) {
-                    Log.d("a", note.getId());
-                }
-            }
-        });*/
-
-/*        List<Note> before = Model.getInstance().getAllLocalNotes();
-        Log.d("before", "" + before.size());
-        for (Note note : before) {
-            Log.d("a", note.getId());
-        }
-        delete_id[0] = before.get(0).getId();
-        Log.d("get", "" + (Model.getInstance().getLocalNote(delete_id[0]) == null));
-        Log.d("delete", "" + Model.getInstance().deleteLocalNote(delete_id[0]));
-        List<Note> after = Model.getInstance().getAllLocalNotes();
-        Log.d("after", "" + after.size());
-        for (Note note : after) {
-            Log.d("a", note.getId());
-        }*/
-        //List<Contact> contactList = Model.getInstance().getAllContacts();
-        //Contact contact = Model.getInstance().getContact("000-1255");
-/*
-        Note note = new Note("0525827248","0544783455","Anna->Noy","17/01/2016");
-        Model.getInstance().addLocalAndRemoteNote(note, new Model.AddNoteListener() {
-            @Override
-            public void onResult(boolean result, Note id) {
-
-            }
-        });
-
-        note = new Note("0543975063","0544783455","Anna->Noy","17/01/2016");
-        Model.getInstance().addLocalAndRemoteNote(note, new Model.AddNoteListener() {
-            @Override
-            public void onResult(boolean result, Note id) {
-
-            }
-        });*/
-    }
-
-    @Override
-    protected void onStart() {
-        super.onStart();
-    }
-
-    @Override
-    protected void onStop() {
-        super.onStop();
     }
 }

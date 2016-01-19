@@ -46,8 +46,8 @@
 
         <receiver android:name=".Receivers.AlarmReceiver"></receiver>
         <receiver android:name=".Receivers.NotificationAlarmReceiver"></receiver>
-        <service android:name=".Services.GeofenceTransitionsIntentService" />
-
+        <service android:name=".Services.GeofenceTransitionService" android:exported="false"/>
+        <service android:name=".Services.GeofenceNoteService" android:exported="false"/>
 
     </application>
 

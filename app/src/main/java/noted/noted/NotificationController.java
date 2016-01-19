@@ -55,8 +55,6 @@ public class NotificationController {
 
 
     public void notify(String from, String details, String id, Context context){
-        Log.d("TIME OF notify", Model.getInstance().getCurrentTimestamp());
-
         Intent notificationIntent = new Intent(context, MainActivity.class);
         // use System.currentTimeMillis() to have a unique ID for the pending intent
         PendingIntent pIntent = PendingIntent.getActivity(context, (int) System.currentTimeMillis(), notificationIntent, 0);
@@ -75,6 +73,5 @@ public class NotificationController {
                 (NotificationManager) context.getSystemService(context.NOTIFICATION_SERVICE);
 
         notificationManager.notify(notificationCode++, n);
-
     }
 }
