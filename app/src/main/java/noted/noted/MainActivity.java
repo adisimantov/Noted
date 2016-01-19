@@ -99,7 +99,8 @@ public class MainActivity extends Activity {
                 }
             });
         } else {
-            new AlarmReceiver().setAlarm(this);
+            // Start sync notes alarm
+            AlarmReceiver.getInstance().init(this);
 
             // Log in with current digit user
             if (Model.getInstance().getCurrUser() == null) {
