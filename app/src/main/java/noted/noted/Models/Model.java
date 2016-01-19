@@ -212,11 +212,11 @@ public class Model {
         task.execute();
     }
 
-    public void getReceivedLocalNotesAsync(final GetNotesListener listener, final String receivedPhone){
+    public void getReceivedLocalNotesAsync(final GetNotesListener listener, final String receivedPhone, final boolean shown){
         class GetNotesAsyncTask extends AsyncTask<String,String,List<Note>> {
             @Override
             protected List<Note> doInBackground(String... params) {
-                return local.getReceivedNotes(receivedPhone);
+                return local.getReceivedNotes(receivedPhone, shown);
             }
 
             @Override

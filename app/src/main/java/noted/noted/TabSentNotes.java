@@ -39,7 +39,7 @@ public class TabSentNotes extends Fragment{
         viewTab = inflater.inflate(R.layout.sent_notes_tab, container, false);
         sentGrid = (GridView) viewTab.findViewById(R.id.sentNotesGrid);
         adapter =  new GridAdapter(viewTab.getContext(),false);
-        sentGrid.setAdapter(new GridAdapter(viewTab.getContext(), false));
+        sentGrid.setAdapter(adapter);
 
         addButton = (ImageButton) viewTab.findViewById(R.id.add_new_note_fab);
         addButton.setOnClickListener(new View.OnClickListener() {
