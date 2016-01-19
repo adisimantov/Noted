@@ -32,6 +32,8 @@ public class SendNoteActivity extends Activity {
     static final int PICK_CONTACT = 1;
     static final int PLACE_PICKER_RESULT = 2;
 
+    private final static String RTL_CHAR = "\u200E";
+
     private final static String ID = "ID";
     private final static String FROM = "FROM";
     private final static String TO = "TO";
@@ -43,7 +45,7 @@ public class SendNoteActivity extends Activity {
     ImageButton  contactButton;
     TextView     contactTo;
     TextView     details;
-    ImageButton sendBtn;
+    Button sendBtn;
     Spinner      spinner;
     DateEditText det;
     TimeEditText tet;
@@ -61,7 +63,7 @@ public class SendNoteActivity extends Activity {
 
         contactButton = (ImageButton) findViewById(R.id.sentViewContactBtn);
         contactTo = (TextView) findViewById(R.id.sentViewTo);
-        sendBtn = (ImageButton) findViewById(R.id.sentBtn);
+        sendBtn = (Button) findViewById(R.id.sentBtn);
         details = (TextView) findViewById(R.id.sentViewDetails);
         spinner = (Spinner) findViewById(R.id.typeSpinner);
         det = (DateEditText) findViewById(R.id.add_note_date);
@@ -206,7 +208,7 @@ public class SendNoteActivity extends Activity {
             case (PLACE_PICKER_RESULT):
                 if (resultCode == Activity.RESULT_OK) {
                     Place place = PlacePicker.getPlace(data, this);
-                    location.setText(place.getName());
+                    location.setText(RTL_CHAR + place.getName());
                     locLat = place.getLatLng();
                 }
                 break;
