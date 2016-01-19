@@ -16,6 +16,7 @@ import java.util.jar.Manifest;
  */
 public class ModelContact {
     List<Contact> contactsList;
+    public static final String DEFAULT_PHONE_PREFIX = "+972";
 
     public void init(Context context) {
         contactsList = new LinkedList<Contact>();
@@ -32,6 +33,11 @@ public class ModelContact {
                 String idContact = cursor.getString(contactIdIdx);
                 String name = cursor.getString(nameIdx);
                 String phoneNumber = cursor.getString(phoneNumberIdx);
+
+                // In future will pick the user country code somehow
+                if (!phoneNumber.startsWith("+")) {
+                    phoneNumber = DEFAULT_PHONE_PREFIX + phoneNumber.substring(1);
+                }
                 Contact contact = new Contact(idContact, name,phoneNumber);
                 contactsList.add(contact);
             } while (cursor.moveToNext());
