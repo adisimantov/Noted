@@ -40,7 +40,7 @@ public class BootReceiver extends BroadcastReceiver {
 
                     for (Note note : notes) {
                         if (note.getTimeToShow() != null) {
-                            new NotificationAlarmReceiver().setAlarm(context, note);
+                            NotificationAlarmReceiver.setAlarm(context, note);
 
                         } else if (note.getLocationToShow() != null) {
                             geoNotes.add(note.getId());
