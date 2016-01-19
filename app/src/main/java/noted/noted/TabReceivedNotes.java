@@ -1,8 +1,6 @@
 package noted.noted;
 
-import android.app.Activity;
 import android.app.AlertDialog;
-import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
@@ -11,13 +9,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
-import android.widget.BaseAdapter;
-import android.widget.CheckBox;
 import android.widget.GridView;
-import android.widget.TextView;
-
-import java.util.ArrayList;
-import java.util.List;
 
 import noted.noted.Models.Model;
 import noted.noted.Models.Note;
@@ -72,7 +64,7 @@ public class TabReceivedNotes extends Fragment {
         receivedGrid.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                Intent intent = new Intent(view.getContext(),NoteActivity.class);
+                Intent intent = new Intent(view.getContext(),ViewNoteActivity.class);
                 Note note = adapter.getItem(position);
                 intent.putExtra("note_id", note.getId());
                 startActivity(intent);

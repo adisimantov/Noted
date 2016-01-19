@@ -45,17 +45,29 @@ public class MainActivity extends Activity {
         // Init databse model with context
         Model.getInstance().init(this);
         //Model.getInstance().setLastSyncTime(null);
-        Model.getInstance().getAllLocalNotesAsync(new Model.GetNotesListener() {
+
+   /*   Model.getInstance().getAllLocalNotesAsync(new Model.GetNotesListener() {
+            @Override
+            public void onResult(List<Note> notes) {
+                for (Note note : notes) {
+                    Log.d("DEL", "" + note.getId());
+                    Model.getInstance().deleteLocalNote(note.getId());
+                }
+            }
+        });
+        Model.getInstance().setLastSyncTime(null);*/
+/*        Model.getInstance().syncNotesFromServer(new Model.GetNotesListener() {
             @Override
             public void onResult(List<Note> notes) {
                 for (Note note : notes) {
                     Log.d("aa", note.getId() + " " + note.isShown() + " " + note.getTimeToShow());
                 }
             }
-        });
+        });*/
 
         // User is not signup to digits
         if (Digits.getInstance().getSessionManager().getActiveSession() == null) {
+            Log.d("MainActivity", " User is not signup to digits");
             setContentView(R.layout.activity_sign_in);
 
             final DigitsAuthButton digitsButton = (DigitsAuthButton) findViewById(R.id.auth_button);
@@ -87,6 +99,7 @@ public class MainActivity extends Activity {
                 }
             });
         } else {
+            Log.d("MainActivity", "user registered");
             new AlarmReceiver().SetAlarm(this);
 
             // Log in with current digit user
@@ -188,6 +201,12 @@ public class MainActivity extends Activity {
 
             }
         });*/
+    }
+
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
     }
 
     @Override

@@ -9,7 +9,7 @@ import noted.noted.Models.Contact;
 import noted.noted.Models.Model;
 import noted.noted.Models.Note;
 
-public class NoteActivity extends Activity {
+public class ViewNoteActivity extends Activity {
     TextView from;
     TextView details;
 

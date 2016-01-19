@@ -8,7 +8,6 @@ import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
 import android.app.Fragment;
-import android.provider.ContactsContract;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -48,8 +47,8 @@ public class TabSentNotes extends Fragment{
         addButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(v.getContext(),Sent_note.class);
-                startActivity(intent);
+                Intent intent = new Intent(v.getContext(),SendNoteActivity.class);
+                startActivityForResult(intent, 1);
             }
         });
 
@@ -98,16 +97,17 @@ public class TabSentNotes extends Fragment{
 
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode,resultCode,data);
         Log.d("noy","Activity result");
-        if(resultCode == Activity.RESULT_OK && requestCode == SENT_NOTE){
-            Bundle bundle = data.getExtras();
-            /*
-            listAdapter.notifyDataSetChanged();
-            listView1.setAdapter(listAdapter);*/
-            Note note = new Note(bundle.getString(FROM), bundle.getString(TO), bundle.getString(DETAILS),
-                    bundle.getString(SENT_TIME),bundle.getString(TIME_TO_SHOW), null,null);
-            adapter.lNotes.add(note);
-            adapter.notifyDataSetChanged();
+        if (requestCode == 1) {
+
+            if (resultCode == Activity.RESULT_OK && requestCode == SENT_NOTE) {
+                Bundle bundle = data.getExtras();
+                Note note = new Note(bundle.getString(FROM), bundle.getString(TO), bundle.getString(DETAILS),
+                        bundle.getString(SENT_TIME), bundle.getString(TIME_TO_SHOW), null, null);
+                adapter.lNotes.add(note);
+                adapter.notifyDataSetChanged();
+            }
         }
     }
 }

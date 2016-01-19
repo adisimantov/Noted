@@ -1,16 +1,11 @@
 package noted.noted;
 
 import android.app.Activity;
-import android.app.AlertDialog;
-import android.content.Context;
 import android.content.Intent;
 import android.database.Cursor;
-import android.location.Location;
 import android.net.Uri;
 import android.os.Bundle;
-import android.provider.Contacts;
 import android.provider.ContactsContract;
-import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
@@ -32,7 +27,7 @@ import noted.noted.Models.Contact;
 import noted.noted.Models.Model;
 import noted.noted.Models.Note;
 
-public class Sent_note extends Activity {
+public class SendNoteActivity extends Activity {
     static final int PICK_CONTACT = 1;
     static final int PLACE_PICKER_RESULT = 2;
 
@@ -60,7 +55,7 @@ public class Sent_note extends Activity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_sent_note);
+        setContentView(R.layout.activity_send_note);
 
         contactButton = (ImageButton) findViewById(R.id.sentViewContactBtn);
         contactTo = (TextView) findViewById(R.id.sentViewTo);
@@ -132,8 +127,8 @@ public class Sent_note extends Activity {
                         intent.putExtra(TIME_TO_SHOW, note.getTimeToShow());
                         intent.putExtra(LOCATION_TO_SHOW, "");
                         setResult(RESULT_OK, intent);
-                        finish();
                         acIndicator.setVisibility(View.INVISIBLE);
+                        finish();
                     }
                 });
             }
@@ -172,7 +167,7 @@ public class Sent_note extends Activity {
                 PlacePicker.IntentBuilder builder = new PlacePicker.IntentBuilder();
 
                 try {
-                    startActivityForResult(builder.build(Sent_note.this), PLACE_PICKER_RESULT);
+                    startActivityForResult(builder.build(SendNoteActivity.this), PLACE_PICKER_RESULT);
                 } catch (GooglePlayServicesRepairableException e) {
                     e.printStackTrace();
                 } catch (GooglePlayServicesNotAvailableException e) {
