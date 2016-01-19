@@ -36,9 +36,9 @@
             android:name="com.google.android.geo.API_KEY"
             android:value="AIzaSyCPnnMzqVs_TCKexscCa-c8oYJO7Ny4QQg" />
 
-        <activity android:name=".NoteActivity" >
+        <activity android:name=".ViewNoteActivity" >
             </activity>
-        <activity android:name=".Sent_note" >
+        <activity android:name=".SendNoteActivity" >
             </activity>
         <meta-data
             android:name="com.google.android.gms.version"

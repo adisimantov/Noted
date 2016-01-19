@@ -304,7 +304,7 @@ public class Model {
                         public void onResult(boolean result) {
                             listener.onResult(result, noteRemote);
                         }
-                    },note);
+                    }, note);
                 } else {
                     listener.onResult(false, noteRemote);
                 }

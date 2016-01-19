@@ -12,7 +12,7 @@ import java.util.List;
  * Created by Anna on 30-Dec-15.
  */
 public class ModelSql {
-    final static int VERSION = 9;
+    final static int VERSION = 10;
     private Helper dbHelper;
 
     public void init(Context context) {

@@ -1,12 +1,14 @@
 package noted.noted;
 
+import android.annotation.TargetApi;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.os.Build;
 import android.os.Bundle;
 import android.app.Fragment;
-import android.provider.ContactsContract;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -22,6 +24,7 @@ import noted.noted.Models.Note;
  */
 public class TabSentNotes extends Fragment{
     static final int SENT_NOTE=1;
+    private final static String ID = "ID";
     private final static String FROM = "FROM";
     private final static String TO = "TO";
     private final static String DETAILS = "DETAILS";
@@ -45,8 +48,8 @@ public class TabSentNotes extends Fragment{
         addButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(v.getContext(),Sent_note.class);
-                startActivity(intent);
+                Intent intent = new Intent(v.getContext(),SendNoteActivity.class);
+                startActivityForResult(intent, SENT_NOTE);
             }
         });
 
@@ -80,12 +83,13 @@ public class TabSentNotes extends Fragment{
         });
 
         sentGrid.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @TargetApi(Build.VERSION_CODES.M)
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                Intent intent = new Intent(view.getContext(), NoteActivity.class);
+                Intent intent = new Intent(view.getContext(),ViewNoteActivity.class);
                 Note note = adapter.getItem(position);
                 intent.putExtra("note_id", note.getId());
-                startActivityForResult(intent,SENT_NOTE);
+                startActivity(intent);
             }
         });
 
@@ -94,15 +98,16 @@ public class TabSentNotes extends Fragment{
 
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
-        if(resultCode == Activity.RESULT_OK && requestCode == SENT_NOTE){
-            Bundle bundle = data.getExtras();
-            /*
-            listAdapter.notifyDataSetChanged();
-            listView1.setAdapter(listAdapter);*/
-            Note note = new Note(bundle.getString(FROM), bundle.getString(TO), bundle.getString(DETAILS),
-                    bundle.getString(SENT_TIME),bundle.getString(TIME_TO_SHOW), null,null);
-            adapter.lNotes.add(note);
-            adapter.notifyDataSetChanged();
-        }
+        super.onActivityResult(requestCode,resultCode,data);
+        Log.d("noy","Activity result");
+
+            if (resultCode == Activity.RESULT_OK && requestCode == SENT_NOTE) {
+                Bundle bundle = data.getExtras();
+                Note note = new Note(bundle.getString(ID), bundle.getString(FROM), bundle.getString(TO), bundle.getString(DETAILS),
+                        bundle.getString(SENT_TIME), bundle.getString(TIME_TO_SHOW), null, null);
+                adapter.lNotes.add(note);
+                adapter.notifyDataSetChanged();
+            }
+
     }
 }

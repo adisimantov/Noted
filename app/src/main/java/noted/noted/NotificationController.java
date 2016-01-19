@@ -55,7 +55,7 @@ public class NotificationController {
 
 
     public void notify(String from, String details, String id, Context context){
-        Intent notificationIntent = new Intent(context, NoteActivity.class);
+        Intent notificationIntent = new Intent(context, ViewNoteActivity.class);
         notificationIntent.putExtra("note_id", id);
         // use System.currentTimeMillis() to have a unique ID for the pending intent
         PendingIntent pIntent = PendingIntent.getActivity(context, (int) System.currentTimeMillis(), notificationIntent, 0);

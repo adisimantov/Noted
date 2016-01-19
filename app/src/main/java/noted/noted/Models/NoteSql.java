@@ -72,7 +72,7 @@ public class NoteSql {
         values.put(NOTE_TIME_TO_SHOW, note.getTimeToShow());
         values.put(NOTE_LNG_TO_SHOW,(note.getLocationToShow() == null) ? null : note.getLocationToShow().getLongitudeToShow());
         values.put(NOTE_LAT_TO_SHOW,(note.getLocationToShow() == null) ? null : note.getLocationToShow().getLatitudeToShow());
-        values.put(NOTE_TIME_TO_SHOW, note.getLocationToShowName());
+        values.put(NOTE_LOCATION_TO_SHOW, note.getLocationToShowName());
 
         long note_id = db.insert(NOTE_TABLE, NOTE_ID, values);
         return note_id;
@@ -97,7 +97,7 @@ public class NoteSql {
         values.put(NOTE_TIME_TO_SHOW, note.getTimeToShow());
         values.put(NOTE_LNG_TO_SHOW,(note.getLocationToShow() == null) ? null : note.getLocationToShow().getLongitudeToShow());
         values.put(NOTE_LAT_TO_SHOW, (note.getLocationToShow() == null) ? null : note.getLocationToShow().getLatitudeToShow());
-        values.put(NOTE_TIME_TO_SHOW, note.getLocationToShowName());
+        values.put(NOTE_LOCATION_TO_SHOW, note.getLocationToShowName());
 
         int rows_updated = db.update(NOTE_TABLE, values, NOTE_ID + "= ?", new String[]{note.getId()});
         return rows_updated;
