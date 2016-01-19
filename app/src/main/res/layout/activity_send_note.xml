@@ -44,17 +44,19 @@
                 android:layout_alignParentTop="true"
                 android:layout_marginTop="100dp"
                 android:layout_marginLeft="30dp"
+                android:inputType="number"
                 />
 
             <ImageButton
                 android:id="@+id/sentViewContactBtn"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:src="@android:drawable/stat_sys_phone_call_on_hold"
+                android:src="@android:drawable/ic_menu_call"
                 android:layout_alignParentLeft="true"
                 android:layout_alignParentTop="true"
                 android:layout_marginTop="100dp"
-                android:layout_marginLeft="30dp"/>
+                android:layout_marginLeft="30dp"
+                android:background="@null"/>
 
         </LinearLayout>
 
@@ -173,12 +175,13 @@
         </LinearLayout>
 
 
-        <Button
+        <ImageButton
             android:id="@+id/sentBtn"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginLeft="30dp"
-            android:text="Sent"/>
+            android:src="@android:drawable/ic_menu_send"
+            android:background="@null"/>
 
     </LinearLayout>
 

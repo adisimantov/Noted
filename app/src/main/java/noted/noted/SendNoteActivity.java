@@ -42,7 +42,7 @@ public class SendNoteActivity extends Activity {
     ImageButton  contactButton;
     TextView     contactTo;
     TextView     details;
-    Button sendBtn;
+    ImageButton sendBtn;
     Spinner      spinner;
     DateEditText det;
     TimeEditText tet;
@@ -60,7 +60,7 @@ public class SendNoteActivity extends Activity {
 
         contactButton = (ImageButton) findViewById(R.id.sentViewContactBtn);
         contactTo = (TextView) findViewById(R.id.sentViewTo);
-        sendBtn = (Button) findViewById(R.id.sentBtn);
+        sendBtn = (ImageButton) findViewById(R.id.sentBtn);
         details = (TextView) findViewById(R.id.sentViewDetails);
         spinner = (Spinner) findViewById(R.id.typeSpinner);
         det = (DateEditText) findViewById(R.id.add_note_date);
@@ -144,10 +144,10 @@ public class SendNoteActivity extends Activity {
                 switch (item) {
                     case ("Time"):
                         timeFL.setVisibility(FrameLayout.VISIBLE);
-                        locationFL.setVisibility(FrameLayout.INVISIBLE);
+                        locationFL.setVisibility(FrameLayout.GONE);
                         break;
                     case ("Location"):
-                        timeFL.setVisibility(FrameLayout.INVISIBLE);
+                        timeFL.setVisibility(FrameLayout.GONE);
                         locationFL.setVisibility(FrameLayout.VISIBLE);
                         break;
                 }
