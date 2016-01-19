@@ -12,8 +12,6 @@ import java.util.List;
  * Created by Anna on 30-Dec-15.
  */
 public class ModelParse {
-    public final static String DEFAULT_DATE_FORMAT = "yyyy'-'MM'-'dd'T'HH':'mm':'ss.SSS'Z'";
-    public final static String DEFAULT_TIME_ZONE = "GMT";
 
     public void init(Context context) {
         Parse.initialize(context);

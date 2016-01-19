@@ -7,49 +7,44 @@ import android.content.Context;
 import android.content.Intent;
 import android.util.Log;
 
-import com.google.android.gms.common.ConnectionResult;
-import com.google.android.gms.common.GooglePlayServicesUtil;
-
+import java.util.ArrayList;
 import java.util.List;
 
-import noted.noted.GeofenceController;
 import noted.noted.Models.Model;
 import noted.noted.Models.Note;
+import noted.noted.Services.GeofenceNoteService;
 
 public class AlarmReceiver extends BroadcastReceiver {
 
     @Override
-    public void onReceive(final Context context, Intent intent) {
-
+    public void onReceive(final Context context, final Intent intent) {
         Model.getInstance().init(context);
-        Model.getInstance().syncNotesFromServer(new Model.SyncNotesListener() {
+        Model.getInstance().syncNotesFromServer(new Model.GetNotesListener() {
             @Override
-            public void onResult(List<Note> data) {
-                Log.d("AlarmReceiver", "syncing data......" + data.size());
-                GeofenceController.getInstance().init(context);
-                GeofenceController.getInstance().connectToApiClient();
-                for (Note note : data) {
-                    Log.d("AlarmReceiver", note.getId() + " " + note.getTimeToShow());
+            public void onResult(List<Note> notes) {
+                Log.d("Alarm", "Syncing Data....");
+                List<String> geoNotes = new ArrayList<String>();
+
+                for (Note note : notes) {
                     if (note.getTimeToShow() != null) {
-                        new NotificationAlarmReceiver().SetAlarm(context, note);
+                        new NotificationAlarmReceiver().setAlarm(context, note);
 
                     } else if (note.getLocationToShow() != null) {
-
-                        GeofenceController.getInstance().addGeofence(note);
+                        geoNotes.add(note.getId());
                     }
                 }
-                GeofenceController.getInstance().disconnectApiClient();
 
-               /* new NotificationAlarmReceiver().SetAlarm(context, data.get(0));
-                geofenceController.addGeofence(data.get(0));
-*/
+                if (geoNotes.size() > 0) {
+                    Log.d("Alarm","starting service");
+                    Intent intentS = new Intent(context, GeofenceNoteService.class);
+                    intentS.putStringArrayListExtra(GeofenceNoteService.NOTE_PARAM_NAME,(ArrayList<String>)geoNotes);
+                    context.startService(intentS);
+                }
             }
         });
     }
 
-
-    public void SetAlarm(final Context context) {
-        Log.d("alarm", "set alarm sync");
+    public void setAlarm(final Context context) {
         Intent intent = new Intent(context, AlarmReceiver.class);
         PendingIntent recurringDownload = PendingIntent.getBroadcast(context,
                 0, intent, PendingIntent.FLAG_CANCEL_CURRENT);

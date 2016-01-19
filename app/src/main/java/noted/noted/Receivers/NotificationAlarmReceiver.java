@@ -41,7 +41,7 @@ public class NotificationAlarmReceiver extends BroadcastReceiver {
         NotificationController.getInstance().notify(intent, context);
     }
 
-    public void SetAlarm(Context context, Note note)
+    public void setAlarm(Context context, Note note)
     {
         Log.d("NotificationAlarmRecei", "set alarm notification!");
 

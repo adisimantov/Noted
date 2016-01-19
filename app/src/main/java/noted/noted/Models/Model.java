@@ -47,13 +47,6 @@ public class Model {
         }
     }
 
-    public String getCurrentGMTDate() {
-        Calendar cal = Calendar.getInstance();
-        DateFormat formatter = new SimpleDateFormat(remote.DEFAULT_DATE_FORMAT);
-        formatter.setTimeZone(TimeZone.getTimeZone(remote.DEFAULT_TIME_ZONE));
-        return formatter.format((cal.getTime()));
-    }
-
     public String getCurrentTimestamp() {
         Calendar cal = Calendar.getInstance();
         DateFormat formatter = new SimpleDateFormat(APP_DEFAULT_TIMESTAMP_FORMAT);
@@ -319,11 +312,7 @@ public class Model {
         });
     }
 
-    public interface SyncNotesListener {
-        public void onResult(List<Note> data);
-    }
-
-    public void syncNotesFromServer(final SyncNotesListener listener){
+    public void syncNotesFromServer(final GetNotesListener listener){
         String timestamp = getLastSyncTime();
         String to = getCurrUser().getPhoneNumber();
         remote.getAllNotes(new GetNotesListener() {
@@ -333,7 +322,7 @@ public class Model {
                     local.addNote(note);
                 }
                 listener.onResult(notes);
-                setLastSyncTime(getCurrentGMTDate());
+                setLastSyncTime(getCurrentTimestamp());
             }
         }, timestamp, to);
     }
