@@ -168,7 +168,9 @@
                 android:elegantTextHeight="false"
                 android:foregroundGravity="top"
                 android:layout_marginRight="35dp"
-                android:gravity="center_horizontal" />
+                android:gravity="center_horizontal"
+                android:maxLength="150"
+                />
         </LinearLayout>
 
 
