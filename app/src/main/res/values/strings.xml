@@ -21,7 +21,6 @@
         <item>Location</item>
     </string-array>
     <string name="enter_contact_message">Please enter contact</string>
-    <string name="choose_location">Choose location</string>
     <string name="choose_location_message">Please choose location</string>
 
 
