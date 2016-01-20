@@ -1,6 +1,5 @@
 package noted.noted.Services;
 
-import android.app.IntentService;
 import android.app.PendingIntent;
 import android.app.Service;
 import android.content.Context;
@@ -21,10 +20,11 @@ import java.util.List;
 
 import noted.noted.Models.Model;
 import noted.noted.Models.Note;
-import noted.noted.Receivers.NotificationAlarmReceiver;
+import noted.noted.Utils;
 
 /**
- * Created by Anna on 19-Jan-16.
+ * Created by Adi on 19-Jan-16.
+ * Connects to google location api in order to add or remove geofences of notes the user received
  */
 public class GeofenceNoteService extends Service implements GoogleApiClient.ConnectionCallbacks, GoogleApiClient.OnConnectionFailedListener {
 
@@ -51,7 +51,7 @@ public class GeofenceNoteService extends Service implements GoogleApiClient.Conn
 
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
-        Log.d(TAG,"service started");
+        Log.d(TAG, "service started");
         this.geoNotes = intent.getStringArrayListExtra(NOTE_PARAM_NAME);
         this.geoNotesToRemove = intent.getStringArrayListExtra(REMOVE_NOTE_PARAM_NAME);
         mGoogleApiClient.connect();
@@ -60,7 +60,7 @@ public class GeofenceNoteService extends Service implements GoogleApiClient.Conn
 
     @Override
     public void onDestroy() {
-        Log.d(TAG,"bye bye");
+        Log.d(TAG, "bye bye");
         mGoogleApiClient.disconnect();
         super.onDestroy();
     }
@@ -112,17 +112,15 @@ public class GeofenceNoteService extends Service implements GoogleApiClient.Conn
         }
     }
 
-    public void addGeofence(Note note){
+    public void addGeofence(Note note) {
         try {
             LocationServices.GeofencingApi.addGeofences(
                     mGoogleApiClient,
                     // The GeofenceRequest object.
                     getGeofencingRequest(note),
-                    // A pending intent that that is reused when calling removeGeofences(). This
-                    // pending intent is used to generate an intent when a matched geofence
+                    // This pending intent is used to generate an intent when a matched geofence
                     // transition is observed.
                     getGeofencePendingIntent(note)
-
             );
 
             Log.i(TAG, "addGeofences");
@@ -132,7 +130,7 @@ public class GeofenceNoteService extends Service implements GoogleApiClient.Conn
         }
     }
 
-    public void removeGeofence(List<String> listToRemove){
+    public void removeGeofence(List<String> listToRemove) {
         try {
             LocationServices.GeofencingApi.removeGeofences(mGoogleApiClient, listToRemove);
             Log.i(TAG, "removeGeofence");
@@ -143,27 +141,23 @@ public class GeofenceNoteService extends Service implements GoogleApiClient.Conn
     }
 
     /**
-     * This sample hard codes geofence data. A real app might dynamically create geofences based on
-     * the user's location.
+     * Build geofence for note
      */
-    public  List<Geofence> createGeofenceList(Note note) {
+    public List<Geofence> createGeofenceList(Note note) {
 
         List<Geofence> geofenceList = new ArrayList<Geofence>();
         geofenceList.add(new Geofence.Builder()
-                // Set the request ID of the geofence. This is a string to identify this
-                // geofence.
+                // Set the request ID of the geofence. This is a string to identify this geofence.
                 .setRequestId(note.getId())
-                // Set the circular region of this geofence.
+                        // Set the circular region of this geofence.
                 .setCircularRegion(
                         note.getLocationToShow().getLatitudeToShow(),
                         note.getLocationToShow().getLongitudeToShow(),
                         GEOFENCE_RADIUS_IN_METERS
                 )
-                // Set the expiration duration of the geofence. This geofence gets automatically
-                // removed after this period of time.
+                        // We will remove the geofence ourself when it is pushed
                 .setExpirationDuration(Geofence.NEVER_EXPIRE)
-                // Set the transition types of interest. Alerts are only generated for these
-                // transition. We track entry and exit transitions in this sample.
+                        // Set the transition alert at entering
                 .setTransitionTypes(Geofence.GEOFENCE_TRANSITION_ENTER)
                 .build());
 
@@ -190,8 +184,7 @@ public class GeofenceNoteService extends Service implements GoogleApiClient.Conn
     }
 
     /**
-     * Gets a PendingIntent to send with the request to add or remove Geofences. Location Services
-     * issues the Intent inside this PendingIntent whenever a geofence transition occurs for the
+     * Location Services issues the Intent inside this PendingIntent whenever a geofence transition occurs for the
      * current list of geofences.
      *
      * @return A PendingIntent for the IntentService that handles geofence transitions.
@@ -199,13 +192,11 @@ public class GeofenceNoteService extends Service implements GoogleApiClient.Conn
     private PendingIntent getGeofencePendingIntent(Note note) {
 
         Intent intent = new Intent(context, GeofenceTransitionService.class);
-        // We use FLAG_UPDATE_CURRENT so that we get the same pending intent back when calling
-        // addGeofences() and removeGeofences().
-        intent.putExtra("noteID", note.getId());
-        intent.putExtra("noteFrom", note.getFrom() + " By Location");
-        intent.putExtra("noteDetails", note.getDetails());
+        intent.putExtra(Utils.NOTE_ID_PARAM, note.getId());
+        intent.putExtra(Utils.NOTE_FROM_PARAM, note.getFrom());
+        intent.putExtra(Utils.NOTE_DETAILS_PARAM, note.getDetails());
 
-        return PendingIntent.getService(context, (int)System.currentTimeMillis(), intent, PendingIntent.FLAG_UPDATE_CURRENT);
+        return PendingIntent.getService(context, (int) System.currentTimeMillis(), intent, PendingIntent.FLAG_UPDATE_CURRENT);
     }
 
     private void logSecurityException(SecurityException securityException) {
