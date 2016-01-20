@@ -52,7 +52,7 @@ public class NoteSql {
                 double latToShow = cursor.getDouble(lat_to_show_index);
                 String locToShow = cursor.getString(location_to_show_index);
 
-                Note st = new Note(id, from, to, details, sentTime, timeToShow, new Location(lngToShow, latToShow), locToShow, isShown);
+                Note st = new Note(id, from, to, details, sentTime, timeToShow, new Location(latToShow,lngToShow), locToShow, isShown);
                 data.add(st);
             } while (cursor.moveToNext());
         }
@@ -145,7 +145,7 @@ public class NoteSql {
             double latToShow = cursor.getDouble(lat_to_show_index);
             String locToShow = cursor.getString(location_to_show_index);
 
-            note = new Note(id, from, to, details, sentTime, timeToShow, new Location(lngToShow, latToShow), locToShow, isShown);
+            note = new Note(id, from, to, details, sentTime, timeToShow, new Location(latToShow,lngToShow), locToShow, isShown);
         }
 
         return note;

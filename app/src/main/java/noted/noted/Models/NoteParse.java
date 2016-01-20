@@ -32,7 +32,6 @@ public class NoteParse {
     private final static String NOTE_TIME_TO_SHOW = "TIME_TO_SHOW";
     private final static String NOTE_LOCATION_TO_SHOW = "LOCATION_TO_SHOW";
     private final static String NOTE_LOCATION_TO_SHOW_NAME = "LOCATION_TO_SHOW_NAME";
-    private final static String NOTE_CREATED_AT = "createdAt";
 
     private static Note createNoteFromParse(ParseObject po) {
         String id = po.getObjectId();
@@ -46,7 +45,7 @@ public class NoteParse {
 
         Location location = null;
         if (locationToShow != null) {
-            location = new Location(locationToShow.getLongitude(), locationToShow.getLatitude());
+            location = new Location(locationToShow.getLatitude(), locationToShow.getLongitude());
         }
 
         return (new Note(id, from, to, details, sentTime, timeToShow, location, locationToShowName));
@@ -62,8 +61,8 @@ public class NoteParse {
 
         ParseGeoPoint location = null;
         if (note.getLocationToShow() != null) {
-            location = new ParseGeoPoint(note.getLocationToShow().getLongitudeToShow(),
-                    note.getLocationToShow().getLatitudeToShow());
+            location = new ParseGeoPoint(note.getLocationToShow().getLatitudeToShow(),
+                                         note.getLocationToShow().getLongitudeToShow());
         }
 
         parseNote.put(NOTE_LOCATION_TO_SHOW, (location == null) ? JSONObject.NULL : location);

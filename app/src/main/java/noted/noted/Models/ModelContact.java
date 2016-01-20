@@ -44,11 +44,14 @@ public class ModelContact {
             }
         }
 
+        addMe();
+    }
+
+    public void addMe() {
         if (Model.getInstance().getCurrUser() != null) {
             Contact contact  = contact = new Contact("Me", "Me", Model.getInstance().getCurrUser().getPhoneNumber());
             contactsList.add(contact);
         }
-
     }
 
     // In future will pick the user country code somehow

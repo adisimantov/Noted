@@ -260,10 +260,14 @@ public class Model {
             public void onResult(boolean result) {
                 if (result) {
                     listener.onResult(true);
+                    addMe();
                 } else {
                     remote.userSignUp(user, new SimpleSuccessListener() {
                         @Override
                         public void onResult(boolean result) {
+                            if (result) {
+                                addMe();
+                            }
                             listener.onResult(result);
                         }
                     });
@@ -341,6 +345,10 @@ public class Model {
 
     public Contact getContact(String phoneNumber) {
         return contacts.getContact(phoneNumber);
+    }
+
+    public void addMe() {
+        contacts.addMe();
     }
 
     public Contact getContactById(String id) {

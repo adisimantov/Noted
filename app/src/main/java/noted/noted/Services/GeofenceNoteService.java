@@ -32,7 +32,7 @@ public class GeofenceNoteService extends Service implements GoogleApiClient.Conn
 
     public static final String NOTE_PARAM_NAME = "GEO_NOTES";
     public static final String REMOVE_NOTE_PARAM_NAME = "GEO_NOTES_TO_REMOVE";
-    public static final float GEOFENCE_RADIUS_IN_METERS = 50;
+    public static final float GEOFENCE_RADIUS_IN_METERS = 100;
 
     private Context context;
     private List<String> geoNotes;
@@ -51,7 +51,7 @@ public class GeofenceNoteService extends Service implements GoogleApiClient.Conn
 
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
-        Log.d(TAG, "service started");
+        Log.d(TAG, "Service started");
         this.geoNotes = intent.getStringArrayListExtra(NOTE_PARAM_NAME);
         this.geoNotesToRemove = intent.getStringArrayListExtra(REMOVE_NOTE_PARAM_NAME);
         mGoogleApiClient.connect();
@@ -60,7 +60,7 @@ public class GeofenceNoteService extends Service implements GoogleApiClient.Conn
 
     @Override
     public void onDestroy() {
-        Log.d(TAG, "bye bye");
+        Log.d(TAG, "Bye bye");
         mGoogleApiClient.disconnect();
         super.onDestroy();
     }
@@ -123,7 +123,7 @@ public class GeofenceNoteService extends Service implements GoogleApiClient.Conn
                     getGeofencePendingIntent(note)
             );
 
-            Log.i(TAG, "addGeofences");
+            Log.d(TAG, "addGeofences " + note.getId() + " " + note.getDetails() + " " + note.getLocationToShow().toString());
         } catch (SecurityException securityException) {
             // Catch exception generated if the app does not use ACCESS_FINE_LOCATION permission.
             logSecurityException(securityException);
@@ -155,9 +155,9 @@ public class GeofenceNoteService extends Service implements GoogleApiClient.Conn
                         note.getLocationToShow().getLongitudeToShow(),
                         GEOFENCE_RADIUS_IN_METERS
                 )
-                        // We will remove the geofence ourself when it is pushed
+                // We will remove the geofence ourself when it is pushed
                 .setExpirationDuration(Geofence.NEVER_EXPIRE)
-                        // Set the transition alert at entering
+                // Set the transition alert at entering
                 .setTransitionTypes(Geofence.GEOFENCE_TRANSITION_ENTER)
                 .build());
 

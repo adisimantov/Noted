@@ -1,24 +1,14 @@
 package noted.noted.Receivers;
 
 import android.app.AlarmManager;
-import android.app.Notification;
-import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
-import android.os.HandlerThread;
-import android.os.Looper;
-import android.util.Log;
 
-import java.util.Calendar;
-import java.util.logging.Handler;
-
-import noted.noted.MainActivity;
 import noted.noted.Models.Model;
 import noted.noted.Models.Note;
 import noted.noted.NotificationController;
-import noted.noted.R;
 import noted.noted.Utils;
 
 /**

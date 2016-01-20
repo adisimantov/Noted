@@ -117,7 +117,7 @@ public class SendNoteActivity extends Activity {
                     note = new Note(Model.getInstance().getCurrUser().getPhoneNumber(),
                             Model.getInstance().getPhoneNumberWithCountry(contactTo.getText().toString()),
                             details.getText().toString(), Model.getInstance().getCurrentTimestamp(),
-                            null, new noted.noted.Models.Location(locLat.longitude, locLat.latitude), noteAdress);
+                            null, new noted.noted.Models.Location(locLat.latitude, locLat.longitude), noteAdress);
                 }
 
                 Model.getInstance().addLocalAndRemoteNote(note, new Model.AddNoteListener() {

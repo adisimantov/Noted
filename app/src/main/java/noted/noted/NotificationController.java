@@ -17,6 +17,7 @@ import noted.noted.Models.Note;
 public class NotificationController {
 
     private static int notificationCode = 1;
+    protected static final String TAG = "NotificationController";
 
     private final static NotificationController instance = new NotificationController();
 
@@ -51,6 +52,7 @@ public class NotificationController {
         }
 
         String details = intent.getStringExtra(Utils.NOTE_DETAILS_PARAM);
+        Log.d(TAG,"" + id + " " + from + " " + details);
         notify(id, from, details, context);
     }
 
