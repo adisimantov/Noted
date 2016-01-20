@@ -11,4 +11,6 @@ public class Utils {
     public static final String NOTE_DETAILS_PARAM = "NOTE_DETAILS";
     public static final String TIME = "Time";
     public static final String LOCATION = "Location";
+
+    public static final String LTR_CHAR = "\u200E";
 }
