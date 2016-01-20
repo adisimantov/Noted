@@ -82,7 +82,7 @@ public class NoteParse {
                     listener.onResult(true, note);
                 } else {
                     listener.onResult(false, note);
-                    Log.d(getClass().getSimpleName(), "Note add error: " + e);
+                    Log.d(TAG, "Note add error: " + e);
                 }
             }
         });
@@ -103,7 +103,7 @@ public class NoteParse {
                                 listener.onResult(true);
                             } else {
                                 listener.onResult(false);
-                                Log.d(getClass().getSimpleName(), "Note update error: " + e);
+                                Log.d(TAG, "Note update error: " + e);
                             }
                         }
                     });

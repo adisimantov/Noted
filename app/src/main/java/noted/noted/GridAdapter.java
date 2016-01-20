@@ -25,15 +25,12 @@ public class GridAdapter extends BaseAdapter {
     public GridAdapter(Context context, boolean isReceived) {
         this.context = context;
         this.isReceived = isReceived;
-        Log.d("GridAdapter", "isReceived" + isReceived);
         if (this.isReceived) {
-            Log.d("GridAdapter", "Received ");
             Model.getInstance().getReceivedLocalNotesAsync(new Model.GetNotesListener() {
                                                                @Override
                                                                public void onResult(List<Note> notes) {
                                                                    if (notes.size() > 0) {
                                                                        for (Note note : notes) {
-                                                                           Log.d("GridAdapter", "addedReceived " + note.getId());
                                                                            lNotes.add(note);
                                                                        }
                                                                        notifyDataSetChanged();
@@ -42,13 +39,11 @@ public class GridAdapter extends BaseAdapter {
                                                            },
                     Model.getInstance().getCurrUser().getPhoneNumber(), true);
         } else {
-            Log.d("GridAdapter", "sent");
             Model.getInstance().getSentLocalNotesAsync(new Model.GetNotesListener() {
                                                            @Override
                                                            public void onResult(List<Note> notes) {
                                                                if (notes.size() > 0) {
                                                                    for (Note note : notes) {
-                                                                       Log.d("GridAdapter", "addedSent " + note.getId());
                                                                        lNotes.add(note);
                                                                    }
                                                                    notifyDataSetChanged();
@@ -57,18 +52,6 @@ public class GridAdapter extends BaseAdapter {
                                                        },
                     Model.getInstance().getCurrUser().getPhoneNumber());
         }
-/*
-        Model.getInstance().getAllLocalNotesAsync(new Model.GetNotesListener() {
-            @Override
-            public void onResult(List<Note> notes) {
-                if (notes.size() > 0) {
-                    for (Note note : notes) {
-                        lNotes.add(note);
-                    }
-                    notifyDataSetChanged();
-                }
-            }
-        });*/
     }
 
     @Override
@@ -118,6 +101,4 @@ public class GridAdapter extends BaseAdapter {
 
         return convertView;
     }
-
-
 }

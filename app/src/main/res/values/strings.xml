@@ -1,7 +1,7 @@
 <resources>
     <string name="app_name">Noted</string>
     <string name="receive_tab">Received notes</string>
-    <string name="sent_tab">sent notes</string>
+    <string name="sent_tab">Sent Notes</string>
     <string name="delete_note_message">Do you want to delete the note?</string>
     <string name="yes_button">Yes</string>
     <string name="no_button">No</string>

@@ -28,10 +28,6 @@ import noted.noted.Receivers.AlarmReceiver;
 
 public class MainActivity extends Activity {
 
-    // Note: Your consumer key and secret should be obfuscated in your source code before shipping.
-    private static final String TWITTER_KEY = "Fdmw3315pp4jkT5XzrJaGrZCf";
-    private static final String TWITTER_SECRET = "4GqParZLqrr7cggWANygsAP732WEiVi1cEE3ZxV8NG4OiVjG74";
-
 
     // Declaring our tabs and the corresponding fragments.
     ActionBar.Tab receivedTab, sentTab;
@@ -41,7 +37,7 @@ public class MainActivity extends Activity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        TwitterAuthConfig authConfig = new TwitterAuthConfig(TWITTER_KEY, TWITTER_SECRET);
+        TwitterAuthConfig authConfig = new TwitterAuthConfig(Utils.TWITTER_KEY, Utils.TWITTER_SECRET);
         Fabric.with(this, new TwitterCore(authConfig), new Digits());
 
         // Init databse model with context
@@ -50,20 +46,13 @@ public class MainActivity extends Activity {
             @Override
             public void onResult(List<Note> notes) {
                 for (Note note : notes) {
-                    Log.d("DEL","" + note.getId());
+                    Log.d("DEL", "" + note.getId());
                     Model.getInstance().deleteLocalNote(note.getId());
                 }
+
             }
         });
-       Model.getInstance().setLastSyncTime(null);*/
-/*        Model.getInstance().syncNotesFromServer(new Model.GetNotesListener() {
-            @Override
-            public void onResult(List<Note> notes) {
-                for (Note note : notes) {
-                    Log.d("aa", note.getId() + " " + note.isShown() + " " + note.getTimeToShow());
-                }
-            }
-        });*/
+        Model.getInstance().setLastSyncTime(null);*/
 
         // User is not signup to digits
         if (Digits.getInstance().getSessionManager().getActiveSession() == null) {
@@ -86,7 +75,7 @@ public class MainActivity extends Activity {
                                 finish();
                                 startActivity(getIntent());
                             } else {
-                                Toast toast = Toast.makeText(getApplicationContext(), "Failed to log in", Toast.LENGTH_SHORT);
+                                Toast.makeText(getApplicationContext(), "Failed to log in", Toast.LENGTH_SHORT);
                             }
                         }
                     });
@@ -94,7 +83,7 @@ public class MainActivity extends Activity {
 
                 @Override
                 public void failure(DigitsException exception) {
-                    Toast toast = Toast.makeText(getApplicationContext(), "Failed to sign in", Toast.LENGTH_SHORT);
+                    Toast.makeText(getApplicationContext(), "Failed to sign in", Toast.LENGTH_SHORT);
                     Log.d("Digits", "Sign in with Digits failure", exception);
                 }
             });
@@ -111,7 +100,7 @@ public class MainActivity extends Activity {
                     @Override
                     public void onResult(boolean result) {
                         if (!result) {
-                            Toast toast = Toast.makeText(getApplicationContext(), "Failed to log in", Toast.LENGTH_SHORT);
+                            Toast.makeText(getApplicationContext(), "Failed to log in", Toast.LENGTH_SHORT);
                         }
                     }
                 });
@@ -132,8 +121,8 @@ public class MainActivity extends Activity {
             actionBar.setNavigationMode(ActionBar.NAVIGATION_MODE_TABS);
 
             // Setting custom tab icons.
-            receivedTab = actionBar.newTab().setText("Received Notes");
-            sentTab = actionBar.newTab().setText("Sent Notes");
+            receivedTab = actionBar.newTab().setText(R.string.receive_tab);
+            sentTab = actionBar.newTab().setText(R.string.sent_tab);
 
             // Setting tab listeners.
             receivedTab.setTabListener(new TabListener(tabReceivedNotes));
@@ -144,7 +133,7 @@ public class MainActivity extends Activity {
             actionBar.addTab(sentTab);
         }
     }
-    
+
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
