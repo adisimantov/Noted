@@ -32,7 +32,7 @@ public class GeofenceNoteService extends Service implements GoogleApiClient.Conn
 
     public static final String NOTE_PARAM_NAME = "GEO_NOTES";
     public static final String REMOVE_NOTE_PARAM_NAME = "GEO_NOTES_TO_REMOVE";
-    public static final float GEOFENCE_RADIUS_IN_METERS = 100;
+    public static final float GEOFENCE_RADIUS_IN_METERS = 500;
 
     private Context context;
     private List<String> geoNotes;
