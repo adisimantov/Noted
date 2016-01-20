@@ -21,15 +21,16 @@ public class ModelParse {
     public void getAllNotes(Model.GetNotesListener listener, String timestamp, String to) {
         NoteParse.getAllNotesTo(listener, timestamp, to);
     }
-    public void getNote(String id, Model.GetNoteListener listener){
+
+    public void getNote(String id, Model.GetNoteListener listener) {
         NoteParse.getNote(id, listener);
     }
 
-    public void addNote(Note note, Model.AddNoteListener listener){
+    public void addNote(Note note, Model.AddNoteListener listener) {
         NoteParse.addNote(note, listener);
     }
 
-    public void updateNote(Note note, Model.SimpleSuccessListener listener){
+    public void updateNote(Note note, Model.SimpleSuccessListener listener) {
         NoteParse.updateNote(note, listener);
     }
 

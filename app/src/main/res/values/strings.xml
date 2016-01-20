@@ -5,8 +5,24 @@
     <string name="delete_note_message">Do you want to delete the note?</string>
     <string name="yes_button">Yes</string>
     <string name="no_button">No</string>
+    <string name="from">From:</string>
+    <string name="sent_at">sent at:</string>
+    <string name="to_show_at">to show at:</string>
+    <string name="Details">Details</string>
+    <string name="send_note_button">SEND NOTE</string>
+    <string name="to">To:</string>
+    <string name="phone_number">Phone Number</string>
+    <string name="show_at">Show at</string>
+    <string name="choose_location">Choose location</string>
+    <string name="time">Time</string>
+    <string name="location">Location</string>
     <string-array name="spinner_array">
         <item>Time</item>
         <item>Location</item>
     </string-array>
+    <string name="enter_contact_message">Please enter contact</string>
+    <string name="choose_location">Choose location</string>
+    <string name="choose_location_message">Please choose location</string>
+
+
 </resources>

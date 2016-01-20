@@ -13,17 +13,17 @@ import java.util.List;
  * Created by Anna on 30-Dec-15.
  */
 public class NoteSql {
-    private final static String NOTE_TABLE               = "NOTES";
-    private final static String NOTE_ID                  = "ID";
-    private final static String NOTE_FROM                = "SENDER";
-    private final static String NOTE_TO                  = "RECEIVER";
-    private final static String NOTE_DETAILS             = "DETAILS";
-    private final static String NOTE_SENT_TIME           = "SENT_TIME";
-    private final static String NOTE_TIME_TO_SHOW        = "TIME_TO_SHOW";
-    private final static String NOTE_LNG_TO_SHOW         = "LNG_TO_SHOW";
-    private final static String NOTE_LAT_TO_SHOW         = "LAT_TO_SHOW";
-    private final static String NOTE_LOCATION_TO_SHOW    = "LOCATION_TO_SHOW";
-    private final static String NOTE_IS_SHOWN            = "IS_SHOWN";
+    private final static String NOTE_TABLE = "NOTES";
+    private final static String NOTE_ID = "ID";
+    private final static String NOTE_FROM = "SENDER";
+    private final static String NOTE_TO = "RECEIVER";
+    private final static String NOTE_DETAILS = "DETAILS";
+    private final static String NOTE_SENT_TIME = "SENT_TIME";
+    private final static String NOTE_TIME_TO_SHOW = "TIME_TO_SHOW";
+    private final static String NOTE_LNG_TO_SHOW = "LNG_TO_SHOW";
+    private final static String NOTE_LAT_TO_SHOW = "LAT_TO_SHOW";
+    private final static String NOTE_LOCATION_TO_SHOW = "LOCATION_TO_SHOW";
+    private final static String NOTE_IS_SHOWN = "IS_SHOWN";
 
     private static List<Note> getNoteListFromCursor(Cursor cursor) {
         List<Note> data = new LinkedList<Note>();
@@ -52,7 +52,7 @@ public class NoteSql {
                 double latToShow = cursor.getDouble(lat_to_show_index);
                 String locToShow = cursor.getString(location_to_show_index);
 
-                Note st = new Note(id,from,to,details,sentTime,timeToShow,new Location(lngToShow,latToShow),locToShow,isShown);
+                Note st = new Note(id, from, to, details, sentTime, timeToShow, new Location(lngToShow, latToShow), locToShow, isShown);
                 data.add(st);
             } while (cursor.moveToNext());
         }
@@ -70,8 +70,8 @@ public class NoteSql {
         values.put(NOTE_SENT_TIME, note.getSentTime());
         values.put(NOTE_IS_SHOWN, note.isShown());
         values.put(NOTE_TIME_TO_SHOW, note.getTimeToShow());
-        values.put(NOTE_LNG_TO_SHOW,(note.getLocationToShow() == null) ? null : note.getLocationToShow().getLongitudeToShow());
-        values.put(NOTE_LAT_TO_SHOW,(note.getLocationToShow() == null) ? null : note.getLocationToShow().getLatitudeToShow());
+        values.put(NOTE_LNG_TO_SHOW, (note.getLocationToShow() == null) ? null : note.getLocationToShow().getLongitudeToShow());
+        values.put(NOTE_LAT_TO_SHOW, (note.getLocationToShow() == null) ? null : note.getLocationToShow().getLatitudeToShow());
         values.put(NOTE_LOCATION_TO_SHOW, note.getLocationToShowName());
 
         long note_id = db.replace(NOTE_TABLE, NOTE_ID, values);
@@ -81,7 +81,7 @@ public class NoteSql {
     public static int deleteNote(ModelSql.Helper dbHelper, String noteId) {
         SQLiteDatabase db = dbHelper.getWritableDatabase();
 
-        int rows_deleted = db.delete(NOTE_TABLE, NOTE_ID + "= ? ", new String[] {noteId});
+        int rows_deleted = db.delete(NOTE_TABLE, NOTE_ID + "= ? ", new String[]{noteId});
         return rows_deleted;
     }
 
@@ -95,7 +95,7 @@ public class NoteSql {
         values.put(NOTE_SENT_TIME, note.getSentTime());
         values.put(NOTE_IS_SHOWN, note.isShown());
         values.put(NOTE_TIME_TO_SHOW, note.getTimeToShow());
-        values.put(NOTE_LNG_TO_SHOW,(note.getLocationToShow() == null) ? null : note.getLocationToShow().getLongitudeToShow());
+        values.put(NOTE_LNG_TO_SHOW, (note.getLocationToShow() == null) ? null : note.getLocationToShow().getLongitudeToShow());
         values.put(NOTE_LAT_TO_SHOW, (note.getLocationToShow() == null) ? null : note.getLocationToShow().getLatitudeToShow());
         values.put(NOTE_LOCATION_TO_SHOW, note.getLocationToShowName());
 
@@ -107,8 +107,7 @@ public class NoteSql {
     public static List<Note> getReceivedNotes(ModelSql.Helper dbHelper, String receivedPhone, boolean shown) {
         SQLiteDatabase db = dbHelper.getReadableDatabase();
         String query = NOTE_TO + "=? AND " + NOTE_IS_SHOWN + " = ?";
-        Log.d("NoteSql", "query = " + query);
-        Cursor cursor = db.query(NOTE_TABLE, null,query , new String[]{receivedPhone,  (shown ? "1" : "0")}, null, null, null);
+        Cursor cursor = db.query(NOTE_TABLE, null, query, new String[]{receivedPhone, (shown ? "1" : "0")}, null, null, null);
         return getNoteListFromCursor(cursor);
     }
 
@@ -146,7 +145,7 @@ public class NoteSql {
             double latToShow = cursor.getDouble(lat_to_show_index);
             String locToShow = cursor.getString(location_to_show_index);
 
-            note = new Note(id,from,to,details,sentTime,timeToShow,new Location(lngToShow,latToShow),locToShow,isShown);
+            note = new Note(id, from, to, details, sentTime, timeToShow, new Location(lngToShow, latToShow), locToShow, isShown);
         }
 
         return note;
@@ -160,16 +159,16 @@ public class NoteSql {
 
     public static void create(SQLiteDatabase db) {
         db.execSQL("CREATE TABLE " + NOTE_TABLE + " (" +
-                    NOTE_ID                 + " TEXT PRIMARY KEY," +
-                    NOTE_FROM               + " TEXT NOT NULL," +
-                    NOTE_TO                 + " TEXT NOT NULL," +
-                    NOTE_DETAILS            + " TEXT NOT NULL," +
-                    NOTE_SENT_TIME          + " DATETIME NOT NULL," +
-                    NOTE_IS_SHOWN           + " BOOLEAN," +
-                    NOTE_TIME_TO_SHOW       + " DATETIME," +
-                    NOTE_LNG_TO_SHOW        + " REAL," +
-                    NOTE_LAT_TO_SHOW        + " REAL," +
-                    NOTE_LOCATION_TO_SHOW   + " TEXT" + ");");
+                NOTE_ID + " TEXT PRIMARY KEY," +
+                NOTE_FROM + " TEXT NOT NULL," +
+                NOTE_TO + " TEXT NOT NULL," +
+                NOTE_DETAILS + " TEXT NOT NULL," +
+                NOTE_SENT_TIME + " DATETIME NOT NULL," +
+                NOTE_IS_SHOWN + " BOOLEAN," +
+                NOTE_TIME_TO_SHOW + " DATETIME," +
+                NOTE_LNG_TO_SHOW + " REAL," +
+                NOTE_LAT_TO_SHOW + " REAL," +
+                NOTE_LOCATION_TO_SHOW + " TEXT" + ");");
     }
 
     public static void drop(SQLiteDatabase db) {

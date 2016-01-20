@@ -46,11 +46,11 @@ public class TimeEditText extends EditText implements TimePickerFragment.onTimeS
 
     @Override
     public boolean onTouchEvent(MotionEvent event) {
-        if (event.getAction() == MotionEvent.ACTION_DOWN){
+        if (event.getAction() == MotionEvent.ACTION_DOWN) {
             TimePickerFragment tpf = new TimePickerFragment();
             tpf.setOnTimeSetListener(this);
-            tpf.setTime(hour,minute);
-            tpf.show(((Activity)getContext()).getFragmentManager(),"TAG");
+            tpf.setTime(hour, minute);
+            tpf.show(((Activity) getContext()).getFragmentManager(), "TAG");
         }
         return true;
     }
