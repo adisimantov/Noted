@@ -74,7 +74,7 @@ public class NoteSql {
         values.put(NOTE_LAT_TO_SHOW,(note.getLocationToShow() == null) ? null : note.getLocationToShow().getLatitudeToShow());
         values.put(NOTE_LOCATION_TO_SHOW, note.getLocationToShowName());
 
-        long note_id = db.insert(NOTE_TABLE, NOTE_ID, values);
+        long note_id = db.replace(NOTE_TABLE, NOTE_ID, values);
         return note_id;
     }
 
