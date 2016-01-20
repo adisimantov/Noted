@@ -172,6 +172,7 @@ public class SendNoteActivity extends Activity {
                 PlacePicker.IntentBuilder builder = new PlacePicker.IntentBuilder();
 
                 try {
+                    acIndicator.setVisibility(View.VISIBLE);
                     startActivityForResult(builder.build(SendNoteActivity.this), PLACE_PICKER_RESULT);
                 } catch (GooglePlayServicesRepairableException e) {
                     e.printStackTrace();
@@ -213,6 +214,7 @@ public class SendNoteActivity extends Activity {
                     Place place = PlacePicker.getPlace(data, this);
                     location.setText(RTL_CHAR + place.getName());
                     locLat = place.getLatLng();
+                    acIndicator.setVisibility(View.INVISIBLE);
                 }
                 break;
         }
