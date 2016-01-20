@@ -27,7 +27,7 @@ public class TabReceivedNotes extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         viewTab = inflater.inflate(R.layout.received_notes_tab, container, false);
         receivedGrid = (GridView) viewTab.findViewById(R.id.receivedNotesGrid);
-        adapter =  new GridAdapter(viewTab.getContext(),true);
+        adapter = new GridAdapter(viewTab.getContext(), true);
         receivedGrid.setAdapter(adapter);
 
         receivedGrid.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
@@ -64,9 +64,9 @@ public class TabReceivedNotes extends Fragment {
         receivedGrid.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                Intent intent = new Intent(view.getContext(),ViewNoteActivity.class);
+                Intent intent = new Intent(view.getContext(), ViewNoteActivity.class);
                 Note note = adapter.getItem(position);
-                intent.putExtra("note_id", note.getId());
+                intent.putExtra(Utils.NOTE_ID_PARAM, note.getId());
                 startActivity(intent);
             }
         });

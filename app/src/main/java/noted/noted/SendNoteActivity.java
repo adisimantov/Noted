@@ -42,17 +42,17 @@ public class SendNoteActivity extends Activity {
     private final static String TIME_TO_SHOW = "TIME_TO_SHOW";
     private final static String LOCATION_TO_SHOW = "LOCATION_TO_SHOW";
 
-    ImageButton  contactButton;
-    TextView     contactTo;
-    TextView     details;
+    ImageButton contactButton;
+    TextView contactTo;
+    TextView details;
     Button sendBtn;
-    Spinner      spinner;
+    Spinner spinner;
     DateEditText det;
     TimeEditText tet;
-    LatLng       locLat;
-    TextView     location;
-    FrameLayout  timeFL;
-    FrameLayout  locationFL;
+    LatLng locLat;
+    TextView location;
+    FrameLayout timeFL;
+    FrameLayout locationFL;
     ProgressBar acIndicator;
 
 
@@ -91,39 +91,40 @@ public class SendNoteActivity extends Activity {
 
                 //Check contact
                 if (contactTo.getText().toString().equals("")) {
-                    Toast toast = Toast.makeText(getApplicationContext(), "Please enter contact", Toast.LENGTH_SHORT);
+                    Toast toast = Toast.makeText(getApplicationContext(), getResources().getString(R.string.enter_contact_message), Toast.LENGTH_SHORT);
                     toast.show();
                     acIndicator.setVisibility(View.GONE);
                     return;
                 }
 
-                if (spinner.getSelectedItem().equals("Time")) {
+                if (spinner.getSelectedItem().equals(getResources().getString(R.string.time))) {
                     note = new Note(Model.getInstance().getCurrUser().getPhoneNumber(),
-                                    Model.getInstance().getPhoneNumberWithCountry(contactTo.getText().toString()),
-                                    details.getText().toString(), Model.getInstance().getCurrentTimestamp(),
-                                    det.getText().toString() + " " + tet.getText().toString(), null, null);
+                            Model.getInstance().getPhoneNumberWithCountry(contactTo.getText().toString()),
+                            details.getText().toString(), Model.getInstance().getCurrentTimestamp(),
+                            det.getText().toString() + " " + tet.getText().toString(), null, null);
                 } else {
                     //Check location
                     noteAdress = location.getText().toString();
 
-                    if (spinner.getSelectedItem().equals("Location") && noteAdress.equals("Choose location")) {
-                        Toast toast = Toast.makeText(getApplicationContext(), "Please choose location", Toast.LENGTH_SHORT);
+                    if (spinner.getSelectedItem().equals(getResources().getString(R.string.location)) &&
+                            noteAdress.equals(getResources().getString(R.string.choose_location))) {
+                        Toast toast = Toast.makeText(getApplicationContext(), getResources().getString(R.string.choose_location_message), Toast.LENGTH_SHORT);
                         toast.show();
                         acIndicator.setVisibility(View.GONE);
                         return;
                     }
 
                     note = new Note(Model.getInstance().getCurrUser().getPhoneNumber(),
-                                    Model.getInstance().getPhoneNumberWithCountry(contactTo.getText().toString()),
-                                    details.getText().toString(), Model.getInstance().getCurrentTimestamp(),
-                                    null, new noted.noted.Models.Location(locLat.longitude, locLat.latitude), noteAdress);
+                            Model.getInstance().getPhoneNumberWithCountry(contactTo.getText().toString()),
+                            details.getText().toString(), Model.getInstance().getCurrentTimestamp(),
+                            null, new noted.noted.Models.Location(locLat.longitude, locLat.latitude), noteAdress);
                 }
 
                 Model.getInstance().addLocalAndRemoteNote(note, new Model.AddNoteListener() {
                     @Override
                     public void onResult(boolean result, Note id) {
                         Intent intent = new Intent();
-                        intent.putExtra(ID,note.getId());
+                        intent.putExtra(ID, note.getId());
                         intent.putExtra(FROM, note.getFrom());
                         intent.putExtra(TO, note.getTo());
                         intent.putExtra(DETAILS, note.getDetails());
@@ -148,11 +149,11 @@ public class SendNoteActivity extends Activity {
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
                 String item = spinner.getItemAtPosition(position).toString();
                 switch (item) {
-                    case ("Time"):
+                    case (Utils.TIME):
                         timeFL.setVisibility(FrameLayout.VISIBLE);
                         locationFL.setVisibility(FrameLayout.GONE);
                         break;
-                    case ("Location"):
+                    case (Utils.LOCATION):
                         timeFL.setVisibility(FrameLayout.GONE);
                         locationFL.setVisibility(FrameLayout.VISIBLE);
                         break;
@@ -185,11 +186,11 @@ public class SendNoteActivity extends Activity {
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         switch (requestCode) {
-            case (PICK_CONTACT) :
+            case (PICK_CONTACT):
                 if (resultCode == Activity.RESULT_OK) {
 
                     Uri contactData = data.getData();
-                    Cursor c =  managedQuery(contactData, null, null, null, null);
+                    Cursor c = managedQuery(contactData, null, null, null, null);
                     startManagingCursor(c);
                     if (c.moveToFirst()) {
                         //inr\ id = c.getString(c.getColumnIndexOrThrow(ContactsContract.CommonDataKinds.Phone.DISPLAY_NAME));

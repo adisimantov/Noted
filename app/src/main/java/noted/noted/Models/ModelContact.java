@@ -33,7 +33,7 @@ public class ModelContact {
                 String idContact = cursor.getString(contactIdIdx);
                 String name = cursor.getString(nameIdx);
                 String phoneNumber = getPhoneNumberWithCountry(cursor.getString(phoneNumberIdx));
-                Contact contact = new Contact(idContact, name,phoneNumber);
+                Contact contact = new Contact(idContact, name, phoneNumber);
                 contactsList.add(contact);
             } while (cursor.moveToNext());
         } catch (Exception e) {
@@ -43,7 +43,7 @@ public class ModelContact {
                 cursor.close();
             }
         }
-        Contact contact = new Contact("Me", "Me",Model.getInstance().getCurrUser().getPhoneNumber());
+        Contact contact = new Contact("Me", "Me", Model.getInstance().getCurrUser().getPhoneNumber());
         contactsList.add(contact);
     }
 
@@ -56,29 +56,29 @@ public class ModelContact {
         return phoneNumber;
     }
 
-    public List<Contact> getAllContacts(Context context){
+    public List<Contact> getAllContacts(Context context) {
 
         return contactsList;
     }
 
-    public Contact getContact(String phoneNumber){
-        for(Contact contact : contactsList){
-            if(contact.getPhoneNumber().equals(phoneNumber))
+    public Contact getContact(String phoneNumber) {
+        for (Contact contact : contactsList) {
+            if (contact.getPhoneNumber().equals(phoneNumber))
                 return contact;
         }
         return null;
     }
 
-    public Contact getContactById(String id){
-        for(Contact contact : contactsList) {
-                if (contact.getId().equals(id))
-                    return contact;
+    public Contact getContactById(String id) {
+        for (Contact contact : contactsList) {
+            if (contact.getId().equals(id))
+                return contact;
         }
         return null;
     }
 
-    public Contact getContactByName(String name){
-        for(Contact contact : contactsList) {
+    public Contact getContactByName(String name) {
+        for (Contact contact : contactsList) {
             if (contact.getName().equals(name))
                 return contact;
         }

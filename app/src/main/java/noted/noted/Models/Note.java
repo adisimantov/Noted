@@ -56,14 +56,16 @@ public class Note {
 
     // To use in gridview
     public long getNumericId() {
-        return Long.parseLong(id,36);
+        return Long.parseLong(id, 36);
     }
 
     public String getId() {
         return id;
     }
 
-    public void setId(String id) {this.id = id; }
+    public void setId(String id) {
+        this.id = id;
+    }
 
     public String getFrom() {
         return from;

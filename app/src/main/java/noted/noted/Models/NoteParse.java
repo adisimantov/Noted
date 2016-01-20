@@ -24,15 +24,15 @@ import java.util.List;
 public class NoteParse {
     private static final String TAG = "NoteParse";
 
-    private final static String NOTE_TABLE                  = "NOTES";
-    private final static String NOTE_FROM                   = "SENDER";
-    private final static String NOTE_TO                     = "RECEIVER";
-    private final static String NOTE_DETAILS                = "DETAILS";
-    private final static String NOTE_SENT_TIME              = "SENT_TIME";
-    private final static String NOTE_TIME_TO_SHOW           = "TIME_TO_SHOW";
-    private final static String NOTE_LOCATION_TO_SHOW       = "LOCATION_TO_SHOW";
-    private final static String NOTE_LOCATION_TO_SHOW_NAME  = "LOCATION_TO_SHOW_NAME";
-    private final static String NOTE_CREATED_AT             = "createdAt";
+    private final static String NOTE_TABLE = "NOTES";
+    private final static String NOTE_FROM = "SENDER";
+    private final static String NOTE_TO = "RECEIVER";
+    private final static String NOTE_DETAILS = "DETAILS";
+    private final static String NOTE_SENT_TIME = "SENT_TIME";
+    private final static String NOTE_TIME_TO_SHOW = "TIME_TO_SHOW";
+    private final static String NOTE_LOCATION_TO_SHOW = "LOCATION_TO_SHOW";
+    private final static String NOTE_LOCATION_TO_SHOW_NAME = "LOCATION_TO_SHOW_NAME";
+    private final static String NOTE_CREATED_AT = "createdAt";
 
     private static Note createNoteFromParse(ParseObject po) {
         String id = po.getObjectId();
@@ -127,7 +127,7 @@ public class NoteParse {
         });
     }
 
-    public static void getAllNotesTo(final Model.GetNotesListener listener,String timestamp,String to) {
+    public static void getAllNotesTo(final Model.GetNotesListener listener, String timestamp, String to) {
         ParseQuery<ParseObject> query = new ParseQuery<ParseObject>(NOTE_TABLE);
         query.whereEqualTo(NOTE_TO, to);
 

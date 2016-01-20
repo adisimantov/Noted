@@ -12,7 +12,8 @@ import java.util.List;
  * Created by Anna on 30-Dec-15.
  */
 public class ModelSql {
-    final static int VERSION = 10;
+    final static int    VERSION  = 10;
+    final static String DATABASE = "database.db";
     private Helper dbHelper;
 
     public void init(Context context) {
@@ -51,7 +52,7 @@ public class ModelSql {
 
     class Helper extends SQLiteOpenHelper {
         public Helper(Context context) {
-            super(context, "database.db", null, VERSION);
+            super(context, DATABASE, null, VERSION);
         }
 
         @Override
