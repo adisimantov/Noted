@@ -123,17 +123,23 @@ public class SendNoteActivity extends Activity {
                 Model.getInstance().addLocalAndRemoteNote(note, new Model.AddNoteListener() {
                     @Override
                     public void onResult(boolean result, Note id) {
-                        Intent intent = new Intent();
-                        intent.putExtra(ID, note.getId());
-                        intent.putExtra(FROM, note.getFrom());
-                        intent.putExtra(TO, note.getTo());
-                        intent.putExtra(DETAILS, note.getDetails());
-                        intent.putExtra(SENT_TIME, note.getSentTime());
-                        intent.putExtra(TIME_TO_SHOW, note.getTimeToShow());
-                        intent.putExtra(LOCATION_TO_SHOW, "");
-                        setResult(RESULT_OK, intent);
-                        acIndicator.setVisibility(View.GONE);
-                        finish();
+                        if (result) {
+                            Intent intent = new Intent();
+                            intent.putExtra(ID, note.getId());
+                            intent.putExtra(FROM, note.getFrom());
+                            intent.putExtra(TO, note.getTo());
+                            intent.putExtra(DETAILS, note.getDetails());
+                            intent.putExtra(SENT_TIME, note.getSentTime());
+                            intent.putExtra(TIME_TO_SHOW, note.getTimeToShow());
+                            intent.putExtra(LOCATION_TO_SHOW, "");
+                            setResult(RESULT_OK, intent);
+                            acIndicator.setVisibility(View.GONE);
+                            finish();
+                        } else {
+                            acIndicator.setVisibility(View.GONE);
+                            Toast toast = Toast.makeText(getApplicationContext(), "Check your network connection", Toast.LENGTH_SHORT);
+                            toast.show();
+                        }
                     }
                 });
             }

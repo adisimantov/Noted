@@ -309,11 +309,15 @@ public class Model {
                     addLocalNoteAsync(new SimpleSuccessListener() {
                         @Override
                         public void onResult(boolean result) {
-                            listener.onResult(result, noteRemote);
+                            if (result) {
+                                listener.onResult(true, noteRemote);
+                            } else {
+                                listener.onResult(false, null);
+                            }
                         }
                     }, note);
                 } else {
-                    listener.onResult(false, noteRemote);
+                    listener.onResult(false, null);
                 }
             }
         });

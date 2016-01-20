@@ -42,17 +42,6 @@ public class MainActivity extends Activity {
 
         // Init databse model with context
         Model.getInstance().init(this);
-/*        Model.getInstance().getAllLocalNotesAsync(new Model.GetNotesListener() {
-            @Override
-            public void onResult(List<Note> notes) {
-                for (Note note : notes) {
-                    Log.d("DEL", "" + note.getId());
-                    Model.getInstance().deleteLocalNote(note.getId());
-                }
-
-            }
-        });
-        Model.getInstance().setLastSyncTime(null);*/
 
         // User is not signup to digits
         if (Digits.getInstance().getSessionManager().getActiveSession() == null) {
@@ -75,7 +64,8 @@ public class MainActivity extends Activity {
                                 finish();
                                 startActivity(getIntent());
                             } else {
-                                Toast.makeText(getApplicationContext(), "Failed to log in", Toast.LENGTH_SHORT);
+                                Toast toast = Toast.makeText(getApplicationContext(), "Failed to log in", Toast.LENGTH_SHORT);
+                                toast.show();
                             }
                         }
                     });
@@ -83,7 +73,8 @@ public class MainActivity extends Activity {
 
                 @Override
                 public void failure(DigitsException exception) {
-                    Toast.makeText(getApplicationContext(), "Failed to sign in", Toast.LENGTH_SHORT);
+                    Toast toast = Toast.makeText(getApplicationContext(), "Failed to sign in", Toast.LENGTH_SHORT);
+                    toast.show();
                     Log.d("Digits", "Sign in with Digits failure", exception);
                 }
             });
@@ -100,7 +91,8 @@ public class MainActivity extends Activity {
                     @Override
                     public void onResult(boolean result) {
                         if (!result) {
-                            Toast.makeText(getApplicationContext(), "Failed to log in", Toast.LENGTH_SHORT);
+                            Toast toast = Toast.makeText(getApplicationContext(), "Failed to log in", Toast.LENGTH_SHORT);
+                            toast.show();
                         }
                     }
                 });
