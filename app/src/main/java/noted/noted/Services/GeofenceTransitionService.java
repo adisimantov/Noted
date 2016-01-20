@@ -105,7 +105,7 @@ public class GeofenceTransitionService extends IntentService {
 
         return geofenceTransitionString + ": " + triggeringGeofencesIdsString;
     }
-    
+
     /**
      * Maps geofence transition types to their human-readable equivalents.
      *
