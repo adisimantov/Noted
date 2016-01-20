@@ -86,7 +86,7 @@ public class MainActivity extends Activity {
                                 finish();
                                 startActivity(getIntent());
                             } else {
-                                // TODO : show failure message
+                                Toast toast = Toast.makeText(getApplicationContext(), "Failed to log in", Toast.LENGTH_SHORT);
                             }
                         }
                     });
