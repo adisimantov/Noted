@@ -66,7 +66,7 @@ public class TabReceivedNotes extends Fragment {
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 Intent intent = new Intent(view.getContext(), ViewNoteActivity.class);
                 Note note = adapter.getItem(position);
-                intent.putExtra("note_id", note.getId());
+                intent.putExtra(Utils.NOTE_ID_PARAM, note.getId());
                 startActivity(intent);
             }
         });
