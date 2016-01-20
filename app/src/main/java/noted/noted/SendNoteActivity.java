@@ -176,6 +176,7 @@ public class SendNoteActivity extends Activity {
             @Override
             public void onClick(View v) {
                 PlacePicker.IntentBuilder builder = new PlacePicker.IntentBuilder();
+                acIndicator.setVisibility(View.VISIBLE);
 
                 try {
                     startActivityForResult(builder.build(SendNoteActivity.this), PLACE_PICKER_RESULT);
@@ -219,6 +220,7 @@ public class SendNoteActivity extends Activity {
                     Place place = PlacePicker.getPlace(data, this);
                     location.setText(RTL_CHAR + place.getName());
                     locLat = place.getLatLng();
+                    acIndicator.setVisibility(View.INVISIBLE);
                 }
                 break;
         }

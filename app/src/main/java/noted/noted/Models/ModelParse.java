@@ -18,7 +18,7 @@ public class ModelParse {
     }
 
     // Notes
-    public void getAllNotes(Model.GetNotesListener listener, String timestamp, String to) {
+    public void getAllNotes(Model.SyncNotesListener listener, String timestamp, String to) {
         NoteParse.getAllNotesTo(listener, timestamp, to);
     }
 

@@ -126,7 +126,7 @@ public class NoteParse {
         });
     }
 
-    public static void getAllNotesTo(final Model.GetNotesListener listener, String timestamp, String to) {
+    public static void getAllNotesTo(final Model.SyncNotesListener listener, String timestamp, String to) {
         ParseQuery<ParseObject> query = new ParseQuery<ParseObject>(NOTE_TABLE);
         query.whereEqualTo(NOTE_TO, to);
 
@@ -144,8 +144,10 @@ public class NoteParse {
                         Note note = createNoteFromParse(po);
                         notes.add(note);
                     }
+                    listener.onResult(notes,true);
+                } else {
+                    listener.onResult(notes,false);
                 }
-                listener.onResult(notes);
             }
         });
     }

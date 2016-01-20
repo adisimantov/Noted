@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import noted.noted.Models.Contact;
 import noted.noted.Models.Model;
@@ -33,27 +34,33 @@ public class ViewNoteActivity extends Activity {
         Model.getInstance().getLocalNoteAsync(new Model.GetNoteListener() {
             @Override
             public void onResult(Note note) {
-                String fromString = note.getFrom();
+                if (note != null) {
+                    String fromString = note.getFrom();
 
-                Contact contactFrom = Model.getInstance().getContact(fromString);
-                if (contactFrom != null) {
-                    fromString = contactFrom.getName();
-                }
+                    Contact contactFrom = Model.getInstance().getContact(fromString);
+                    if (contactFrom != null) {
+                        fromString = contactFrom.getName();
+                    }
 
-                String toString = note.getTo();
-                Contact contactTo = Model.getInstance().getContact(toString);
-                if (contactTo != null) {
-                    toString = contactTo.getName();
-                }
+                    String toString = note.getTo();
+                    Contact contactTo = Model.getInstance().getContact(toString);
+                    if (contactTo != null) {
+                        toString = contactTo.getName();
+                    }
 
-                to.setText(Utils.LTR_CHAR + toString);
-                from.setText(Utils.LTR_CHAR + fromString);
-                details.setText(Utils.LTR_CHAR + note.getDetails());
-                sentTime.setText(Utils.LTR_CHAR + note.getSentTime());
-                if (note.getTimeToShow() != null) {
-                    timeOrLoc.setText(Utils.LTR_CHAR + note.getTimeToShow());
-                } else if (note.getLocationToShowName() != null) {
-                    timeOrLoc.setText(Utils.LTR_CHAR + note.getLocationToShowName());
+                    to.setText(Utils.LTR_CHAR + toString);
+                    from.setText(Utils.LTR_CHAR + fromString);
+                    details.setText(Utils.LTR_CHAR + note.getDetails());
+                    sentTime.setText(Utils.LTR_CHAR + note.getSentTime());
+                    if (note.getTimeToShow() != null) {
+                        timeOrLoc.setText(Utils.LTR_CHAR + note.getTimeToShow());
+                    } else if (note.getLocationToShowName() != null) {
+                        timeOrLoc.setText(Utils.LTR_CHAR + note.getLocationToShowName());
+                    }
+                } else {
+                    finish();
+                    Toast toast = Toast.makeText(getApplicationContext(),"Error getting note",Toast.LENGTH_SHORT);
+                    toast.show();
                 }
             }
         }, id);

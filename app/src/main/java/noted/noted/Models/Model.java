@@ -323,17 +323,24 @@ public class Model {
         });
     }
 
+    public interface SyncNotesListener {
+        public void onResult(List<Note> notes, boolean result);
+    }
+
     public void syncNotesFromServer(final GetNotesListener listener) {
         String timestamp = getLastSyncTime();
         String to = getCurrUser().getPhoneNumber();
-        remote.getAllNotes(new GetNotesListener() {
+        remote.getAllNotes(new SyncNotesListener() {
             @Override
-            public void onResult(List<Note> notes) {
-                for (Note note : notes) {
-                    local.addNote(note);
+            public void onResult(List<Note> notes, boolean result) {
+                if (result) {
+                    for (Note note : notes) {
+                        local.addNote(note);
+                    }
+                    setLastSyncTime(getCurrentTimestamp());
                 }
                 listener.onResult(notes);
-                setLastSyncTime(getCurrentTimestamp());
+                Log.d("Sync","" + notes.size() + " " + result);
             }
         }, timestamp, to);
     }

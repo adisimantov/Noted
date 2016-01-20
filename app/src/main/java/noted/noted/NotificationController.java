@@ -35,11 +35,12 @@ public class NotificationController {
         // Update this note as shown so it won't be shown again on boot
         Model.getInstance().getLocalNoteAsync(new Model.GetNoteListener() {
             @Override
-            public void onResult(Note note) {
+            public void onResult(final Note note) {
                 note.setIsShown(true);
                 Model.getInstance().updateLocalNoteAsync(new Model.SimpleSuccessListener() {
                     @Override
                     public void onResult(boolean result) {
+                        Log.d(TAG,"Note " + note.getId() + " couldn't update");
                     }
                 }, note);
             }
